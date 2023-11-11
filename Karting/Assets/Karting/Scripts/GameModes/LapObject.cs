@@ -30,21 +30,20 @@ public class LapObject : TargetObject
 
         if(this.tag == "Lap")
         {
-            this.gameObject.SetActive(false);
+            ((MeshRenderer) this.gameObject.transform.GetChild(0).GetComponent<MeshRenderer>()).enabled = false;
         }
         else if(this.tag == "Finish")
         {
-            Debug.Log("Finish");
+            //Debug.Log("Finish");
             // make all lap objects visible again
-            //LapObject[] lapObjects = GameObject.FindObjectsOfType<LapObject>();
             GameObject[] lapObjects = GameObject.FindGameObjectsWithTag("Lap");
 
             foreach (GameObject lapObj in lapObjects)
             {
                 if(lapObj.tag == "Lap")
                 {
-                    Debug.Log("Checkpoint");
-                    lapObj.SetActive(true);
+                    //Debug.Log("Checkpoint");
+                    ((MeshRenderer)lapObj.transform.GetChild(0).GetComponent<MeshRenderer>()).enabled = true;
                 }
             }
         }
