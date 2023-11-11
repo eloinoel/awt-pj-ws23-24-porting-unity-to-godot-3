@@ -129,7 +129,7 @@ MonoBehaviour:
     ElapsedTime: 0
     MaxTime: 3
   cooldown: 3
-  disableGameObjectWhenActivated: 1
+  disableGameObjectWhenActivated: 0
   onPowerupActivated:
     m_PersistentCalls:
       m_Calls: []
