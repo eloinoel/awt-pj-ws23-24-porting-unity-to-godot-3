@@ -27,5 +27,6 @@ public class LapObject : TargetObject
             return;
        
         Objective.OnUnregisterPickup?.Invoke(this);
+        //this.gameObject.
     }
 }
