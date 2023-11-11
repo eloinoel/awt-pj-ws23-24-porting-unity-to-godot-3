@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ArcadeKartPowerup : MonoBehaviour {
+public class ArcadeKartPowerup : MonoBehaviour
+{
 
     public ArcadeKart.StatPowerup boostStats = new ArcadeKart.StatPowerup
     {
@@ -26,9 +27,11 @@ public class ArcadeKartPowerup : MonoBehaviour {
 
     private void Update()
     {
-        if (isCoolingDown) { 
+        if (isCoolingDown)
+        {
 
-            if (Time.time - lastActivatedTimestamp > cooldown) {
+            if (Time.time - lastActivatedTimestamp > cooldown)
+            {
                 //finished cooldown!
                 isCoolingDown = false;
                 onPowerupFinishCooldown.Invoke();
@@ -42,13 +45,41 @@ public class ArcadeKartPowerup : MonoBehaviour {
     {
         if (isCoolingDown) return;
 
-        var rb = other.attachedRigidbody;
-        if (rb) {
+        // get the player object that hits the powerup
+        // GameObject player = other.gameObject;
+        // Debug.Log(player.name);
 
+
+        // // get player 
+        GameObject player = GameObject.FindWithTag("LaserTrail");
+        player.gameObject.setActive(true);
+
+        // // get the children of the playerobject 
+        // Transform[] children = player.GetComponentsInChildren<Transform>();
+        // foreach (Transform child in children)
+        // {
+        //     Debug.Log(child.gameObject.name);
+        //     if (child.gameObject.name == "LaserTrail")
+        //     {
+        //         // activate the trail renderer
+        //         //child.getComponent<TrailRenderer>().enabled = true;
+        //         Debug.Log("Laser Activated");
+        //     }
+        //     // //if the child is 'LaserTrail' activate the laser
+        //     // if (child.GameObject == "LaserTrail")
+        //     // {
+        //     //     child.gameObject.SetActive(true);
+        //     //     Debug.Log("Laser Activated");
+        //     // }
+        // }
+
+        var rb = other.attachedRigidbody;
+        if (rb)
+        {
             var kart = rb.GetComponent<ArcadeKart>();
 
             if (kart)
-            { 
+            {
                 lastActivatedTimestamp = Time.time;
                 kart.AddPowerup(this.boostStats);
                 onPowerupActivated.Invoke();
