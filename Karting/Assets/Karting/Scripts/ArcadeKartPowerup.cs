@@ -26,7 +26,6 @@ public class ArcadeKartPowerup : MonoBehaviour
         lastActivatedTimestamp = -9999f;
     }
 
-
     private void Update()
     {
         if (isCoolingDown)
@@ -55,6 +54,11 @@ public class ArcadeKartPowerup : MonoBehaviour
             if (kart)
             {
                 lastActivatedTimestamp = Time.time;
+                // reset elapsed time if this boost has already been used before
+                if(this.boostStats.ElapsedTime > this.boostStats.MaxTime)
+                {
+                    this.boostStats.ElapsedTime = 0f;
+                }
                 kart.AddPowerup(this.boostStats);
                 onPowerupActivated.Invoke();
                 isCoolingDown = true;
