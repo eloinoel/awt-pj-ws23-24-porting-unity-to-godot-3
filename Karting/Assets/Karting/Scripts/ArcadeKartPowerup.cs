@@ -19,6 +19,8 @@ public class ArcadeKartPowerup : MonoBehaviour
     public UnityEvent onPowerupActivated;
     public UnityEvent onPowerupFinishCooldown;
 
+    private TrailRenderer[] laserTrails;
+
     private void Awake()
     {
         lastActivatedTimestamp = -9999f;
@@ -48,11 +50,6 @@ public class ArcadeKartPowerup : MonoBehaviour
         // get the player object that hits the powerup
         // GameObject player = other.gameObject;
         // Debug.Log(player.name);
-
-
-        // // get player 
-        GameObject player = GameObject.FindWithTag("LaserTrail");
-        player.gameObject.SetActive(true);
 
         // // get the children of the playerobject 
         // Transform[] children = player.GetComponentsInChildren<Transform>();
@@ -86,7 +83,51 @@ public class ArcadeKartPowerup : MonoBehaviour
                 isCoolingDown = true;
 
                 if (disableGameObjectWhenActivated) this.gameObject.SetActive(false);
+
+                enableLaserTrails(kart);
             }
+        }
+    }
+
+    private void enableLaserTrails(ArcadeKart kart)
+    {
+        var wheels = kart.transform.Find("Wheels");
+        if (wheels)
+        {
+            this.laserTrails = new TrailRenderer[2];
+            // get wheels with laser trail
+            var wheelRearLeft = wheels.transform.Find("WheelRearLeft");
+            if (wheelRearLeft)
+            {
+                var laserTrail = wheelRearLeft.GetChild(0);
+                if (laserTrail)
+                {
+                    this.laserTrails[0] = laserTrail.GetComponent<TrailRenderer>();
+                    this.laserTrails[0].enabled = true;
+                }
+                    
+            }
+
+            var wheelRearRight = wheels.transform.Find("WheelRearRight");
+            if (wheelRearRight)
+            {
+                var laserTrail = wheelRearRight.GetChild(0);
+                if (laserTrail)
+                {
+                    this.laserTrails[1] = laserTrail.GetComponent<TrailRenderer>();
+                    this.laserTrails[1].enabled = true;
+                }
+            }
+
+            Invoke("disableLaserTrails", boostStats.MaxTime);
+        }
+    }
+
+    private void disableLaserTrails()
+    {
+        foreach(var trailRenderer in this.laserTrails)
+        {
+            trailRenderer.enabled = false;
         }
     }
 
