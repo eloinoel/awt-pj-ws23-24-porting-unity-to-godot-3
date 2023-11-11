@@ -47,29 +47,6 @@ public class ArcadeKartPowerup : MonoBehaviour
     {
         if (isCoolingDown) return;
 
-        // get the player object that hits the powerup
-        // GameObject player = other.gameObject;
-        // Debug.Log(player.name);
-
-        // // get the children of the playerobject 
-        // Transform[] children = player.GetComponentsInChildren<Transform>();
-        // foreach (Transform child in children)
-        // {
-        //     Debug.Log(child.gameObject.name);
-        //     if (child.gameObject.name == "LaserTrail")
-        //     {
-        //         // activate the trail renderer
-        //         //child.getComponent<TrailRenderer>().enabled = true;
-        //         Debug.Log("Laser Activated");
-        //     }
-        //     // //if the child is 'LaserTrail' activate the laser
-        //     // if (child.GameObject == "LaserTrail")
-        //     // {
-        //     //     child.gameObject.SetActive(true);
-        //     //     Debug.Log("Laser Activated");
-        //     // }
-        // }
-
         var rb = other.attachedRigidbody;
         if (rb)
         {
