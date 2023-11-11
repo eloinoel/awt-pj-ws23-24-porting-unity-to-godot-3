@@ -52,7 +52,7 @@ public class ArcadeKartPowerup : MonoBehaviour
 
         // // get player 
         GameObject player = GameObject.FindWithTag("LaserTrail");
-        player.gameObject.setActive(true);
+        player.gameObject.SetActive(true);
 
         // // get the children of the playerobject 
         // Transform[] children = player.GetComponentsInChildren<Transform>();
