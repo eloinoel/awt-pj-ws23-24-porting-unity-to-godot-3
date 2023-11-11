@@ -27,6 +27,26 @@ public class LapObject : TargetObject
             return;
        
         Objective.OnUnregisterPickup?.Invoke(this);
-        //this.gameObject.
+
+        if(this.tag == "Lap")
+        {
+            this.gameObject.SetActive(false);
+        }
+        else if(this.tag == "Finish")
+        {
+            Debug.Log("Finish");
+            // make all lap objects visible again
+            //LapObject[] lapObjects = GameObject.FindObjectsOfType<LapObject>();
+            GameObject[] lapObjects = GameObject.FindGameObjectsWithTag("Lap");
+
+            foreach (GameObject lapObj in lapObjects)
+            {
+                if(lapObj.tag == "Lap")
+                {
+                    Debug.Log("Checkpoint");
+                    lapObj.SetActive(true);
+                }
+            }
+        }
     }
 }
