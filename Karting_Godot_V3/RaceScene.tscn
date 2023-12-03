@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://RaceScene.gltf" type="PackedScene" id=1]
 [ext_resource path="res://Tree.material" type="Material" id=2]
@@ -264,6 +264,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (3)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (3)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 13 )
 
 [node name="ModularTrackStraight (17)" parent="RaceTrack" index="1"]
@@ -275,6 +276,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (17)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (17)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 14 )
 
 [node name="ModularTrackCurveSmall (1)" parent="RaceTrack" index="2"]
@@ -286,6 +288,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveSmall (1)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveSmall (1)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 15 )
 
 [node name="ModularTrackStraight (16)" parent="RaceTrack" index="3"]
@@ -297,6 +300,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (16)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (16)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 16 )
 
 [node name="ModularTrackCurveSmall" parent="RaceTrack" index="4"]
@@ -308,6 +312,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveSmall" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveSmall/StaticBody" index="0"]
+visible = false
 shape = SubResource( 17 )
 
 [node name="ModularTrackRamp (2)" parent="RaceTrack" index="5"]
@@ -319,6 +324,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRamp (2)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRamp (2)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 18 )
 
 [node name="ModularTrackRampCurveLeft (2)" parent="RaceTrack" index="6"]
@@ -330,6 +336,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRampCurveLeft (2)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRampCurveLeft (2)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 19 )
 
 [node name="ModularTrackCurveMedium (2)" parent="RaceTrack" index="7"]
@@ -341,6 +348,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveMedium (2)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveMedium (2)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 20 )
 
 [node name="ModularTrackBumpyStraight" parent="RaceTrack" index="8"]
@@ -352,6 +360,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackBumpyStraight" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackBumpyStraight/StaticBody" index="0"]
+visible = false
 shape = SubResource( 21 )
 
 [node name="ModularTrackCurveMedium (1)" parent="RaceTrack" index="9"]
@@ -363,6 +372,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveMedium (1)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveMedium (1)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 22 )
 
 [node name="ModularTrackStraight (12)" parent="RaceTrack" index="10"]
@@ -374,6 +384,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (12)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (12)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 23 )
 
 [node name="ModularTrackCantMediumLeft" parent="RaceTrack" index="11"]
@@ -385,6 +396,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCantMediumLeft" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCantMediumLeft/StaticBody" index="0"]
+visible = false
 shape = SubResource( 24 )
 
 [node name="ModularTrackBank" parent="RaceTrack" index="12"]
@@ -396,6 +408,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackBank" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackBank/StaticBody" index="0"]
+visible = false
 shape = SubResource( 25 )
 
 [node name="ModularTrackStraight (10)" parent="RaceTrack" index="13"]
@@ -407,6 +420,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (10)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (10)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 26 )
 
 [node name="ModularTrackRamp (1)" parent="RaceTrack" index="14"]
@@ -418,6 +432,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRamp (1)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRamp (1)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 27 )
 
 [node name="ModularTrackRampCurveLeft" parent="RaceTrack" index="15"]
@@ -429,6 +444,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRampCurveLeft" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRampCurveLeft/StaticBody" index="0"]
+visible = false
 shape = SubResource( 28 )
 
 [node name="ModularTrackStraight (9)" parent="RaceTrack" index="16"]
@@ -440,6 +456,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (9)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (9)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 29 )
 
 [node name="ModularTrackStraight (8)" parent="RaceTrack" index="17"]
@@ -451,6 +468,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (8)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (8)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 30 )
 
 [node name="ModularTrackStraight (7)" parent="RaceTrack" index="18"]
@@ -462,6 +480,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (7)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (7)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 31 )
 
 [node name="ModularTrackSpiralRight" parent="RaceTrack" index="19"]
@@ -473,6 +492,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackSpiralRight" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackSpiralRight/StaticBody" index="0"]
+visible = false
 shape = SubResource( 32 )
 
 [node name="ModularTrackSCurveLeft" parent="RaceTrack" index="20"]
@@ -484,6 +504,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackSCurveLeft" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackSCurveLeft/StaticBody" index="0"]
+visible = false
 shape = SubResource( 33 )
 
 [node name="ModularTrackSCurveRight" parent="RaceTrack" index="21"]
@@ -495,6 +516,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackSCurveRight" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackSCurveRight/StaticBody" index="0"]
+visible = false
 shape = SubResource( 34 )
 
 [node name="ModularTrackCurveMedium" parent="RaceTrack" index="22"]
@@ -506,6 +528,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveMedium" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveMedium/StaticBody" index="0"]
+visible = false
 shape = SubResource( 35 )
 
 [node name="ModularTrackStraight (6)" parent="RaceTrack" index="23"]
@@ -517,6 +540,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (6)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (6)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 36 )
 
 [node name="ModularTrackCurveLarge" parent="RaceTrack" index="24"]
@@ -528,6 +552,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveLarge" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveLarge/StaticBody" index="0"]
+visible = false
 shape = SubResource( 37 )
 
 [node name="ModularTrackStraight (3)2" parent="RaceTrack" index="25"]
@@ -539,6 +564,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (3)2" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (3)2/StaticBody" index="0"]
+visible = false
 shape = SubResource( 38 )
 
 [node name="ModularTrackStraight (2)" parent="RaceTrack" index="26"]
@@ -550,6 +576,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (2)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (2)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 39 )
 
 [node name="ModularTrackStraight (1)" parent="RaceTrack" index="27"]
@@ -561,6 +588,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (1)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (1)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 40 )
 
 [node name="ModularTrackStraight" parent="RaceTrack" index="28"]
@@ -572,6 +600,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight/StaticBody" index="0"]
+visible = false
 shape = SubResource( 41 )
 
 [node name="ModularTrackStraight (5)" parent="RaceTrack" index="29"]
@@ -583,6 +612,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (5)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (5)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 42 )
 
 [node name="ModularTrackStraight (4)" parent="RaceTrack" index="30"]
@@ -594,6 +624,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (4)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (4)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 43 )
 
 [node name="ModularTrackCurveSmall (2)" parent="RaceTrack" index="31"]
@@ -605,6 +636,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackCurveSmall (2)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackCurveSmall (2)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 44 )
 
 [node name="ModularTrackRampCurveLeft (1)" parent="RaceTrack" index="32"]
@@ -616,6 +648,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRampCurveLeft (1)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRampCurveLeft (1)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 45 )
 
 [node name="ModularTrackRamp" parent="RaceTrack" index="33"]
@@ -627,6 +660,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRamp" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRamp/StaticBody" index="0"]
+visible = false
 shape = SubResource( 46 )
 
 [node name="ModularTrackStraight (14)" parent="RaceTrack" index="34"]
@@ -638,6 +672,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (14)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (14)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 47 )
 
 [node name="ModularTrackStraight (15)" parent="RaceTrack" index="35"]
@@ -649,6 +684,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (15)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (15)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 48 )
 
 [node name="ModularTrackStraight (11)" parent="RaceTrack" index="36"]
@@ -660,6 +696,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (11)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (11)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 49 )
 
 [node name="ModularTrackStraight (13)" parent="RaceTrack" index="37"]
@@ -671,6 +708,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackStraight (13)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackStraight (13)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 50 )
 
 [node name="ModularTrackRamp (3)" parent="RaceTrack" index="38"]
@@ -682,6 +720,7 @@ material/0 = ExtResource( 11 )
 [node name="StaticBody" type="StaticBody" parent="RaceTrack/ModularTrackRamp (3)" index="1"]
 
 [node name="CollisionShape" type="CollisionShape" parent="RaceTrack/ModularTrackRamp (3)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 51 )
 
 [node name="SpeedArrow" parent="RaceTrack/SpeedPads/SpeedPad (1)" index="0"]
@@ -1069,6 +1108,7 @@ material/0 = ExtResource( 5 )
 [node name="StaticBody" type="StaticBody" parent="Environment/Stones/StoneRound (28)" index="0"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Environment/Stones/StoneRound (28)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 52 )
 
 [node name="StoneRound (29)" parent="Environment/Stones" index="46"]
@@ -1080,6 +1120,7 @@ material/0 = ExtResource( 5 )
 [node name="StaticBody" type="StaticBody" parent="Environment/Stones/StoneRound (30)" index="0"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Environment/Stones/StoneRound (30)/StaticBody" index="0"]
+visible = false
 shape = SubResource( 53 )
 
 [node name="StoneFlat2" parent="Environment/Stones" index="48"]
@@ -1088,6 +1129,7 @@ material/0 = ExtResource( 5 )
 [node name="StaticBody" type="StaticBody" parent="Environment/Stones/StoneFlat2" index="0"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Environment/Stones/StoneFlat2/StaticBody" index="0"]
+visible = false
 shape = SubResource( 54 )
 
 [node name="StoneRound2" parent="Environment/Stones" index="49"]
@@ -1096,6 +1138,7 @@ material/0 = ExtResource( 5 )
 [node name="StaticBody" type="StaticBody" parent="Environment/Stones/StoneRound2" index="0"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Environment/Stones/StoneRound2/StaticBody" index="0"]
+visible = false
 shape = SubResource( 55 )
 
 [node name="BuildingThin_Combined" parent="Environment/Buildings/BuildingThin (1)/BuildingThinModel" index="0"]
