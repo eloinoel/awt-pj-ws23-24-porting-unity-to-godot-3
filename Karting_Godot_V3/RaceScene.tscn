@@ -24,7 +24,7 @@
 [node name="DirectionalLight" parent="." index="3"]
 transform = Transform( 0.99999, -0.000818871, 0.00437462, -3.04048e-05, 0.981648, 0.190702, -0.0044505, -0.1907, 0.981638, 0.368662, -0.0164919, 0.350001 )
 light_color = Color( 1, 0.376471, 0, 1 )
-light_energy = 0.56
+light_energy = 0.75
 shadow_enabled = true
 
 [node name="Mesh_Sun" parent="DirectionalLight/DirectionalLight-flipped" index="0"]

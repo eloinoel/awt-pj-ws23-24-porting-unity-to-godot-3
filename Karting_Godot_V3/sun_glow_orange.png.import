@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/TemplateEnvironmentSwatch.jpg-9c8fff3f77a38d25884d7249504bbc34.s3tc.stex"
-path.etc="res://.import/TemplateEnvironmentSwatch.jpg-9c8fff3f77a38d25884d7249504bbc34.etc.stex"
+path.s3tc="res://.import/sun_glow_orange.png-8fdd53f7084f3715d8991d1760d5597b.s3tc.stex"
+path.etc="res://.import/sun_glow_orange.png-8fdd53f7084f3715d8991d1760d5597b.etc.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://TemplateEnvironmentSwatch.jpg"
-dest_files=[ "res://.import/TemplateEnvironmentSwatch.jpg-9c8fff3f77a38d25884d7249504bbc34.s3tc.stex", "res://.import/TemplateEnvironmentSwatch.jpg-9c8fff3f77a38d25884d7249504bbc34.etc.stex" ]
+source_file="res://sun_glow_orange.png"
+dest_files=[ "res://.import/sun_glow_orange.png-8fdd53f7084f3715d8991d1760d5597b.s3tc.stex", "res://.import/sun_glow_orange.png-8fdd53f7084f3715d8991d1760d5597b.etc.stex" ]
 
 [params]
 
