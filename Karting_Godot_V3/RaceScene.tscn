@@ -1,8 +1,34 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://RaceScene.gltf" type="PackedScene" id=1]
+[ext_resource path="res://Tree.material" type="Material" id=2]
+[ext_resource path="res://Cloud.material" type="Material" id=3]
+[ext_resource path="res://Hill.material" type="Material" id=4]
+[ext_resource path="res://Rock.material" type="Material" id=5]
+[ext_resource path="res://Ground.material" type="Material" id=6]
+[ext_resource path="res://TemplateEnvironment_004.material" type="Material" id=7]
+[ext_resource path="res://TemplateEnvironment.material" type="Material" id=8]
+[ext_resource path="res://TemplateEnvironment_003.material" type="Material" id=9]
+[ext_resource path="res://LapCheckpoint.material" type="Material" id=10]
+[ext_resource path="res://Modular_Track_Lane_Divider.material" type="Material" id=11]
+[ext_resource path="res://Modular_Track_Road.material" type="Material" id=12]
+[ext_resource path="res://No Name.material" type="Material" id=13]
+[ext_resource path="res://KartBody.material" type="Material" id=14]
+[ext_resource path="res://Material_Player.material" type="Material" id=15]
+[ext_resource path="res://KartWheels.material" type="Material" id=16]
+[ext_resource path="res://Starting_Line_Material.material" type="Material" id=17]
+[ext_resource path="res://Sun.material" type="Material" id=18]
 
 [node name="RaceScene" instance=ExtResource( 1 )]
+
+[node name="DirectionalLight" parent="." index="3"]
+transform = Transform( 0.99999, -0.000818871, 0.00437462, -3.04048e-05, 0.981648, 0.190702, -0.0044505, -0.1907, 0.981638, 0.368662, -0.0164919, 0.350001 )
+light_color = Color( 1, 0.376471, 0, 1 )
+light_energy = 0.56
+shadow_enabled = true
+
+[node name="Mesh_Sun" parent="DirectionalLight/DirectionalLight-flipped" index="0"]
+material/0 = ExtResource( 18 )
 
 [node name="Skeleton" parent="KartClassic_Player/KartVisual/Kart/Root" index="0"]
 bones/1/bound_children = [ NodePath("BoneAttachment") ]
@@ -20,6 +46,9 @@ transform = Transform( 0.262732, -0.262941, 0.92835, 0.707388, 0.706826, 8.9407e
 
 [node name="BoneAttachment4" parent="KartClassic_Player/KartVisual/Kart/Root/Skeleton" index="3"]
 transform = Transform( 0.262732, -0.262941, 0.92835, 0.707388, 0.706826, 8.9407e-08, -0.656182, 0.656704, 0.371706, -1.49012e-08, 0.510156, 0.194151 )
+
+[node name="Kart_Body" parent="KartClassic_Player/KartVisual/Kart/Root/Skeleton" index="4"]
+material/0 = ExtResource( 14 )
 
 [node name="Skeleton2" parent="KartClassic_Player/KartVisual/PlayerIdle/Root1" index="0"]
 bones/3/bound_children = [ NodePath("BoneAttachment5") ]
@@ -74,3 +103,691 @@ transform = Transform( 0.243545, -0.957439, -0.154911, -0.561381, -0.00891041, -
 
 [node name="BoneAttachment17" parent="KartClassic_Player/KartVisual/PlayerIdle/Root1/Skeleton2" index="12"]
 transform = Transform( -0.911012, -0.18165, -0.370217, 0.409562, -0.503319, -0.760874, -0.0481247, -0.844792, 0.532927, -0.134796, 0.605292, 0.211708 )
+
+[node name="Template_Character" parent="KartClassic_Player/KartVisual/PlayerIdle/Root1/Skeleton2" index="13"]
+material/0 = ExtResource( 15 )
+
+[node name="WheelFrontLeft" parent="KartClassic_Player/Wheels" index="0"]
+material/0 = ExtResource( 16 )
+
+[node name="WheelFrontRight" parent="KartClassic_Player/Wheels" index="1"]
+material/0 = ExtResource( 16 )
+
+[node name="WheelRearLeft" parent="KartClassic_Player/Wheels" index="2"]
+material/0 = ExtResource( 16 )
+
+[node name="WheelRearRight" parent="KartClassic_Player/Wheels" index="3"]
+material/0 = ExtResource( 16 )
+
+[node name="ModularTrackStraight (3)" parent="RaceTrack" index="0"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider" parent="RaceTrack/ModularTrackStraight (3)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (17)" parent="RaceTrack" index="1"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider2" parent="RaceTrack/ModularTrackStraight (17)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveSmall (1)" parent="RaceTrack" index="2"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider3" parent="RaceTrack/ModularTrackCurveSmall (1)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (16)" parent="RaceTrack" index="3"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider4" parent="RaceTrack/ModularTrackStraight (16)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveSmall" parent="RaceTrack" index="4"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider5" parent="RaceTrack/ModularTrackCurveSmall" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRamp (2)" parent="RaceTrack" index="5"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider6" parent="RaceTrack/ModularTrackRamp (2)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRampCurveLeft (2)" parent="RaceTrack" index="6"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider7" parent="RaceTrack/ModularTrackRampCurveLeft (2)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveMedium (2)" parent="RaceTrack" index="7"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider8" parent="RaceTrack/ModularTrackCurveMedium (2)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackBumpyStraight" parent="RaceTrack" index="8"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider9" parent="RaceTrack/ModularTrackBumpyStraight" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveMedium (1)" parent="RaceTrack" index="9"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider10" parent="RaceTrack/ModularTrackCurveMedium (1)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (12)" parent="RaceTrack" index="10"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider11" parent="RaceTrack/ModularTrackStraight (12)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCantMediumLeft" parent="RaceTrack" index="11"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider12" parent="RaceTrack/ModularTrackCantMediumLeft" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackBank" parent="RaceTrack" index="12"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider13" parent="RaceTrack/ModularTrackBank" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (10)" parent="RaceTrack" index="13"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider14" parent="RaceTrack/ModularTrackStraight (10)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRamp (1)" parent="RaceTrack" index="14"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider15" parent="RaceTrack/ModularTrackRamp (1)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRampCurveLeft" parent="RaceTrack" index="15"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider16" parent="RaceTrack/ModularTrackRampCurveLeft" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (9)" parent="RaceTrack" index="16"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider17" parent="RaceTrack/ModularTrackStraight (9)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (8)" parent="RaceTrack" index="17"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider18" parent="RaceTrack/ModularTrackStraight (8)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (7)" parent="RaceTrack" index="18"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider19" parent="RaceTrack/ModularTrackStraight (7)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackSpiralRight" parent="RaceTrack" index="19"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider20" parent="RaceTrack/ModularTrackSpiralRight" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackSCurveLeft" parent="RaceTrack" index="20"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider21" parent="RaceTrack/ModularTrackSCurveLeft" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackSCurveRight" parent="RaceTrack" index="21"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider22" parent="RaceTrack/ModularTrackSCurveRight" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveMedium" parent="RaceTrack" index="22"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider23" parent="RaceTrack/ModularTrackCurveMedium" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (6)" parent="RaceTrack" index="23"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider24" parent="RaceTrack/ModularTrackStraight (6)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveLarge" parent="RaceTrack" index="24"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider25" parent="RaceTrack/ModularTrackCurveLarge" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (3)2" parent="RaceTrack" index="25"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider26" parent="RaceTrack/ModularTrackStraight (3)2" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (2)" parent="RaceTrack" index="26"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider27" parent="RaceTrack/ModularTrackStraight (2)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (1)" parent="RaceTrack" index="27"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider28" parent="RaceTrack/ModularTrackStraight (1)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight" parent="RaceTrack" index="28"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider29" parent="RaceTrack/ModularTrackStraight" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (5)" parent="RaceTrack" index="29"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider30" parent="RaceTrack/ModularTrackStraight (5)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (4)" parent="RaceTrack" index="30"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider31" parent="RaceTrack/ModularTrackStraight (4)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackCurveSmall (2)" parent="RaceTrack" index="31"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider32" parent="RaceTrack/ModularTrackCurveSmall (2)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRampCurveLeft (1)" parent="RaceTrack" index="32"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider33" parent="RaceTrack/ModularTrackRampCurveLeft (1)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRamp" parent="RaceTrack" index="33"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider34" parent="RaceTrack/ModularTrackRamp" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (14)" parent="RaceTrack" index="34"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider35" parent="RaceTrack/ModularTrackStraight (14)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (15)" parent="RaceTrack" index="35"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider36" parent="RaceTrack/ModularTrackStraight (15)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (11)" parent="RaceTrack" index="36"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider37" parent="RaceTrack/ModularTrackStraight (11)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackStraight (13)" parent="RaceTrack" index="37"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider38" parent="RaceTrack/ModularTrackStraight (13)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="ModularTrackRamp (3)" parent="RaceTrack" index="38"]
+material/0 = ExtResource( 12 )
+
+[node name="LaneDivider39" parent="RaceTrack/ModularTrackRamp (3)" index="0"]
+material/0 = ExtResource( 11 )
+
+[node name="SpeedArrow" parent="RaceTrack/SpeedPads/SpeedPad (1)" index="0"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (1)" parent="RaceTrack/SpeedPads/SpeedPad (1)" index="1"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (2)" parent="RaceTrack/SpeedPads/SpeedPad (1)" index="2"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow2" parent="RaceTrack/SpeedPads/SpeedPad (2)" index="0"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (1)2" parent="RaceTrack/SpeedPads/SpeedPad (2)" index="1"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (2)2" parent="RaceTrack/SpeedPads/SpeedPad (2)" index="2"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow3" parent="RaceTrack/SpeedPads/SpeedPad" index="0"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (1)3" parent="RaceTrack/SpeedPads/SpeedPad" index="1"]
+material/0 = ExtResource( 13 )
+
+[node name="SpeedArrow (2)3" parent="RaceTrack/SpeedPads/SpeedPad" index="2"]
+material/0 = ExtResource( 13 )
+
+[node name="Tree" parent="Environment/Trees/TreeRound" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree2" parent="Environment/Trees/TreeRound (2)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree3" parent="Environment/Trees/TreeRound (3)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree4" parent="Environment/Trees/TreeRound (4)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree5" parent="Environment/Trees/TreeRound (5)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree6" parent="Environment/Trees/TreeRound (6)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree7" parent="Environment/Trees/TreeRound (7)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree8" parent="Environment/Trees/TreeRound (8)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree9" parent="Environment/Trees/TreeRound (9)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree10" parent="Environment/Trees/TreeRound (10)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree11" parent="Environment/Trees/TreeRound (11)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree12" parent="Environment/Trees/TreeRound (12)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree13" parent="Environment/Trees/TreeRound (13)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree14" parent="Environment/Trees/TreeRound (14)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree15" parent="Environment/Trees/TreeRound (16)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree16" parent="Environment/Trees/TreeRound (17)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree17" parent="Environment/Trees/TreeRound (18)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree18" parent="Environment/Trees/TreeRound (19)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox" parent="Environment/Trees" index="18"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (1)" parent="Environment/Trees" index="19"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (2)" parent="Environment/Trees" index="20"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (3)" parent="Environment/Trees" index="21"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (4)" parent="Environment/Trees" index="22"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (5)" parent="Environment/Trees" index="23"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (6)" parent="Environment/Trees" index="24"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (7)" parent="Environment/Trees" index="25"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (8)" parent="Environment/Trees" index="26"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (9)" parent="Environment/Trees" index="27"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (10)" parent="Environment/Trees" index="28"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (12)" parent="Environment/Trees" index="29"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (13)" parent="Environment/Trees" index="30"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (14)" parent="Environment/Trees" index="31"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (15)" parent="Environment/Trees" index="32"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (16)" parent="Environment/Trees" index="33"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (17)" parent="Environment/Trees" index="34"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (18)" parent="Environment/Trees" index="35"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (19)" parent="Environment/Trees" index="36"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (20)" parent="Environment/Trees" index="37"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (11)" parent="Environment/Trees" index="38"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree19" parent="Environment/Trees/TreeRound (21)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="TreeBox (21)" parent="Environment/Trees" index="40"]
+material/0 = ExtResource( 2 )
+
+[node name="Tree20" parent="Environment/Trees/TreeRound (15)" index="0"]
+material/0 = ExtResource( 2 )
+
+[node name="Hill" parent="Environment/Hills" index="0"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (1)" parent="Environment/Hills" index="1"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (2)" parent="Environment/Hills" index="2"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (3)" parent="Environment/Hills" index="3"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (4)" parent="Environment/Hills" index="4"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (5)" parent="Environment/Hills" index="5"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (6)" parent="Environment/Hills" index="6"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (7)" parent="Environment/Hills" index="7"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (8)" parent="Environment/Hills" index="8"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (9)" parent="Environment/Hills" index="9"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (10)" parent="Environment/Hills" index="10"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (11)" parent="Environment/Hills" index="11"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (12)" parent="Environment/Hills" index="12"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (13)" parent="Environment/Hills" index="13"]
+material/0 = ExtResource( 4 )
+
+[node name="Hill (14)" parent="Environment/Hills" index="14"]
+material/0 = ExtResource( 4 )
+
+[node name="Cloud" parent="Environment/Clouds" index="0"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (1)" parent="Environment/Clouds" index="1"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (2)" parent="Environment/Clouds" index="2"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (3)" parent="Environment/Clouds" index="3"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (4)" parent="Environment/Clouds" index="4"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (5)" parent="Environment/Clouds" index="5"]
+transform = Transform( 13.7942, 0, -2.39191, 0, 14, 0, 2.39191, 0, 13.7942, -36.0836, 73.5142, 533.495 )
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (6)" parent="Environment/Clouds" index="6"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (7)" parent="Environment/Clouds" index="7"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (8)" parent="Environment/Clouds" index="8"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (9)" parent="Environment/Clouds" index="9"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (10)" parent="Environment/Clouds" index="10"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (11)" parent="Environment/Clouds" index="11"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (12)" parent="Environment/Clouds" index="12"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (13)" parent="Environment/Clouds" index="13"]
+material/0 = ExtResource( 3 )
+
+[node name="Cloud (14)" parent="Environment/Clouds" index="14"]
+material/0 = ExtResource( 3 )
+
+[node name="StoneFlat" parent="Environment/Stones" index="0"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (1)" parent="Environment/Stones" index="1"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (13)" parent="Environment/Stones" index="2"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (3)" parent="Environment/Stones" index="3"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (4)" parent="Environment/Stones" index="4"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (5)" parent="Environment/Stones" index="5"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (6)" parent="Environment/Stones" index="6"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (2)" parent="Environment/Stones" index="7"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (7)" parent="Environment/Stones" index="8"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (8)" parent="Environment/Stones" index="9"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (9)" parent="Environment/Stones" index="10"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (10)" parent="Environment/Stones" index="11"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (11)" parent="Environment/Stones" index="12"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (12)" parent="Environment/Stones" index="13"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound" parent="Environment/Stones" index="14"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (1)" parent="Environment/Stones" index="15"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (2)" parent="Environment/Stones" index="16"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (3)" parent="Environment/Stones" index="17"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (4)" parent="Environment/Stones" index="18"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (5)" parent="Environment/Stones" index="19"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (6)" parent="Environment/Stones" index="20"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (8)" parent="Environment/Stones" index="21"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (9)" parent="Environment/Stones" index="22"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (10)" parent="Environment/Stones" index="23"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (11)" parent="Environment/Stones" index="24"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (12)" parent="Environment/Stones" index="25"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (13)" parent="Environment/Stones" index="26"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (14)" parent="Environment/Stones" index="27"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (15)" parent="Environment/Stones" index="28"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (16)" parent="Environment/Stones" index="29"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (17)" parent="Environment/Stones" index="30"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (18)" parent="Environment/Stones" index="31"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (19)" parent="Environment/Stones" index="32"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (20)" parent="Environment/Stones" index="33"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (21)" parent="Environment/Stones" index="34"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (22)" parent="Environment/Stones" index="35"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (23)" parent="Environment/Stones" index="36"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (24)" parent="Environment/Stones" index="37"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (7)" parent="Environment/Stones" index="38"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (14)" parent="Environment/Stones" index="39"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (15)" parent="Environment/Stones" index="40"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat (16)" parent="Environment/Stones" index="41"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (25)" parent="Environment/Stones" index="42"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (26)" parent="Environment/Stones" index="43"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (27)" parent="Environment/Stones" index="44"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (28)" parent="Environment/Stones" index="45"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (29)" parent="Environment/Stones" index="46"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound (30)" parent="Environment/Stones" index="47"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneFlat2" parent="Environment/Stones" index="48"]
+material/0 = ExtResource( 5 )
+
+[node name="StoneRound2" parent="Environment/Stones" index="49"]
+material/0 = ExtResource( 5 )
+
+[node name="BuildingThin_Combined" parent="Environment/Buildings/BuildingThin (1)/BuildingThinModel" index="0"]
+material/0 = ExtResource( 7 )
+
+[node name="BuildingThin_Combined2" parent="Environment/Buildings/BuildingThin/BuildingThinModel2" index="0"]
+material/0 = ExtResource( 7 )
+
+[node name="BuildingShortVariant_Combined" parent="Environment/Buildings/BuildingShortVariant/BuildingShortVariantModel" index="0"]
+material/0 = ExtResource( 8 )
+
+[node name="Building01_Wall_Plain__7_" parent="Environment/Buildings/BuildingShort/BuildingShortModel" index="0"]
+material/0 = ExtResource( 8 )
+
+[node name="BuildingMedium_Combined" parent="Environment/Buildings/BuildingMedium (1)/BuildingMediumModel" index="0"]
+material/0 = ExtResource( 9 )
+
+[node name="BuildingMedium_Combined2" parent="Environment/Buildings/BuildingMedium/BuildingMediumModel2" index="0"]
+material/0 = ExtResource( 9 )
+
+[node name="Horizon" parent="Environment" index="5"]
+material/0 = ExtResource( 5 )
+
+[node name="GroundPlane" parent="Environment" index="6"]
+material/0 = ExtResource( 6 )
+
+[node name="Flag-Left" parent="Checkpoints/LapCheckpoint (5)" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="Flag-Left2" parent="Checkpoints/LapCheckpoint (4)" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="Flag-Left3" parent="Checkpoints/LapCheckpoint (3)" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="Flag-Left4" parent="Checkpoints/LapCheckpoint (2)" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="Flag-Left5" parent="Checkpoints/LapCheckpoint (1)" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="Flag-Left6" parent="Checkpoints/LapCheckpoint" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="StartFinishLine" parent="Checkpoints" index="6"]
+material/0 = ExtResource( 17 )
