@@ -14,6 +14,12 @@ Unity is a game engine that is popular with game developers for mobile, desktop,
 
 ## Get the Game
 
-You can play our game in your web browser at: https://eloinoel.github.io/awt-pj-ws23-24-porting-unity-to-godot-3/
+# Unity
 
-If you want to run the game locally, download this repository and open the Karting directory with Unity version 2022.3.14f1. You can then build the game by selecting 'File->Build Settings', then choosing the desired platform (for example WebGL for deployment in your browser). Then select 'Build and Run' at the bottom right of the dialog window. Alternatively, you could 'Build' the game and then open it with your own web server, e.g. running 'python -m http.server' in your build directory where the 'index.html' resides.
+You can play our Unity game in your web browser at: https://eloinoel.github.io/UnityRacingGame/ 
+
+If you want to run the game locally, download this repository and open the KartingUnity/ directory with Unity version 2022.3.14f1. You can then build the game by selecting 'File->Build Settings', then choosing the desired platform (for example WebGL for deployment in your browser). Then select 'Build and Run' at the bottom right of the dialog window. Alternatively, you could 'Build' the game and then open it with your own web server, e.g. running 'python -m http.server' in your build directory where the 'index.html' resides.
+
+# Godot
+
+You can play the ported Godot game in its current development state at: https://eloinoel.github.io/awt-pj-ws23-24-porting-unity-to-godot-3/ 
