@@ -181,7 +181,6 @@ namespace KartGame.KartSystems
         bool m_HasCollision;
         bool m_InAir = false;
 
-        //public void AddPowerup(StatPowerup statPowerup) => m_ActivePowerupList.Add(statPowerup);
         public void AddPowerup(StatPowerup statPowerup) 
         {
             //Debug.Log("add Powerup");
