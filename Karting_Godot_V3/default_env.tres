@@ -8,6 +8,6 @@ panorama = ExtResource( 1 )
 [resource]
 background_mode = 2
 background_sky = SubResource( 1 )
-background_sky_orientation = Basis( -0.997564, 0, -0.0697562, 0, 1, 0, 0.0697562, 0, -0.997564 )
+background_sky_orientation = Basis( -0.999848, 0, -0.0174526, 0, 1, 0, 0.0174526, 0, -0.999848 )
 fog_sun_amount = 0.33
 auto_exposure_scale = 3.45

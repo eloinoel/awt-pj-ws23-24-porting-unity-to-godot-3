@@ -1,0 +1,103 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://IntroMenu/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://IntroMenu_Unity/IntroSceneBackground_1.png" type="Texture" id=2]
+[ext_resource path="res://IntroMenu_Unity/KartScene.tscn" type="PackedScene" id=3]
+[ext_resource path="res://IntroMenu/Roboto-Black.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 128
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 64
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.231373, 0.231373, 0.231373, 1 )
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Control2" type="Control" parent="."]
+
+[node name="TextureRect3" type="TextureRect" parent="Control2"]
+margin_right = 1024.0
+margin_bottom = 600.0
+texture = ExtResource( 2 )
+expand = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control2"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2/MarginContainer2"]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="Label" type="Label" parent="Control2/MarginContainer2/VBoxContainer"]
+margin_right = 1024.0
+margin_bottom = 298.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 1 )
+text = "AWT Kart Game"
+align = 1
+valign = 1
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control2/MarginContainer2/VBoxContainer"]
+margin_left = 512.0
+margin_top = 302.0
+margin_right = 512.0
+margin_bottom = 306.0
+size_flags_horizontal = 6
+size_flags_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4"]
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer"]
+
+[node name="Control" type="Control" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer"]
+
+[node name="PlayButton" type="Button" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer/Control"]
+margin_left = -144.0
+margin_top = 178.0
+margin_right = 144.0
+margin_bottom = 256.0
+custom_fonts/font = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+text = "Play!"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4"]
+margin_top = 4.0
+margin_bottom = 4.0
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2"]
+
+[node name="Control" type="Control" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2/MarginContainer"]
+
+[node name="ControlButton" type="Button" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2/MarginContainer/Control"]
+margin_left = -144.0
+margin_top = 86.0
+margin_right = 144.0
+margin_bottom = 162.0
+custom_fonts/font = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+text = "Control"
+
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="Viewport" type="Viewport" parent="Spatial"]
+size = Vector2( 1024, 600 )
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="IntroMenu" parent="Spatial/Viewport" instance=ExtResource( 3 )]
+
+[node name="Camera" type="Camera" parent="Spatial/Viewport"]
+transform = Transform( -0.999999, 8.22478e-05, 0.00137627, 0, 0.998219, -0.0596548, -0.00137873, -0.0596547, -0.998218, 0, 2, -10 )
+
+[connection signal="pressed" from="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer/Control/PlayButton" to="." method="_on_PlayButton_pressed"]
