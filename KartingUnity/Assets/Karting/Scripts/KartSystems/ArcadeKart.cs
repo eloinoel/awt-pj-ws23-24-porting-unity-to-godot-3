@@ -204,7 +204,6 @@ namespace KartGame.KartSystems
                     if (vfx.sparks.isPlaying)
                         vfx.sparks.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                 }
-                    
             }
 
             foreach (var trail in m_DriftTrailInstances)
