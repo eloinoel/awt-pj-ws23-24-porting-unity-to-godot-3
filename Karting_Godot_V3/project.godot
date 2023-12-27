@@ -45,6 +45,10 @@ left={
  ]
 }
 
+[mono]
+
+project/assembly_name="Karting_Godot"
+
 [physics]
 
 common/enable_pause_aware_picking=true
