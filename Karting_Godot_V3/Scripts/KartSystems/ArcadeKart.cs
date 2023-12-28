@@ -10,14 +10,6 @@ public class ArcadeKart : RigidBody
 		GD.Print("ArcadeKart script is loaded");
 	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
-
-
-
 	//-----------------------------------------
 	//----------------- STATS -----------------
 	//-----------------------------------------

@@ -181,11 +181,11 @@ namespace KartGame.KartSystems
         bool m_HasCollision;
         bool m_InAir = false;
 
-        public void AddPowerup(StatPowerup statPowerup) 
+        public void AddPowerup(StatPowerup statPowerup)
         {
             //Debug.Log("add Powerup");
-            m_ActivePowerupList.Add(statPowerup); 
-        } 
+            m_ActivePowerupList.Add(statPowerup);
+        }
         public void SetCanMove(bool move) => m_CanMove = move;
         public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
@@ -456,7 +456,7 @@ namespace KartGame.KartSystems
             bool wasOverMaxSpeed = currentSpeed >= maxSpeed;
 
             // if over max speed, cannot accelerate faster.
-            if (wasOverMaxSpeed && !isBraking) 
+            if (wasOverMaxSpeed && !isBraking)
                 movement *= 0.0f;
 
             Vector3 newVelocity = Rigidbody.velocity + movement * Time.fixedDeltaTime;
@@ -490,7 +490,7 @@ namespace KartGame.KartSystems
                 float angularVelocitySmoothSpeed = 20f;
 
                 // turning is reversed if we're going in reverse and pressing reverse
-                if (!localVelDirectionIsFwd && !accelDirectionIsFwd) 
+                if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
                     angularVelocitySteering *= -1.0f;
 
                 var angularVel = Rigidbody.angularVelocity;
