@@ -256,19 +256,19 @@ public class ArcadeKart : RigidBody
 	//[ExportGroup("Physical Wheels")]
 	[Export]
 	public Godot.NodePath FrontLeftWheelPath;
-    public Godot.CollisionShape FrontLeftWheel;
+    public Godot.VehicleWheel3D FrontLeftWheel;
 
 	[Export]
 	public Godot.NodePath FrontRightWheelPath;
-    public Godot.CollisionShape FrontRightWheel;
+    public Godot.VehicleWheel3D FrontRightWheel;
 
 	[Export]
 	public Godot.NodePath RearLeftWheelPath;
-    public Godot.CollisionShape RearLeftWheel;
+    public Godot.VehicleWheel3D RearLeftWheel;
 
 	[Export]
 	public Godot.NodePath RearRightWheelPath;
-    public Godot.CollisionShape RearRightWheel;
+    public Godot.VehicleWheel3D RearRightWheel;
 
 //	[Export]
 	/// <summary>
@@ -370,7 +370,7 @@ public class ArcadeKart : RigidBody
     } */
 
     //TODO:
-    void UpdateSuspensionParams(CollisionShape wheel)
+    void UpdateSuspensionParams(VehicleWheel3D wheel)
     {
         /* wheel.suspensionDistance = SuspensionHeight;
         wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
@@ -390,10 +390,10 @@ public class ArcadeKart : RigidBody
         // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
         // set properties from given node paths
-        FrontLeftWheel = GetNode<CollisionShape>(FrontLeftWheelPath);
-        FrontRightWheel = GetNode<CollisionShape>(FrontRightWheelPath);
-        RearLeftWheel = GetNode<CollisionShape>(RearLeftWheelPath);
-        RearRightWheel = GetNode<CollisionShape>(RearRightWheelPath);
+        FrontLeftWheel = GetNode<VehicleWheel3D>(FrontLeftWheelPath);
+        FrontRightWheel = GetNode<VehicleWheel3D>(FrontRightWheelPath);
+        RearLeftWheel = GetNode<VehicleWheel3D>(RearLeftWheelPath);
+        RearRightWheel = GetNode<VehicleWheel3D>(RearRightWheelPath);
 
         //apply code to properties
         if(FrontRightWheel != null && FrontLeftWheel != null && RearLeftWheel != null && RearRightWheel != null)
@@ -454,7 +454,7 @@ public class ArcadeKart : RigidBody
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
 
 		int groundedCount = 0;
-		/*if (FrontLeftWheel.)*/
+		if (FrontLeftWheel.is_in_contact() /*&& */)
 	}
 	//TODO: continue porting methods here
 }
