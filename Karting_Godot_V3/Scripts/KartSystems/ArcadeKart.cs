@@ -267,18 +267,18 @@ public class ArcadeKart : RigidBody
 	public float WheelsPositionVerticalOffset = 0.0f;
 
 
-/* 	//[ExportGroup("Physical Wheels")]
+	//[ExportGroup("Physical Wheels")]
 	[Export]
-	public WheelCollider FrontLeftWheel; //TODO: change type
+	public Godot.NodePath FrontLeftWheel;
 
 	[Export]
-	public WheelCollider FrontRightWheel; //TODO: change type
+	public Godot.NodePath FrontRightWheel;
 
 	[Export]
-	public WheelCollider RearLeftWheel; //TODO: change type
+	public Godot.NodePath RearLeftWheel;
 
 	[Export]
-	public WheelCollider RearRightWheel; //TODO: change type */
+	public Godot.NodePath RearRightWheel;
 
 //	[Export]
 	/// <summary>
