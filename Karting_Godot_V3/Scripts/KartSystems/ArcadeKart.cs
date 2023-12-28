@@ -33,7 +33,7 @@ public class ArcadeKart : RigidBody
 	public struct Stats
 	{
 		//[ExportGroup("Movement Settings")]
-		[Export(PropertyHint.Range, "0.001f,,")] 
+		[Export(PropertyHint.Range, "0.001f,,")]
 		/// <summary>
 		/// Top speed attainable when moving forward.
 		/// </summary>
@@ -240,7 +240,6 @@ public class ArcadeKart : RigidBody
 	/// List of the kart's nozzles.
 	/// </summary>
  	public Godot.Collections.Array<Transform> Nozzles; //TODO: change type */
-	
 
 	//[ExportGroup("Suspensions")]
 	[Export(PropertyHint.Range, "0.0f, 1.0f,")]
