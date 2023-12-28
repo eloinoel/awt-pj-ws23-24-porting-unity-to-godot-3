@@ -4,11 +4,11 @@ using System;
 public class ArcadeKart : RigidBody
 {
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        GD.Print("ArcadeKart script is loaded");
-    }
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		GD.Print("ArcadeKart script is loaded");
+	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
@@ -18,7 +18,7 @@ public class ArcadeKart : RigidBody
 
 
 
-    //-----------------------------------------
+	//-----------------------------------------
 	//----------------- STATS -----------------
 	//-----------------------------------------
 
@@ -112,7 +112,7 @@ public class ArcadeKart : RigidBody
 		}
 	}
 
-    /* 	public Rigidbody Rigidbody { get; private set; } //TODO: change type */
+	/* 	public Rigidbody Rigidbody { get; private set; } //TODO: change type */
 /* 	public InputData Input { get; private set; }//TODO: change type */
 	public float AirPercent { get; private set; }
 	public float GroundPercent { get; private set; }
@@ -192,7 +192,7 @@ public class ArcadeKart : RigidBody
 	public float DriftDampening = 10.0f;
 
 
-    //[ExportGroup("VFX")]
+	//[ExportGroup("VFX")]
 	/*[Export]
 	/// <summary>
 	/// VFX that will be placed on the wheels when drifting.
@@ -318,7 +318,7 @@ public class ArcadeKart : RigidBody
 	bool m_HasCollision;
 	bool m_InAir = false;
 
-    //-----------------------------------------
+	//-----------------------------------------
 	//--------------- Functions ---------------
 	//-----------------------------------------
 
