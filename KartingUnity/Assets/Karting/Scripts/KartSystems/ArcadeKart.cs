@@ -296,7 +296,7 @@ namespace KartGame.KartSystems
             TickPowerups();
 
             // apply our physics properties
-            //Rigidbody.centerOfMass = transform.InverseTransformPoint(CenterOfMass.position);
+            Rigidbody.centerOfMass = transform.InverseTransformPoint(CenterOfMass.position);
 
             int groundedCount = 0;
             if (FrontLeftWheel.isGrounded && FrontLeftWheel.GetGroundHit(out WheelHit hit))
@@ -440,7 +440,7 @@ namespace KartGame.KartSystems
             bool isBraking = (localVelDirectionIsFwd && brake) || (!localVelDirectionIsFwd && accelerate);
 
             // if we are braking (moving reverse to where we are going)
-            // use the braking accleration instead
+            // use the braking acceleration instead
             float finalAccelPower = isBraking ? m_FinalStats.Braking : accelPower;
 
             float finalAcceleration = finalAccelPower * accelRamp;
