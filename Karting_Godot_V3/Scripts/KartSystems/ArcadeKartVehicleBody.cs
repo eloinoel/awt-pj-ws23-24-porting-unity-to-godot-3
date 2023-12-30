@@ -333,9 +333,9 @@ public class ArcadeKartVehicleBody : RigidBody
 	public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
 	//TODO: needs adjustment for collection maneuvering
-/* 	private void ActivateDriftVFX(bool active)
+	private void ActivateDriftVFX(bool active)
 	{
-		foreach (var vfx in m_DriftSparkInstances)
+		/*foreach (var vfx in m_DriftSparkInstances)
 		{
 			if (active && vfx.wheel.GetGroundHit(out WheelHit hit))
 			{
@@ -350,8 +350,8 @@ public class ArcadeKartVehicleBody : RigidBody
 		}
 
 		foreach (var trail in m_DriftTrailInstances)
-			trail.Item3.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);
-	} */
+			trail.Item3.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);*/
+	}
 
     private void UpdateDriftVFXOrientation()
     {
@@ -470,7 +470,7 @@ public class ArcadeKartVehicleBody : RigidBody
 		// apply vehicle physics
 		if (m_CanMove)
 		{
-			MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), Input.GetAxis("right","left"));
+			MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), Input.GetAxis("right","left"), state);
 		}
 		GroundAirborne();
 
@@ -573,7 +573,7 @@ public class ArcadeKartVehicleBody : RigidBody
         }
     } */
 
-	void MoveVehicle(bool accelerate, bool brake, float turnInput)
+	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
 		float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
@@ -624,7 +624,7 @@ public class ArcadeKartVehicleBody : RigidBody
         if (wasOverMaxSpeed && !isBraking)
             movement *= 0.0f;
 
-        Vector3 newVelocity = Rigidbody.LinearVelocity + movement /* TODO: * Time.fixedDeltaTime */;
+        Vector3 newVelocity = Rigidbody.LinearVelocity + movement * state.Step;
         newVelocity.y = Rigidbody.LinearVelocity.y;
 
         //  clamp max speed if we are on ground
@@ -637,20 +637,21 @@ public class ArcadeKartVehicleBody : RigidBody
         // coasting is when we aren't touching accelerate
         if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
         {
-            // newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), /* TODO: Time.fixedDeltaTime * */ m_FinalStats.CoastingDrag);
-			newVelocity = newVelocity.MoveToward(new Vector3(0, Rigidbody.LinearVelocity.y, 0), /* TODO: Time.fixedDeltaTime * */ m_FinalStats.CoastingDrag);
+            // newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
+			newVelocity = newVelocity.MoveToward(new Vector3(0, Rigidbody.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
         }
 		GD.Print(newVelocity);
-        Rigidbody.LinearVelocity = newVelocity;
+        //Rigidbody.LinearVelocity = newVelocity;
+		state.LinearVelocity = newVelocity;
 
-        /*// Drift
+        // Drift
         if (GroundPercent > 0.0f)
         {
-            if (m_InAir)
+			/* TODO: if (m_InAir)
             {
                 m_InAir = false;
                 Instantiate(JumpVFX, transform.position, Quaternion.identity);
-            }
+            } */
 
             // manual angular velocity coefficient
             float angularVelocitySteering = 0.4f;
@@ -660,20 +661,22 @@ public class ArcadeKartVehicleBody : RigidBody
             if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
                 angularVelocitySteering *= -1.0f;
 
-            var angularVel = Rigidbody.angularVelocity;
+            var angularVel = Rigidbody.AngularVelocity;
 
             // move the Y angular velocity towards our target
-            angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed);
+/*             angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
+            angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
 
             // apply the angular velocity
-            Rigidbody.angularVelocity = angularVel;
+/*             Rigidbody.angularVelocity = angularVel; */
+            state.AngularVelocity = angularVel;
 
             // rotate rigidbody's velocity as well to generate immediate velocity redirection
             // manual velocity steering coefficient
             float velocitySteering = 25f;
 
             // If the karts lands with a forward not in the velocity direction, we start the drift
-            if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
+            /*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
             {
                 Vector3 flattenVelocity = Vector3.ProjectOnPlane(Rigidbody.velocity, m_VerticalReference).normalized;
                 if (Vector3.Dot(flattenVelocity, transform.forward * Mathf.Sign(accelInput)) < Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad))
@@ -682,10 +685,10 @@ public class ArcadeKartVehicleBody : RigidBody
                     m_CurrentGrip = DriftGrip;
                     m_DriftTurningPower = 0.0f;
                 }
-            }
+            }*/
 
             // Drift Management
-            if (!IsDrifting)
+            /*if (!IsDrifting)
             {
                 if ((WantsToDrift || isBraking) && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
                 {
@@ -695,9 +698,9 @@ public class ArcadeKartVehicleBody : RigidBody
 
                     ActivateDriftVFX(true);
                 }
-            }
+            }*/
 
-            if (IsDrifting)
+            /*if (IsDrifting)
             {
                 float turnInputAbs = Mathf.Abs(turnInput);
                 if (turnInputAbs < k_NullInput)
@@ -724,17 +727,18 @@ public class ArcadeKartVehicleBody : RigidBody
                     m_CurrentGrip = m_FinalStats.Grip;
                 }
 
-            }
+            }*/
 
             // rotate our velocity based on current steer value
-            Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity;
+			/* Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
+            state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
         }
         else
         {
             m_InAir = true;
         }
 
-        bool validPosition = false;
+        /*bool validPosition = false;
         if (Physics.Raycast(transform.position + (transform.up * 0.1f), -transform.up, out RaycastHit hit, 3.0f, 1 << 9 | 1 << 10 | 1 << 11)) // Layer: ground (9) / Environment(10) / Track (11)
         {
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
