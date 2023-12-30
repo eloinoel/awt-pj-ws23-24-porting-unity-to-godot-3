@@ -633,7 +633,7 @@ public class ArcadeKartVehicleBody : RigidBody
 
         Rigidbody.velocity = newVelocity;
 
-        // Drift
+        /*// Drift
         if (GroundPercent > 0.0f)
         {
             if (m_InAir)
@@ -755,7 +755,6 @@ public class ArcadeKartVehicleBody : RigidBody
             m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
         }
 
-        ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
+        ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
 	}
-	//TODO: continue porting methods here
 }
