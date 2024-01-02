@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class ArcadeKartVehicleBody : RigidBody
+public class ArcadeKartVehicleBody : VehicleBody
 {
 
 	//-----------------------------------------
@@ -398,6 +398,10 @@ public class ArcadeKartVehicleBody : RigidBody
 
         m_CurrentGrip = baseStats.Grip;
 
+        //setup collision callbacks with the CollisionShape
+        Connect("body_entered", this, "_OnCollisionEnter");
+        Connect("body_exited", this, "_OnCollisionExit");
+
         //TODO: add in vfx when necessary
         /* if (DriftSparkVFX != null)
         {
@@ -546,9 +550,19 @@ public class ArcadeKartVehicleBody : RigidBody
 		return 0f; // TODO: Dummy return
 	}
 
-    /* void OnCollisionEnter(Collision collision) => m_HasCollision = true;
-    void OnCollisionExit(Collision collision) => m_HasCollision = false;
+    /* PREV: void OnCollisionEnter(Collision collision) => m_HasCollision = true;*/
+    private void _OnCollisionEnter(Node body)
+    {
+        m_HasCollision = true;
+    }
 
+    /* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
+    private void _OnCollisionExit(Node body)
+    {
+        m_HasCollision = false;
+    }
+
+    /* TODO:
     void OnCollisionStay(Collision collision)
     {
         m_HasCollision = true;
@@ -561,12 +575,6 @@ public class ArcadeKartVehicleBody : RigidBody
                 m_LastCollisionNormal = contact.normal;
         }
     } */
-	
-	// TODO: still need to connect collision signal?
-	void _OnEnter(Node body)
-	{
-
-	}
 
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
@@ -601,17 +609,16 @@ public class ArcadeKartVehicleBody : RigidBody
         // apply inputs to forward/backward
         float turningPower = IsDrifting ? m_DriftTurningPower : turnInput * m_FinalStats.Steer;
 
-        // PREV: transform.z = transform.forward and transform.y = transform.up in local coordinate space
-		/* PREV PORTED: Quaternion turnAngle = Quaternion.AngleAxis(turningPower, transform.up);
-        Vector3 fwd = turnAngle * Transform.origin.z; //Vector3 fwd = turnAngle * Transform.forward;
-        Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f); */
+		/* PREV: Quaternion turnAngle = Quaternion.AngleAxis(turningPower, transform.up);
+            Vector3 fwd = turnAngle * transform.forward;
+            Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f); */
 
        	/* In stack overflow we trust:
 	   	https://stackoverflow.com/questions/48438273/godot-3d-get-forward-vector */
 		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
 		Vector3 Forward = Rigidbody.GlobalTransform.basis.z;
 
-		GD.Print("fwd");
+		//GD.Print("fwd"); //TODO: remove debug
         Vector3 fwd = Forward.Rotated(Up, turningPower);
         Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
@@ -622,8 +629,9 @@ public class ArcadeKartVehicleBody : RigidBody
         if (wasOverMaxSpeed && !isBraking)
             movement *= 0.0f;
 
-        Vector3 newVelocity = Rigidbody.LinearVelocity + movement * state.Step;
-        newVelocity.y = Rigidbody.LinearVelocity.y;
+        //changed to state instead of Rigidbody.LinearVelocity
+        Vector3 newVelocity = state.LinearVelocity + movement * state.Step;
+        newVelocity.y = state.LinearVelocity.y;
 
         //  clamp max speed if we are on ground
         if (GroundPercent > 0.0f && !wasOverMaxSpeed)
@@ -632,11 +640,11 @@ public class ArcadeKartVehicleBody : RigidBody
 			newVelocity = newVelocity.LimitLength(maxSpeed);
         }
 
-        // coasting is when we aren't touching accelerate
+        // coasting(Leerlauf) is when we aren't touching accelerate
         if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
         {
             // PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
-			newVelocity = newVelocity.MoveToward(new Vector3(0, Rigidbody.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
+			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
         }
 		// GD.Print(newVelocity);
         // PREV: Rigidbody.LinearVelocity = newVelocity;
@@ -648,7 +656,7 @@ public class ArcadeKartVehicleBody : RigidBody
 			if (m_InAir)
             {
                 m_InAir = false;
-				GD.Print("Kart becomes grounded");
+				//GD.Print("Kart becomes grounded"); //TODO: remove debug
                 /* TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity); */
             }
 
@@ -660,7 +668,7 @@ public class ArcadeKartVehicleBody : RigidBody
             if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
                 angularVelocitySteering *= -1.0f;
 
-            var angularVel = Rigidbody.AngularVelocity;
+            var angularVel = state.AngularVelocity;
 
             // move the Y angular velocity towards our target
 			/* PREV: angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
@@ -730,12 +738,12 @@ public class ArcadeKartVehicleBody : RigidBody
 
             // rotate our velocity based on current steer value
 			/* PREV: Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
-			GD.Print("LinearVelocity");
+			//GD.Print("LinearVelocity"); //TODO: take out the trash
             state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
         }
         else
         {
-			GD.Print("Kart becomes ungrounded (in air)");
+			//GD.Print("Kart becomes ungrounded (in air)");
             m_InAir = true;
         }
 
