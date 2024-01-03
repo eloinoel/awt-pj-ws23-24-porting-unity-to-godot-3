@@ -427,12 +427,14 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public override void _IntegrateForces(PhysicsDirectBodyState state)
 	{
+        //base._IntegrateForces(state);
+
 		UpdateSuspensionParams(FrontLeftWheel);
 		UpdateSuspensionParams(FrontRightWheel);
 		UpdateSuspensionParams(RearLeftWheel);
 		UpdateSuspensionParams(RearRightWheel);
 
-		/* GatherInputs(); */
+		/* GatherInputs(); probably not needed*/
 
 		// apply our powerups to create our finalStats
 		TickPowerups();
@@ -445,6 +447,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			this can't be backported to Godot 3.x without a complete rewrite.
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
+        //GD.Print(state.CenterOfMass);
 
 		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
@@ -604,16 +607,26 @@ public class ArcadeKartVehicleBody : VehicleBody
                 m_LastCollisionNormal = contact.normal;
         }
     } */
+    private float debugTimer = 0.0f; //TODO: remove debub
+    /*  if(debugTimer >= 1)
+        {
+            GD.Print("global: " + state.LinearVelocity);
+            GD.Print("local:" + localVel);
+            debugTimer = 0.0f;
+        } */
 
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
+        debugTimer += state.Step; //TODO: remove debug
+
 		float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
         // manual acceleration curve coefficient scalar
         float accelerationCurveCoeff = 5;
         // PREV: transform.InverseTransformVector(Rigidbody.velocity);
-        // PREV PORTED: Vector3 localVel = Transform.XformInv(Rigidbody.LinearVelocity); // TODO: is this correct
-		Vector3 localVel = state.Transform.XformInv(Rigidbody.LinearVelocity);
+		Vector3 localVel = state.Transform.basis.XformInv(state.LinearVelocity);
+
+
 
         bool accelDirectionIsFwd = accelInput >= 0;
         bool localVelDirectionIsFwd = localVel.z >= 0;

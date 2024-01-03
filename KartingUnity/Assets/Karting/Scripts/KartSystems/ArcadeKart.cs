@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.VFX;
+using System.Threading;
 
 namespace KartGame.KartSystems
 {
@@ -412,11 +413,12 @@ namespace KartGame.KartSystems
 
             foreach (var contact in collision.contacts)
             {
+
                 if (Vector3.Dot(contact.normal, Vector3.up) > dot)
                     m_LastCollisionNormal = contact.normal;
             }
         }
-
+        private float debugTimer = 0.0f;// TODO: remove debug
         void MoveVehicle(bool accelerate, bool brake, float turnInput)
         {
             float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
@@ -424,6 +426,14 @@ namespace KartGame.KartSystems
             // manual acceleration curve coefficient scalar
             float accelerationCurveCoeff = 5;
             Vector3 localVel = transform.InverseTransformVector(Rigidbody.velocity);
+
+            //TODO: remove debug
+            debugTimer += Time.deltaTime;
+            if(debugTimer >= 1)
+            {
+                Debug.Log("localVel: " + localVel);
+                debugTimer = 0;
+            }
 
             bool accelDirectionIsFwd = accelInput >= 0;
             bool localVelDirectionIsFwd = localVel.z >= 0;
