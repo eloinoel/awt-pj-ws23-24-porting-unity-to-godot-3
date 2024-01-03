@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics.Eventing.Reader;
 
 public class ArcadeKartVehicleBody : VehicleBody
 {
@@ -456,6 +457,9 @@ public class ArcadeKartVehicleBody : VehicleBody
 		if (RearRightWheel.IsInContact() && RearRightWheel.GetContactBody() != null)
 			groundedCount++;
 
+        //check collisions with kart (in Unity onCollisionStay method)
+        _OnCollisionStay(state);
+
 		// calculate how grounded and airbone we are
 		GroundPercent = (float) groundedCount / 4.0f;
 		AirPercent = 1 - GroundPercent;
@@ -550,6 +554,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		return 0f; // TODO: Dummy return
 	}
 
+    // see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot
     /* PREV: void OnCollisionEnter(Collision collision) => m_HasCollision = true;*/
     private void _OnCollisionEnter(Node body)
     {
@@ -560,6 +565,30 @@ public class ArcadeKartVehicleBody : VehicleBody
     private void _OnCollisionExit(Node body)
     {
         m_HasCollision = false;
+    }
+
+    // this method isn't a real callback but is called every frame in _integrateForces (naming according to unity code)
+    private void _OnCollisionStay(PhysicsDirectBodyState state)
+    {
+        m_LastCollisionNormal = Vector3.Zero;
+        float dot = -1.0f;
+        int contactCount = state.GetContactCount();
+
+        if (contactCount > 0)
+        {
+            m_HasCollision = true;
+            for(int i = 0; i < contactCount; i++)
+            {
+                Vector3 contactNormal = state.GetContactLocalNormal(i);
+                //GD.Print("local normal" + contactNormal);
+                //contactNormal = state.Transform.XformInv(contactNormal); //convert to world space
+                //GD.Print("global normal" + contactNormal);
+                if(contactNormal.Dot(Vector3.Up) > dot)
+                {
+                    m_LastCollisionNormal = contactNormal;
+                }
+            }
+        }
     }
 
     /* TODO:
