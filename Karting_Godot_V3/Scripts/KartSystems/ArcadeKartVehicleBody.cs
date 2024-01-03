@@ -752,7 +752,12 @@ public class ArcadeKartVehicleBody : VehicleBody
         {
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
             m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime * (GroundPercent > 0.0f ? 10.0f : 1.0f)));    // Blend faster if on ground
-        } */
+        } else
+        {
+            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
+            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
+        }*/
+		m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
@@ -760,18 +765,37 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			Vector3 hitNormal = (Vector3) intersection["normal"];
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
-/* 			GD.Print(hitNormal);
+			GD.Print(hitNormal);
 			GD.Print(m_VerticalReference);
 			GD.Print(m_LastCollisionNormal);
-            m_VerticalReference = m_VerticalReference.Slerp(lerpVector, Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f));    // Blend faster if on ground
-			GD.Print(m_VerticalReference); */
-		}
-        /* else
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
-        }
+			GD.Print(lerpVector);
+			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f);
+			
+/* 			Vector2 m_VerticalReference_xy = new Vector2(m_VerticalReference.x, m_VerticalReference.y).Normalized();
+			Vector2 m_VerticalReference_yz = new Vector2(m_VerticalReference.y, m_VerticalReference.z).Normalized();
+			Vector2 lerpVector_xy = new Vector2(lerpVector.x, lerpVector.y).Normalized();
+			Vector2 lerpVector_yz = new Vector2(lerpVector.y, lerpVector.z).Normalized();
 
+			m_VerticalReference_xy = m_VerticalReference_xy.Slerp(lerpVector_xy, lerpRatio);
+			m_VerticalReference_yz = m_VerticalReference_yz.Slerp(lerpVector_yz, lerpRatio);
+			m_VerticalReference = new Vector3(m_VerticalReference_xy.x, m_VerticalReference_xy.y, m_VerticalReference_yz.y).Normalized(); */
+			//m_VerticalReference = m_VerticalReference.Slerp(lerpVector, lerpRatio);    // Blend faster if on ground
+			//new Vector3(0, 1, 0).Slerp(new Vector3(0, -1, 0), 0.05f);
+
+/* 			Quat m_VerticalReferenceQuat = new Quat(m_VerticalReference);
+			Quat lerpVectorQuat = new Quat(lerpVector);
+			m_VerticalReferenceQuat = m_VerticalReferenceQuat.Slerp(lerpVectorQuat, lerpRatio);
+			m_VerticalReference = m_VerticalReferenceQuat.GetEuler(); */
+			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
+			GD.Print(m_VerticalReference);
+		}
+		else
+		{
+            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.Up;
+			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
+			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
+		}
+        /*
         validPosition = GroundPercent > 0.7f && !m_HasCollision && Vector3.Dot(m_VerticalReference, Vector3.up) > 0.9f;
 
         // Airborne / Half on ground management
@@ -792,5 +816,13 @@ public class ArcadeKartVehicleBody : VehicleBody
         }
 
         ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
+	}
+
+	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
+	{
+		Quat fromQuat = new Quat(from);
+		Quat toQuat = new Quat(to);
+		fromQuat = fromQuat.Slerp(toQuat, slerpRatio);
+		return fromQuat.GetEuler();
 	}
 }
