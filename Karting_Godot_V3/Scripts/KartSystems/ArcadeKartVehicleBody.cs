@@ -839,16 +839,25 @@ public class ArcadeKartVehicleBody : VehicleBody
 		// Airborne / Half on ground management
 		if (GroundPercent < 0.7f)
 		{
- 			/* state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
+ 			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
 			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
 			Plane projectionPlane = new Plane(m_VerticalReference, 0.0f);
 			Vector3 finalOrientationDirection = projectionPlane.Project(Forward);
 			finalOrientationDirection = finalOrientationDirection.Normalized();
 			if (finalOrientationDirection.LengthSquared() > 0.0f)
 			{
-				state.Transform = state.GetTransform().
+				float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
+				Vector3 Rotation = state.Transform.basis.GetEuler();
+				Quat QuatRotation = new Quat(Rotation);
+				Vector3 LateralAxis = finalOrientationDirection.Cross(m_VerticalReference);
+				Basis basis = new Basis(LateralAxis, m_VerticalReference, finalOrientationDirection);
+				Quat lookAt = basis.Quat().Normalized();
+				Quat lerpQuat = new Quat(QuatSlerp(Rotation, lookAt.GetEuler(), slerpRatio));
+				state.Transform = state.Transform.LookingAt(finalOrientationDirection, m_VerticalReference);
+				//state.Transform.basis.RotationQuat = lerpQuat;
+				// state.Transform = state.GetTransform().
 				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
-			} */
+			}
 		}
 	}
 
