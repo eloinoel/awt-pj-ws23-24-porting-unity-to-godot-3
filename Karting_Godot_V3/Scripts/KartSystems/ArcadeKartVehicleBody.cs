@@ -794,29 +794,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			Vector3 hitNormal = (Vector3) intersection["normal"];
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
-			GD.Print(hitNormal);
-			GD.Print(m_VerticalReference);
-			GD.Print(m_LastCollisionNormal);
-			GD.Print(lerpVector);
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f);
-			
-/* 			Vector2 m_VerticalReference_xy = new Vector2(m_VerticalReference.x, m_VerticalReference.y).Normalized();
-			Vector2 m_VerticalReference_yz = new Vector2(m_VerticalReference.y, m_VerticalReference.z).Normalized();
-			Vector2 lerpVector_xy = new Vector2(lerpVector.x, lerpVector.y).Normalized();
-			Vector2 lerpVector_yz = new Vector2(lerpVector.y, lerpVector.z).Normalized();
-
-			m_VerticalReference_xy = m_VerticalReference_xy.Slerp(lerpVector_xy, lerpRatio);
-			m_VerticalReference_yz = m_VerticalReference_yz.Slerp(lerpVector_yz, lerpRatio);
-			m_VerticalReference = new Vector3(m_VerticalReference_xy.x, m_VerticalReference_xy.y, m_VerticalReference_yz.y).Normalized(); */
-			//m_VerticalReference = m_VerticalReference.Slerp(lerpVector, lerpRatio);    // Blend faster if on ground
-			//new Vector3(0, 1, 0).Slerp(new Vector3(0, -1, 0), 0.05f);
-
-/* 			Quat m_VerticalReferenceQuat = new Quat(m_VerticalReference);
-			Quat lerpVectorQuat = new Quat(lerpVector);
-			m_VerticalReferenceQuat = m_VerticalReferenceQuat.Slerp(lerpVectorQuat, lerpRatio);
-			m_VerticalReference = m_VerticalReferenceQuat.GetEuler(); */
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
-			GD.Print(m_VerticalReference);
 		}
 		else
 		{
@@ -824,11 +803,10 @@ public class ArcadeKartVehicleBody : VehicleBody
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
-        /*
-        validPosition = GroundPercent > 0.7f && !m_HasCollision && Vector3.Dot(m_VerticalReference, Vector3.up) > 0.9f;
+        validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f;
 
         // Airborne / Half on ground management
-        if (GroundPercent < 0.7f)
+/*         if (GroundPercent < 0.7f)
         {
             Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
             Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
@@ -837,14 +815,28 @@ public class ArcadeKartVehicleBody : VehicleBody
             {
                 Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
             }
-        }
-        else if (validPosition)
+        } */
+        /*else if (validPosition)
         {
             m_LastValidPosition = transform.position;
             m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
         }
 
         ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
+		// Airborne / Half on ground management
+		if (GroundPercent < 0.7f)
+		{
+ 			/* state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
+			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
+			Plane projectionPlane = new Plane(m_VerticalReference, 0.0f);
+			Vector3 finalOrientationDirection = projectionPlane.Project(Forward);
+			finalOrientationDirection = finalOrientationDirection.Normalized();
+			if (finalOrientationDirection.LengthSquared() > 0.0f)
+			{
+				state.Transform = state.GetTransform().
+				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
+			} */
+		}
 	}
 
 	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
