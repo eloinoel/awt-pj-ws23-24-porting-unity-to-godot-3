@@ -792,7 +792,12 @@ public class ArcadeKartVehicleBody : VehicleBody
         {
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
             m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime * (GroundPercent > 0.0f ? 10.0f : 1.0f)));    // Blend faster if on ground
-        } */
+        } else
+        {
+            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
+            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
+        }*/
+		m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
@@ -800,22 +805,19 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			Vector3 hitNormal = (Vector3) intersection["normal"];
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
- 			GD.Print(hitNormal);
-			GD.Print(m_VerticalReference);
-			GD.Print(m_LastCollisionNormal);
-            m_VerticalReference = m_VerticalReference.Slerp(lerpVector, Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f));    // Blend faster if on ground
-			GD.Print(m_VerticalReference);
+			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f);
+			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
-        /* else
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
-        }
-
-        validPosition = GroundPercent > 0.7f && !m_HasCollision && Vector3.Dot(m_VerticalReference, Vector3.up) > 0.9f;
+		else
+		{
+            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.Up;
+			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
+			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
+		}
+        validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f;
 
         // Airborne / Half on ground management
-        if (GroundPercent < 0.7f)
+/*         if (GroundPercent < 0.7f)
         {
             Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
             Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
@@ -824,14 +826,45 @@ public class ArcadeKartVehicleBody : VehicleBody
             {
                 Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
             }
-        }
-        else if (validPosition)
+        } */
+        /*else if (validPosition)
         {
             m_LastValidPosition = transform.position;
             m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
         }
 
         ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
+		// Airborne / Half on ground management
+		if (GroundPercent < 0.7f)
+		{
+ 			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
+			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
+			Plane projectionPlane = new Plane(m_VerticalReference, 0.0f);
+			Vector3 finalOrientationDirection = projectionPlane.Project(Forward);
+			finalOrientationDirection = finalOrientationDirection.Normalized();
+			if (finalOrientationDirection.LengthSquared() > 0.0f)
+			{
+				float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
+				Vector3 Rotation = state.Transform.basis.GetEuler();
+				Quat QuatRotation = new Quat(Rotation);
+				Vector3 LateralAxis = finalOrientationDirection.Cross(m_VerticalReference);
+				Basis basis = new Basis(LateralAxis, m_VerticalReference, finalOrientationDirection);
+				Quat lookAt = basis.Quat().Normalized();
+				Quat lerpQuat = new Quat(QuatSlerp(Rotation, lookAt.GetEuler(), slerpRatio));
+				state.Transform = state.Transform.LookingAt(finalOrientationDirection, m_VerticalReference);
+				//state.Transform.basis.RotationQuat = lerpQuat;
+				// state.Transform = state.GetTransform().
+				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
+			}
+		}
+	}
+
+	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
+	{
+		Quat fromQuat = new Quat(from);
+		Quat toQuat = new Quat(to);
+		fromQuat = fromQuat.Slerp(toQuat, slerpRatio);
+		return fromQuat.GetEuler();
 	}
 
     Vector3 FloorVec(Vector3 vector, int numDecimals)
