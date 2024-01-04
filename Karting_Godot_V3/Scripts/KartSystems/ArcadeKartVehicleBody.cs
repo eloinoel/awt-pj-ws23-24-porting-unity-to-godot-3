@@ -608,13 +608,12 @@ public class ArcadeKartVehicleBody : VehicleBody
         }
     } */
     private float debugTimer = 0.0f; //TODO: remove debub
-    /*  if(debugTimer >= 1)
-        {
-            GD.Print("global: " + state.LinearVelocity);
-            GD.Print("local:" + localVel);
-            debugTimer = 0.0f;
-        } */
-
+    /* if(debugTimer >= 1)
+    {
+        GD.Print("Up " + Up + ", Forward: " + Forward + ", fwd: " + fwd + ", movement: " + FloorVec(movement, 2) + "turning power: " + turningPower);
+        GD.Print("newVelocity: " + newVelocity);
+        debugTimer = 0.0f;
+    } */
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
         debugTimer += state.Step; //TODO: remove debug
@@ -626,8 +625,6 @@ public class ArcadeKartVehicleBody : VehicleBody
         // PREV: transform.InverseTransformVector(Rigidbody.velocity);
 		Vector3 localVel = state.Transform.basis.XformInv(state.LinearVelocity);
 
-
-
         bool accelDirectionIsFwd = accelInput >= 0;
         bool localVelDirectionIsFwd = localVel.z >= 0;
 
@@ -635,7 +632,7 @@ public class ArcadeKartVehicleBody : VehicleBody
         float maxSpeed = localVelDirectionIsFwd ? m_FinalStats.TopSpeed : m_FinalStats.ReverseSpeed;
         float accelPower = accelDirectionIsFwd ? m_FinalStats.Acceleration : m_FinalStats.ReverseAcceleration;
 
-        float currentSpeed = Rigidbody.LinearVelocity.Length();
+        float currentSpeed = state.LinearVelocity.Length();
         float accelRampT = currentSpeed / maxSpeed;
         float multipliedAccelerationCurve = m_FinalStats.AccelerationCurve * accelerationCurveCoeff;
         float accelRamp = Mathf.Lerp(multipliedAccelerationCurve, 1, accelRampT * accelRampT);
@@ -657,11 +654,10 @@ public class ArcadeKartVehicleBody : VehicleBody
 
        	/* In stack overflow we trust:
 	   	https://stackoverflow.com/questions/48438273/godot-3d-get-forward-vector */
-		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
-		Vector3 Forward = Rigidbody.GlobalTransform.basis.z;
+		Vector3 Up = GlobalTransform.basis.y.Normalized();
+		Vector3 Forward = GlobalTransform.basis.z.Normalized();
 
-		//GD.Print("fwd"); //TODO: remove debug
-        Vector3 fwd = Forward.Rotated(Up, turningPower);
+        Vector3 fwd = Forward.Rotated(Up, Mathf.Deg2Rad(turningPower)*10);
         Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
         // forward movement
@@ -688,6 +684,9 @@ public class ArcadeKartVehicleBody : VehicleBody
             // PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
         }
+
+        //TODO: remove debug
+
 		// GD.Print(newVelocity);
         // PREV: Rigidbody.LinearVelocity = newVelocity;
 		state.LinearVelocity = newVelocity;
@@ -711,7 +710,6 @@ public class ArcadeKartVehicleBody : VehicleBody
                 angularVelocitySteering *= -1.0f;
 
             var angularVel = state.AngularVelocity;
-
             // move the Y angular velocity towards our target
 			/* PREV: angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
             angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
@@ -802,11 +800,11 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			Vector3 hitNormal = (Vector3) intersection["normal"];
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
-/* 			GD.Print(hitNormal);
+ 			GD.Print(hitNormal);
 			GD.Print(m_VerticalReference);
 			GD.Print(m_LastCollisionNormal);
             m_VerticalReference = m_VerticalReference.Slerp(lerpVector, Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f));    // Blend faster if on ground
-			GD.Print(m_VerticalReference); */
+			GD.Print(m_VerticalReference);
 		}
         /* else
         {
@@ -835,4 +833,15 @@ public class ArcadeKartVehicleBody : VehicleBody
 
         ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
 	}
+
+    Vector3 FloorVec(Vector3 vector, int numDecimals)
+    {
+        Vector3 result = new Vector3(vector.x, vector.y, vector.z);
+
+        result.x = ((int) (result.x * 10 * numDecimals)) / (numDecimals * 10.0f);
+        result.y = ((int) (result.y * 10 * numDecimals)) / (numDecimals * 10.0f);
+        result.z = ((int) (result.z * 10 * numDecimals)) / (numDecimals * 10.0f);
+
+        return result;
+    }
 }
