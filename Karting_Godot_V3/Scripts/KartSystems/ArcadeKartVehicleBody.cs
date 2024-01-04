@@ -601,20 +601,19 @@ public class ArcadeKartVehicleBody : VehicleBody
 		m_LastCollisionNormal = Vector3.zero;
 		float dot = -1.0f;
 
-		foreach (var contact in collision.contacts)
-		{
-			if (Vector3.Dot(contact.normal, Vector3.up) > dot)
-				m_LastCollisionNormal = contact.normal;
-		}
-	} */
-	private float debugTimer = 0.0f; //TODO: remove debub
-	/*  if(debugTimer >= 1)
-		{
-			GD.Print("global: " + state.LinearVelocity);
-			GD.Print("local:" + localVel);
-			debugTimer = 0.0f;
-		} */
-
+        foreach (var contact in collision.contacts)
+        {
+            if (Vector3.Dot(contact.normal, Vector3.up) > dot)
+                m_LastCollisionNormal = contact.normal;
+        }
+    } */
+    private float debugTimer = 0.0f; //TODO: remove debub
+    /* if(debugTimer >= 1)
+    {
+        GD.Print("Up " + Up + ", Forward: " + Forward + ", fwd: " + fwd + ", movement: " + FloorVec(movement, 2) + "turning power: " + turningPower);
+        GD.Print("newVelocity: " + newVelocity);
+        debugTimer = 0.0f;
+    } */
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
 		debugTimer += state.Step; //TODO: remove debug
@@ -626,19 +625,17 @@ public class ArcadeKartVehicleBody : VehicleBody
 		// PREV: transform.InverseTransformVector(Rigidbody.velocity);
 		Vector3 localVel = state.Transform.basis.XformInv(state.LinearVelocity);
 
-
-
-		bool accelDirectionIsFwd = accelInput >= 0;
-		bool localVelDirectionIsFwd = localVel.z >= 0;
+        bool accelDirectionIsFwd = accelInput >= 0;
+        bool localVelDirectionIsFwd = localVel.z >= 0;
 
 		// use the max speed for the direction we are going--forward or reverse.
 		float maxSpeed = localVelDirectionIsFwd ? m_FinalStats.TopSpeed : m_FinalStats.ReverseSpeed;
 		float accelPower = accelDirectionIsFwd ? m_FinalStats.Acceleration : m_FinalStats.ReverseAcceleration;
 
-		float currentSpeed = Rigidbody.LinearVelocity.Length();
-		float accelRampT = currentSpeed / maxSpeed;
-		float multipliedAccelerationCurve = m_FinalStats.AccelerationCurve * accelerationCurveCoeff;
-		float accelRamp = Mathf.Lerp(multipliedAccelerationCurve, 1, accelRampT * accelRampT);
+        float currentSpeed = state.LinearVelocity.Length();
+        float accelRampT = currentSpeed / maxSpeed;
+        float multipliedAccelerationCurve = m_FinalStats.AccelerationCurve * accelerationCurveCoeff;
+        float accelRamp = Mathf.Lerp(multipliedAccelerationCurve, 1, accelRampT * accelRampT);
 
 		bool isBraking = (localVelDirectionIsFwd && brake) || (!localVelDirectionIsFwd && accelerate);
 
@@ -657,12 +654,11 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	   	/* In stack overflow we trust:
 	   	https://stackoverflow.com/questions/48438273/godot-3d-get-forward-vector */
-		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
-		Vector3 Forward = Rigidbody.GlobalTransform.basis.z;
+		Vector3 Up = GlobalTransform.basis.y.Normalized();
+		Vector3 Forward = GlobalTransform.basis.z.Normalized();
 
-		//GD.Print("fwd"); //TODO: remove debug
-		Vector3 fwd = Forward.Rotated(Up, turningPower);
-		Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
+        Vector3 fwd = Forward.Rotated(Up, Mathf.Deg2Rad(turningPower));
+        Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
 		// forward movement
 		bool wasOverMaxSpeed = currentSpeed >= maxSpeed;
@@ -687,9 +683,13 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			// PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
-		}
+        }
+
+        //TODO: remove debug
+
 		// GD.Print(newVelocity);
-		// PREV: Rigidbody.LinearVelocity = newVelocity;
+        // PREV: Rigidbody.LinearVelocity = newVelocity;
+        newVelocity.x = -newVelocity.x; // x axis is inverted in godot
 		state.LinearVelocity = newVelocity;
 
 		// Drift
@@ -699,8 +699,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 			{
 				m_InAir = false;
 				//GD.Print("Kart becomes grounded"); //TODO: remove debug
-				/* TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity); */
-			}
+                //TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity);
+            }
 
 			// manual angular velocity coefficient
 			float angularVelocitySteering = 0.4f;
@@ -877,4 +877,15 @@ public class ArcadeKartVehicleBody : VehicleBody
 		fromQuat = fromQuat.Slerp(toQuat, slerpRatio);
 		return fromQuat.GetEuler();
 	}
+
+    Vector3 FloorVec(Vector3 vector, int numDecimals)
+    {
+        Vector3 result = new Vector3(vector.x, vector.y, vector.z);
+
+        result.x = ((int) (result.x * 10 * numDecimals)) / (numDecimals * 10.0f);
+        result.y = ((int) (result.y * 10 * numDecimals)) / (numDecimals * 10.0f);
+        result.z = ((int) (result.z * 10 * numDecimals)) / (numDecimals * 10.0f);
+
+        return result;
+    }
 }
