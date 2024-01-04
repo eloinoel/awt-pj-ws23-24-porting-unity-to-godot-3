@@ -689,13 +689,13 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 		// GD.Print(newVelocity);
         // PREV: Rigidbody.LinearVelocity = newVelocity;
-        newVelocity.x = -newVelocity.x;
+        newVelocity.x = -newVelocity.x; // x axis is inverted in godot
 		state.LinearVelocity = newVelocity;
 
         // Drift
         if (GroundPercent > 0.0f)
         {
-			/* if (m_InAir)
+			if (m_InAir)
             {
                 m_InAir = false;
 				//GD.Print("Kart becomes grounded"); //TODO: remove debug
@@ -721,7 +721,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
             // rotate rigidbody's velocity as well to generate immediate velocity redirection
             // manual velocity steering coefficient
-            float velocitySteering = 25f; */
+            float velocitySteering = 25f;
 
             // If the karts lands with a forward not in the velocity direction, we start the drift
             /*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
@@ -780,7 +780,7 @@ public class ArcadeKartVehicleBody : VehicleBody
             // rotate our velocity based on current steer value
 			/* PREV: Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
 			//GD.Print("LinearVelocity"); //TODO: take out the trash
-            //state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
+            state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
         }
         else
         {
@@ -798,7 +798,7 @@ public class ArcadeKartVehicleBody : VehicleBody
             Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
             m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
         }*/
-		/* m_LastCollisionNormal = Vector3.Up; // TODO: remove
+		m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
@@ -815,7 +815,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
-        validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f; */
+        validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f;
 
         // Airborne / Half on ground management
 /*         if (GroundPercent < 0.7f)
@@ -836,7 +836,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
         ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
 		// Airborne / Half on ground management
-		/* if (GroundPercent < 0.7f)
+		if (GroundPercent < 0.7f)
 		{
  			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
 			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
@@ -857,7 +857,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 				// state.Transform = state.GetTransform().
 				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
 			}
-		} */
+		}
 	}
 
 	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
