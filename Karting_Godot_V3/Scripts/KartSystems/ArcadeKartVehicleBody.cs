@@ -257,19 +257,19 @@ public class ArcadeKartVehicleBody : VehicleBody
 	//[ExportGroup("Physical Wheels")]
 	[Export]
 	public Godot.NodePath FrontLeftWheelPath;
-    public Godot.VehicleWheel FrontLeftWheel;
+	public Godot.VehicleWheel FrontLeftWheel;
 
 	[Export]
 	public Godot.NodePath FrontRightWheelPath;
-    public Godot.VehicleWheel FrontRightWheel;
+	public Godot.VehicleWheel FrontRightWheel;
 
 	[Export]
 	public Godot.NodePath RearLeftWheelPath;
-    public Godot.VehicleWheel RearLeftWheel;
+	public Godot.VehicleWheel RearLeftWheel;
 
 	[Export]
 	public Godot.NodePath RearRightWheelPath;
-    public Godot.VehicleWheel RearRightWheel;
+	public Godot.VehicleWheel RearRightWheel;
 
 //	[Export]
 	/// <summary>
@@ -303,7 +303,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	Godot.Collections.Array<StatPowerup> m_ActivePowerupList = new Godot.Collections.Array<StatPowerup>();
 	ArcadeKart.Stats m_FinalStats;
 
-/* 	Godot.Quaternion m_LastValidRotation; */
+	Godot.Quat m_LastValidRotation;
 	Godot.Vector3 m_LastValidPosition;
 	Godot.Vector3 m_LastCollisionNormal;
 	bool m_HasCollision;
@@ -343,91 +343,91 @@ public class ArcadeKartVehicleBody : VehicleBody
 			trail.Item3.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);*/
 	}
 
-    private void UpdateDriftVFXOrientation()
-    {
-        /* foreach (var vfx in m_DriftSparkInstances)
-        {
-            vfx.sparks.transform.position = vfx.wheel.transform.position - (vfx.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up) + (transform.right * vfx.horizontalOffset);
-            vfx.sparks.transform.rotation = transform.rotation * Quaternion.Euler(0.0f, 0.0f, vfx.rotation);
-        }
+	private void UpdateDriftVFXOrientation()
+	{
+		/* foreach (var vfx in m_DriftSparkInstances)
+		{
+			vfx.sparks.transform.position = vfx.wheel.transform.position - (vfx.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up) + (transform.right * vfx.horizontalOffset);
+			vfx.sparks.transform.rotation = transform.rotation * Quaternion.Euler(0.0f, 0.0f, vfx.rotation);
+		}
 
-        foreach (var trail in m_DriftTrailInstances)
-        {
-            trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up);
-            trail.trailRoot.transform.rotation = transform.rotation;
-        } */
-    }
+		foreach (var trail in m_DriftTrailInstances)
+		{
+			trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up);
+			trail.trailRoot.transform.rotation = transform.rotation;
+		} */
+	}
 
-    //TODO:
-    void UpdateSuspensionParams(VehicleWheel wheel)
-    {
-        /* wheel.suspensionDistance = SuspensionHeight;
-        wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
-        JointSpring spring = wheel.suspensionSpring;
-        spring.spring = SuspensionSpring;
-        spring.damper = SuspensionDamp;
-        wheel.suspensionSpring = spring; */
-    }
+	//TODO:
+	void UpdateSuspensionParams(VehicleWheel wheel)
+	{
+		/* wheel.suspensionDistance = SuspensionHeight;
+		wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
+		JointSpring spring = wheel.suspensionSpring;
+		spring.spring = SuspensionSpring;
+		spring.damper = SuspensionDamp;
+		wheel.suspensionSpring = spring; */
+	}
 
-    // Called when the node enters the scene tree for the first time.
-    // Replaces Awake Method from Unity
+	// Called when the node enters the scene tree for the first time.
+	// Replaces Awake Method from Unity
 	public override void _Ready()
 	{
 		GD.Print("ArcadeKart script is loaded"); // TODO: remove debug
 
-        Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
-        // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
+		Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
+		// m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
-        // set properties from given node paths
-        FrontLeftWheel = GetNode<VehicleWheel>(FrontLeftWheelPath);
-        FrontRightWheel = GetNode<VehicleWheel>(FrontRightWheelPath);
-        RearLeftWheel = GetNode<VehicleWheel>(RearLeftWheelPath);
-        RearRightWheel = GetNode<VehicleWheel>(RearRightWheelPath);
+		// set properties from given node paths
+		FrontLeftWheel = GetNode<VehicleWheel>(FrontLeftWheelPath);
+		FrontRightWheel = GetNode<VehicleWheel>(FrontRightWheelPath);
+		RearLeftWheel = GetNode<VehicleWheel>(RearLeftWheelPath);
+		RearRightWheel = GetNode<VehicleWheel>(RearRightWheelPath);
 
-        //apply code to properties
-        if(FrontRightWheel != null && FrontLeftWheel != null && RearLeftWheel != null && RearRightWheel != null)
-        {
-            UpdateSuspensionParams(FrontLeftWheel);
-            UpdateSuspensionParams(FrontRightWheel);
-            UpdateSuspensionParams(RearLeftWheel);
-            UpdateSuspensionParams(RearRightWheel);
-        }
-        else
-        {
-            GD.PrintErr("_Ready: Wheel Colliders were null");
-        }
+		//apply code to properties
+		if(FrontRightWheel != null && FrontLeftWheel != null && RearLeftWheel != null && RearRightWheel != null)
+		{
+			UpdateSuspensionParams(FrontLeftWheel);
+			UpdateSuspensionParams(FrontRightWheel);
+			UpdateSuspensionParams(RearLeftWheel);
+			UpdateSuspensionParams(RearRightWheel);
+		}
+		else
+		{
+			GD.PrintErr("_Ready: Wheel Colliders were null");
+		}
 
-        m_CurrentGrip = baseStats.Grip;
+		m_CurrentGrip = baseStats.Grip;
 
-        //setup collision callbacks with the CollisionShape
-        Connect("body_entered", this, "_OnCollisionEnter");
-        Connect("body_exited", this, "_OnCollisionExit");
+		//setup collision callbacks with the CollisionShape
+		Connect("body_entered", this, "_OnCollisionEnter");
+		Connect("body_exited", this, "_OnCollisionExit");
 
-        //TODO: add in vfx when necessary
-        /* if (DriftSparkVFX != null)
-        {
-            AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
-            AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
-        } */
+		//TODO: add in vfx when necessary
+		/* if (DriftSparkVFX != null)
+		{
+			AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
+			AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
+		} */
 
-        /* if (DriftTrailPrefab != null)
-        {
-            AddTrailToWheel(RearLeftWheel);
-            AddTrailToWheel(RearRightWheel);
-        } */
+		/* if (DriftTrailPrefab != null)
+		{
+			AddTrailToWheel(RearLeftWheel);
+			AddTrailToWheel(RearRightWheel);
+		} */
 
-        /* if (NozzleVFX != null)
-        {
-            foreach (var nozzle in Nozzles)
-            {
-                Instantiate(NozzleVFX, nozzle, false);
-            }
-        } */
+		/* if (NozzleVFX != null)
+		{
+			foreach (var nozzle in Nozzles)
+			{
+				Instantiate(NozzleVFX, nozzle, false);
+			}
+		} */
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState state)
 	{
-        //base._IntegrateForces(state);
+		//base._IntegrateForces(state);
 
 		UpdateSuspensionParams(FrontLeftWheel);
 		UpdateSuspensionParams(FrontRightWheel);
@@ -447,7 +447,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			this can't be backported to Godot 3.x without a complete rewrite.
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
-        //GD.Print(state.CenterOfMass);
+		//GD.Print(state.CenterOfMass);
 
 		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
@@ -460,8 +460,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 		if (RearRightWheel.IsInContact() && RearRightWheel.GetContactBody() != null)
 			groundedCount++;
 
-        //check collisions with kart (in Unity onCollisionStay method)
-        _OnCollisionStay(state);
+		//check collisions with kart (in Unity onCollisionStay method)
+		_OnCollisionStay(state);
 
 		// calculate how grounded and airbone we are
 		GroundPercent = (float) groundedCount / 4.0f;
@@ -479,19 +479,19 @@ public class ArcadeKartVehicleBody : VehicleBody
 		UpdateDriftVFXOrientation();
 	}
 
-    /* void GatherInputs()
-    {
-        // reset input
-        Input = new InputData();
-        WantsToDrift = false;
+	/* void GatherInputs()
+	{
+		// reset input
+		Input = new InputData();
+		WantsToDrift = false;
 
-        // gather nonzero input from our sources
-        for (int i = 0; i < m_Inputs.Length; i++)
-        {
-            Input = m_Inputs[i].GenerateInput();
-            WantsToDrift = Input.Brake && Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
-        }
-    } */
+		// gather nonzero input from our sources
+		for (int i = 0; i < m_Inputs.Length; i++)
+		{
+			Input = m_Inputs[i].GenerateInput();
+			WantsToDrift = Input.Brake && Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
+		}
+	} */
 
 	void TickPowerups()
 	{
@@ -532,7 +532,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public void Reset()
 	{
-        /* Vector3 euler = transform.rotation.eulerAngles;
+		/* Vector3 euler = transform.rotation.eulerAngles;
 		euler.x = euler.z = 0f;
 		transform.rotation = Quaternion.Euler(euler); */
 	}
@@ -557,287 +557,289 @@ public class ArcadeKartVehicleBody : VehicleBody
 		return 0f; // TODO: Dummy return
 	}
 
-    // see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot
-    /* PREV: void OnCollisionEnter(Collision collision) => m_HasCollision = true;*/
-    private void _OnCollisionEnter(Node body)
-    {
-        m_HasCollision = true;
-    }
+	// see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot
+	/* PREV: void OnCollisionEnter(Collision collision) => m_HasCollision = true;*/
+	private void _OnCollisionEnter(Node body)
+	{
+		m_HasCollision = true;
+	}
 
-    /* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
-    private void _OnCollisionExit(Node body)
-    {
-        m_HasCollision = false;
-    }
+	/* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
+	private void _OnCollisionExit(Node body)
+	{
+		m_HasCollision = false;
+	}
 
-    // this method isn't a real callback but is called every frame in _integrateForces (naming according to unity code)
-    private void _OnCollisionStay(PhysicsDirectBodyState state)
-    {
-        m_LastCollisionNormal = Vector3.Zero;
-        float dot = -1.0f;
-        int contactCount = state.GetContactCount();
+	// this method isn't a real callback but is called every frame in _integrateForces (naming according to unity code)
+	private void _OnCollisionStay(PhysicsDirectBodyState state)
+	{
+		m_LastCollisionNormal = Vector3.Zero;
+		float dot = -1.0f;
+		int contactCount = state.GetContactCount();
 
-        if (contactCount > 0)
-        {
-            m_HasCollision = true;
-            for(int i = 0; i < contactCount; i++)
-            {
-                Vector3 contactNormal = state.GetContactLocalNormal(i);
-                //GD.Print("local normal" + contactNormal);
-                //contactNormal = state.Transform.XformInv(contactNormal); //convert to world space
-                //GD.Print("global normal" + contactNormal);
-                if(contactNormal.Dot(Vector3.Up) > dot)
-                {
-                    m_LastCollisionNormal = contactNormal;
-                }
-            }
-        }
-    }
+		if (contactCount > 0)
+		{
+			m_HasCollision = true;
+			for(int i = 0; i < contactCount; i++)
+			{
+				Vector3 contactNormal = state.GetContactLocalNormal(i);
+				//GD.Print("local normal" + contactNormal);
+				//contactNormal = state.Transform.XformInv(contactNormal); //convert to world space
+				//GD.Print("global normal" + contactNormal);
+				if(contactNormal.Dot(Vector3.Up) > dot)
+				{
+					m_LastCollisionNormal = contactNormal;
+				}
+			}
+		}
+	}
 
-    /* TODO:
-    void OnCollisionStay(Collision collision)
-    {
-        m_HasCollision = true;
-        m_LastCollisionNormal = Vector3.zero;
-        float dot = -1.0f;
+	/* TODO:
+	void OnCollisionStay(Collision collision)
+	{
+		m_HasCollision = true;
+		m_LastCollisionNormal = Vector3.zero;
+		float dot = -1.0f;
 
-        foreach (var contact in collision.contacts)
-        {
-            if (Vector3.Dot(contact.normal, Vector3.up) > dot)
-                m_LastCollisionNormal = contact.normal;
-        }
-    } */
-    private float debugTimer = 0.0f; //TODO: remove debub
-    /*  if(debugTimer >= 1)
-        {
-            GD.Print("global: " + state.LinearVelocity);
-            GD.Print("local:" + localVel);
-            debugTimer = 0.0f;
-        } */
+		foreach (var contact in collision.contacts)
+		{
+			if (Vector3.Dot(contact.normal, Vector3.up) > dot)
+				m_LastCollisionNormal = contact.normal;
+		}
+	} */
+	private float debugTimer = 0.0f; //TODO: remove debub
+	/*  if(debugTimer >= 1)
+		{
+			GD.Print("global: " + state.LinearVelocity);
+			GD.Print("local:" + localVel);
+			debugTimer = 0.0f;
+		} */
 
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
-        debugTimer += state.Step; //TODO: remove debug
+		debugTimer += state.Step; //TODO: remove debug
 
 		float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
-        // manual acceleration curve coefficient scalar
-        float accelerationCurveCoeff = 5;
-        // PREV: transform.InverseTransformVector(Rigidbody.velocity);
+		// manual acceleration curve coefficient scalar
+		float accelerationCurveCoeff = 5;
+		// PREV: transform.InverseTransformVector(Rigidbody.velocity);
 		Vector3 localVel = state.Transform.basis.XformInv(state.LinearVelocity);
 
 
 
-        bool accelDirectionIsFwd = accelInput >= 0;
-        bool localVelDirectionIsFwd = localVel.z >= 0;
+		bool accelDirectionIsFwd = accelInput >= 0;
+		bool localVelDirectionIsFwd = localVel.z >= 0;
 
-        // use the max speed for the direction we are going--forward or reverse.
-        float maxSpeed = localVelDirectionIsFwd ? m_FinalStats.TopSpeed : m_FinalStats.ReverseSpeed;
-        float accelPower = accelDirectionIsFwd ? m_FinalStats.Acceleration : m_FinalStats.ReverseAcceleration;
+		// use the max speed for the direction we are going--forward or reverse.
+		float maxSpeed = localVelDirectionIsFwd ? m_FinalStats.TopSpeed : m_FinalStats.ReverseSpeed;
+		float accelPower = accelDirectionIsFwd ? m_FinalStats.Acceleration : m_FinalStats.ReverseAcceleration;
 
-        float currentSpeed = Rigidbody.LinearVelocity.Length();
-        float accelRampT = currentSpeed / maxSpeed;
-        float multipliedAccelerationCurve = m_FinalStats.AccelerationCurve * accelerationCurveCoeff;
-        float accelRamp = Mathf.Lerp(multipliedAccelerationCurve, 1, accelRampT * accelRampT);
+		float currentSpeed = Rigidbody.LinearVelocity.Length();
+		float accelRampT = currentSpeed / maxSpeed;
+		float multipliedAccelerationCurve = m_FinalStats.AccelerationCurve * accelerationCurveCoeff;
+		float accelRamp = Mathf.Lerp(multipliedAccelerationCurve, 1, accelRampT * accelRampT);
 
-        bool isBraking = (localVelDirectionIsFwd && brake) || (!localVelDirectionIsFwd && accelerate);
+		bool isBraking = (localVelDirectionIsFwd && brake) || (!localVelDirectionIsFwd && accelerate);
 
-        // if we are braking (moving reverse to where we are going)
-        // use the braking acceleration instead
-        float finalAccelPower = isBraking ? m_FinalStats.Braking : accelPower;
+		// if we are braking (moving reverse to where we are going)
+		// use the braking acceleration instead
+		float finalAccelPower = isBraking ? m_FinalStats.Braking : accelPower;
 
-        float finalAcceleration = finalAccelPower * accelRamp;
+		float finalAcceleration = finalAccelPower * accelRamp;
 
-        // apply inputs to forward/backward
-        float turningPower = IsDrifting ? m_DriftTurningPower : turnInput * m_FinalStats.Steer;
+		// apply inputs to forward/backward
+		float turningPower = IsDrifting ? m_DriftTurningPower : turnInput * m_FinalStats.Steer;
 
 		/* PREV: Quaternion turnAngle = Quaternion.AngleAxis(turningPower, transform.up);
-            Vector3 fwd = turnAngle * transform.forward;
-            Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f); */
+			Vector3 fwd = turnAngle * transform.forward;
+			Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f); */
 
-       	/* In stack overflow we trust:
+	   	/* In stack overflow we trust:
 	   	https://stackoverflow.com/questions/48438273/godot-3d-get-forward-vector */
 		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
 		Vector3 Forward = Rigidbody.GlobalTransform.basis.z;
 
 		//GD.Print("fwd"); //TODO: remove debug
-        Vector3 fwd = Forward.Rotated(Up, turningPower);
-        Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
+		Vector3 fwd = Forward.Rotated(Up, turningPower);
+		Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
-        // forward movement
-        bool wasOverMaxSpeed = currentSpeed >= maxSpeed;
+		// forward movement
+		bool wasOverMaxSpeed = currentSpeed >= maxSpeed;
 
-        // if over max speed, cannot accelerate faster.
-        if (wasOverMaxSpeed && !isBraking)
-            movement *= 0.0f;
+		// if over max speed, cannot accelerate faster.
+		if (wasOverMaxSpeed && !isBraking)
+			movement *= 0.0f;
 
-        //changed to state instead of Rigidbody.LinearVelocity
-        Vector3 newVelocity = state.LinearVelocity + movement * state.Step;
-        newVelocity.y = state.LinearVelocity.y;
+		//changed to state instead of Rigidbody.LinearVelocity
+		Vector3 newVelocity = state.LinearVelocity + movement * state.Step;
+		newVelocity.y = state.LinearVelocity.y;
 
-        //  clamp max speed if we are on ground
-        if (GroundPercent > 0.0f && !wasOverMaxSpeed)
-        {
+		//  clamp max speed if we are on ground
+		if (GroundPercent > 0.0f && !wasOverMaxSpeed)
+		{
 			/* PREV: newVelocity = Vector3.ClampMagnitude(newVelocity, maxSpeed); */
 			newVelocity = newVelocity.LimitLength(maxSpeed);
-        }
+		}
 
-        // coasting(Leerlauf) is when we aren't touching accelerate
-        if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
-        {
-            // PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
+		// coasting(Leerlauf) is when we aren't touching accelerate
+		if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
+		{
+			// PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
-        }
+		}
 		// GD.Print(newVelocity);
-        // PREV: Rigidbody.LinearVelocity = newVelocity;
+		// PREV: Rigidbody.LinearVelocity = newVelocity;
 		state.LinearVelocity = newVelocity;
 
-        // Drift
-        if (GroundPercent > 0.0f)
-        {
+		// Drift
+		if (GroundPercent > 0.0f)
+		{
 			if (m_InAir)
-            {
-                m_InAir = false;
+			{
+				m_InAir = false;
 				//GD.Print("Kart becomes grounded"); //TODO: remove debug
-                /* TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity); */
-            }
+				/* TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity); */
+			}
 
-            // manual angular velocity coefficient
-            float angularVelocitySteering = 0.4f;
-            float angularVelocitySmoothSpeed = 20f;
+			// manual angular velocity coefficient
+			float angularVelocitySteering = 0.4f;
+			float angularVelocitySmoothSpeed = 20f;
 
-            // turning is reversed if we're going in reverse and pressing reverse
-            if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
-                angularVelocitySteering *= -1.0f;
+			// turning is reversed if we're going in reverse and pressing reverse
+			if (!localVelDirectionIsFwd && !accelDirectionIsFwd)
+				angularVelocitySteering *= -1.0f;
 
-            var angularVel = state.AngularVelocity;
+			var angularVel = state.AngularVelocity;
 
-            // move the Y angular velocity towards our target
+			// move the Y angular velocity towards our target
 			/* PREV: angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
-            angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
+			angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
 
-            // apply the angular velocity
+			// apply the angular velocity
 			/* PREV: Rigidbody.angularVelocity = angularVel; */
-            state.AngularVelocity = angularVel;
+			state.AngularVelocity = angularVel;
 
-            // rotate rigidbody's velocity as well to generate immediate velocity redirection
-            // manual velocity steering coefficient
-            float velocitySteering = 25f;
+			// rotate rigidbody's velocity as well to generate immediate velocity redirection
+			// manual velocity steering coefficient
+			float velocitySteering = 25f;
 
-            // If the karts lands with a forward not in the velocity direction, we start the drift
-            /*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
-            {
-                Vector3 flattenVelocity = Vector3.ProjectOnPlane(Rigidbody.velocity, m_VerticalReference).normalized;
-                if (Vector3.Dot(flattenVelocity, transform.forward * Mathf.Sign(accelInput)) < Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad))
-                {
-                    IsDrifting = true;
-                    m_CurrentGrip = DriftGrip;
-                    m_DriftTurningPower = 0.0f;
-                }
-            }*/
+			// If the karts lands with a forward not in the velocity direction, we start the drift
+			/*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
+			{
+				Vector3 flattenVelocity = Vector3.ProjectOnPlane(Rigidbody.velocity, m_VerticalReference).normalized;
+				if (Vector3.Dot(flattenVelocity, transform.forward * Mathf.Sign(accelInput)) < Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad))
+				{
+					IsDrifting = true;
+					m_CurrentGrip = DriftGrip;
+					m_DriftTurningPower = 0.0f;
+				}
+			}*/
 
-            // Drift Management
-            /*if (!IsDrifting)
-            {
-                if ((WantsToDrift || isBraking) && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
-                {
-                    IsDrifting = true;
-                    m_DriftTurningPower = turningPower + (Mathf.Sign(turningPower) * DriftAdditionalSteer);
-                    m_CurrentGrip = DriftGrip;
+			// Drift Management
+			/*if (!IsDrifting)
+			{
+				if ((WantsToDrift || isBraking) && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
+				{
+					IsDrifting = true;
+					m_DriftTurningPower = turningPower + (Mathf.Sign(turningPower) * DriftAdditionalSteer);
+					m_CurrentGrip = DriftGrip;
 
-                    ActivateDriftVFX(true);
-                }
-            }*/
+					ActivateDriftVFX(true);
+				}
+			}*/
 
-            /*if (IsDrifting)
-            {
-                float turnInputAbs = Mathf.Abs(turnInput);
-                if (turnInputAbs < k_NullInput)
-                    m_DriftTurningPower = Mathf.MoveTowards(m_DriftTurningPower, 0.0f, Mathf.Clamp01(DriftDampening * Time.fixedDeltaTime));
+			/*if (IsDrifting)
+			{
+				float turnInputAbs = Mathf.Abs(turnInput);
+				if (turnInputAbs < k_NullInput)
+					m_DriftTurningPower = Mathf.MoveTowards(m_DriftTurningPower, 0.0f, Mathf.Clamp01(DriftDampening * Time.fixedDeltaTime));
 
-                // Update the turning power based on input
-                float driftMaxSteerValue = m_FinalStats.Steer + DriftAdditionalSteer;
-                m_DriftTurningPower = Mathf.Clamp(m_DriftTurningPower + (turnInput * Mathf.Clamp01(DriftControl * Time.fixedDeltaTime)), -driftMaxSteerValue, driftMaxSteerValue);
+				// Update the turning power based on input
+				float driftMaxSteerValue = m_FinalStats.Steer + DriftAdditionalSteer;
+				m_DriftTurningPower = Mathf.Clamp(m_DriftTurningPower + (turnInput * Mathf.Clamp01(DriftControl * Time.fixedDeltaTime)), -driftMaxSteerValue, driftMaxSteerValue);
 
-                bool facingVelocity = Vector3.Dot(Rigidbody.velocity.normalized, transform.forward * Mathf.Sign(accelInput)) > Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad);
+				bool facingVelocity = Vector3.Dot(Rigidbody.velocity.normalized, transform.forward * Mathf.Sign(accelInput)) > Mathf.Cos(MinAngleToFinishDrift * Mathf.Deg2Rad);
 
-                bool canEndDrift = true;
-                if (isBraking)
-                    canEndDrift = false;
-                else if (!facingVelocity)
-                    canEndDrift = false;
-                else if (turnInputAbs >= k_NullInput && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
-                    canEndDrift = false;
+				bool canEndDrift = true;
+				if (isBraking)
+					canEndDrift = false;
+				else if (!facingVelocity)
+					canEndDrift = false;
+				else if (turnInputAbs >= k_NullInput && currentSpeed > maxSpeed * MinSpeedPercentToFinishDrift)
+					canEndDrift = false;
 
-                if (canEndDrift || currentSpeed < k_NullSpeed)
-                {
-                    // No Input, and car aligned with speed direction => Stop the drift
-                    IsDrifting = false;
-                    m_CurrentGrip = m_FinalStats.Grip;
-                }
+				if (canEndDrift || currentSpeed < k_NullSpeed)
+				{
+					// No Input, and car aligned with speed direction => Stop the drift
+					IsDrifting = false;
+					m_CurrentGrip = m_FinalStats.Grip;
+				}
 
-            }*/
+			}*/
 
-            // rotate our velocity based on current steer value
+			// rotate our velocity based on current steer value
 			/* PREV: Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
 			//GD.Print("LinearVelocity"); //TODO: take out the trash
-            state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
-        }
-        else
-        {
+			//state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
+		    localVel = state.Transform.basis.XformInv(state.LinearVelocity);
+            state.LinearVelocity = state.LinearVelocity.Rotated(Up, Mathf.Deg2Rad(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step));
+		}
+		else
+		{
 			//GD.Print("Kart becomes ungrounded (in air)");
-            m_InAir = true;
-        }
+			m_InAir = true;
+		}
 
-        bool validPosition = false;
+		bool validPosition = false;
 		/* PREV: if (Physics.Raycast(transform.position + (transform.up * 0.1f), -transform.up, out RaycastHit hit, 3.0f, 1 << 9 | 1 << 10 | 1 << 11)) // Layer: ground (9) / Environment(10) / Track (11)
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime * (GroundPercent > 0.0f ? 10.0f : 1.0f)));    // Blend faster if on ground
-        } else
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
-        }*/
-		m_LastCollisionNormal = Vector3.Up; // TODO: remove
-		var spacestate = GetWorld().DirectSpaceState;
+		{
+			Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
+			m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime * (GroundPercent > 0.0f ? 10.0f : 1.0f)));    // Blend faster if on ground
+		} else
+		{
+			Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
+			m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
+		}*/
+		//m_LastCollisionNormal = Vector3.Up; // TODO: remove
+		/* var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
 		if (intersection.Count > 0)
 		{
 			Vector3 hitNormal = (Vector3) intersection["normal"];
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
+			Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hitNormal.y) ? m_LastCollisionNormal : hitNormal;
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step * (GroundPercent > 0.0f ? 10.0f : 1.0f), 0.0f, 1.0f);
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
 		else
 		{
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.Up;
+			Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.Up;
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
-        validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f;
+		validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f; */
 
-        // Airborne / Half on ground management
-/*         if (GroundPercent < 0.7f)
-        {
-            Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
-            Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
-            finalOrientationDirection.Normalize();
-            if (finalOrientationDirection.sqrMagnitude > 0.0f)
-            {
-                Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
-            }
-        } */
-        /*else if (validPosition)
-        {
-            m_LastValidPosition = transform.position;
-            m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
-        }
-
-        ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
 		// Airborne / Half on ground management
-		if (GroundPercent < 0.7f)
+/*         if (GroundPercent < 0.7f)
+		{
+			Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
+			Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
+			finalOrientationDirection.Normalize();
+			if (finalOrientationDirection.sqrMagnitude > 0.0f)
+			{
+				Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
+			}
+		} */
+		/*else if (validPosition)
+		{
+			m_LastValidPosition = transform.position;
+			m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
+		}
+
+		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
+		// Airborne / Half on ground management
+		/* if (GroundPercent < 0.7f)
 		{
  			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
 			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
@@ -848,7 +850,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			{
 				float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
 				Vector3 Rotation = state.Transform.basis.GetEuler();
-				Quat QuatRotation = new Quat(Rotation);
+				//Quat QuatRotation = new Quat(Rotation);
 				Vector3 LateralAxis = finalOrientationDirection.Cross(m_VerticalReference);
 				Basis basis = new Basis(LateralAxis, m_VerticalReference, finalOrientationDirection);
 				Quat lookAt = basis.Quat().Normalized();
@@ -859,6 +861,13 @@ public class ArcadeKartVehicleBody : VehicleBody
 				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
 			}
 		}
+		else if (validPosition)
+		{
+			m_LastValidPosition = state.Transform.origin;
+			m_LastValidRotation = new Quat(state.Transform.basis.GetEuler());
+		}
+
+		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f); */
 	}
 
 	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
