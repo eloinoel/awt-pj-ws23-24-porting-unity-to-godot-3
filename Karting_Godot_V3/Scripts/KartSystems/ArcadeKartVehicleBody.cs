@@ -657,7 +657,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		Vector3 Up = GlobalTransform.basis.y.Normalized();
 		Vector3 Forward = GlobalTransform.basis.z.Normalized();
 
-        Vector3 fwd = Forward.Rotated(Up, turningPower);
+        Vector3 fwd = Forward.Rotated(Up, Mathf.Deg2Rad(turningPower));
         Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
         // forward movement
