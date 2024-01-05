@@ -106,15 +106,16 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public ArcadeKart.Stats baseStats = new ArcadeKart.Stats
 	{
-		TopSpeed = 10f,
-		Acceleration = 5f,
-		AccelerationCurve = 4f,
-		Braking = 10f,
-		ReverseAcceleration = 5f,
-		ReverseSpeed = 5f,
-		Steer = 5f,
-		CoastingDrag = 4f,
-		Grip = .95f,
+		// I hard set the settings hiw they were overwritten by the unity editor
+		TopSpeed = 15f, //10f,
+		Acceleration = 7f, //5f,
+		AccelerationCurve = 0.5f, //4f,
+		Braking = 16f, //10f,
+		ReverseAcceleration = 3f, //5f,
+		ReverseSpeed = 10f, //5f,
+		Steer = 4f, //5f,
+		CoastingDrag = 5f, //4f,
+		Grip = 0.97f, //.95f,
 		AddedGravity = 1f,
 	};
 
@@ -472,7 +473,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), Input.GetAxis("right","left"), state);
 		}
-		GroundAirborne();
+		GroundAirborne(state);
 
 		m_PreviousGroundPercent = GroundPercent;
 
@@ -535,12 +536,12 @@ public class ArcadeKartVehicleBody : VehicleBody
 		m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
 	}
 
-	void GroundAirborne()
+	void GroundAirborne(PhysicsDirectBodyState state)
 	{
 		// while in the air, fall faster
 		if (AirPercent >= 1)
 		{
-			/* Rigidbody.velocity += Physics.gravity * Time.fixedDeltaTime * m_FinalStats.AddedGravity; */
+			state.LinearVelocity += new Vector3(0, -1, 0) * state.Step * m_FinalStats.AddedGravity;
 		}
 	}
 
@@ -705,6 +706,7 @@ public class ArcadeKartVehicleBody : VehicleBody
         // PREV: Rigidbody.LinearVelocity = newVelocity;
 		// newVelocity.x = -newVelocity.x; // x axis is inverted in godot
 		state.LinearVelocity = newVelocity;
+		//GD.Print(newVelocity);
 
 		// Drift
 		if (GroundPercent > 0.0f)
@@ -727,8 +729,14 @@ public class ArcadeKartVehicleBody : VehicleBody
 			var angularVel = state.AngularVelocity;
 
 			// move the Y angular velocity towards our target
-			/* PREV: angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
-			angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
+			GD.Print(angularVel);
+			GD.Print(angularVel.y);
+/* 			GD.Print(turningPower);
+			GD.Print(angularVelocitySteering);
+			GD.Print(angularVelocitySmoothSpeed);
+			GD.Print(state.Step); */
+			angularVel.y = Mathf.MoveToward(angularVel.y, turningPower * angularVelocitySteering, state.Step * angularVelocitySmoothSpeed);
+			// TODO: GD.Print(angularVel);
 
 			// apply the angular velocity
 			/* PREV: Rigidbody.angularVelocity = angularVel; */
@@ -796,7 +804,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			/* PREV: Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
 			//GD.Print("LinearVelocity"); //TODO: take out the trash
 			//state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
-		    localVel = state.Transform.basis.XformInv(state.LinearVelocity);
+			localVel = state.Transform.basis.XformInv(state.LinearVelocity);
             state.LinearVelocity = state.LinearVelocity.Rotated(Up, Mathf.Deg2Rad(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step));
 		}
 		else
@@ -833,7 +841,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 
 		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
-		//m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		/* var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);

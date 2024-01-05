@@ -505,8 +505,15 @@ namespace KartGame.KartSystems
 
                 var angularVel = Rigidbody.angularVelocity;
 
+                Debug.Log(angularVel);
+                Debug.Log(angularVel.y);
+/*                 Debug.Log(turningPower);
+                Debug.Log(angularVelocitySteering);
+                Debug.Log(angularVelocitySmoothSpeed);
+                Debug.Log(Time.fixedDeltaTime); */
                 // move the Y angular velocity towards our target
                 angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed);
+                //Debug.Log(angularVel);
 
                 // apply the angular velocity
                 Rigidbody.angularVelocity = angularVel;
