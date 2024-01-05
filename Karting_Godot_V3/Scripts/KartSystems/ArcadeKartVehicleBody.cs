@@ -689,7 +689,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 		// GD.Print(newVelocity);
         // PREV: Rigidbody.LinearVelocity = newVelocity;
-		newVelocity.x = -newVelocity.x; // x axis is inverted in godot
+		// newVelocity.x = -newVelocity.x; // x axis is inverted in godot
 		state.LinearVelocity = newVelocity;
 
 		// Drift
