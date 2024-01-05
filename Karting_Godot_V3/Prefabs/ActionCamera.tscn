@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Camera/ActionCamera.gd" type="Script" id=2]
+
+[node name="ActionCamera" type="Node"]
+script = ExtResource( 2 )
+isMainCamera = true
+
+[node name="CameraPivot" type="Spatial" parent="."]
+
+[node name="Camera" type="Camera" parent="CameraPivot"]
+transform = Transform( -1, -1.6985e-08, 8.5757e-08, 0, 0.980945, 0.194286, -8.74228e-08, 0.194286, -0.980945, 0, 3, -6 )
+far = 8192.0
