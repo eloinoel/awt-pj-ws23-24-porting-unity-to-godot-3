@@ -26,10 +26,9 @@ func _physics_process(delta):
     camera_pivot.global_transform.basis = camera_pivot.transform.basis.slerp(vehicle.transform.basis, delta * 5)
 
     # sway camera to where we are going with the car
-    #DebugDrawing.draw_sphere(vehicle.global_transform.origin)
+    #DebugDrawingGD.draw_sphere(vehicle.global_transform.origin)
     var vehicle_position = vehicle.global_transform.origin
-    #DebugDrawing.draw_line(vehicle_position, vehicle_position + vehicle.linear_velocity, Color(1,0,0,1), 0.1)
-    #DebugDrawing.draw_line(vehicle.global_transform.origin, vehicle.linear_velocity, Color(1,0,0,1), 1)
+    #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + vehicle.linear_velocity, Color(1,0,0,1), 0.1)
     look_at_target = look_at_target.linear_interpolate(vehicle.global_transform.origin, delta*5)
     #camera.look_at(look_at_target, camera.global_transform.basis.y)
     """ if(not _is_driving_backwards()):
