@@ -729,8 +729,9 @@ public class ArcadeKartVehicleBody : VehicleBody
 			var angularVel = state.AngularVelocity;
 
 			// move the Y angular velocity towards our target
+			/* GD.Print(angularVel.Length());
 			GD.Print(angularVel);
-			GD.Print(angularVel.y);
+			GD.Print(angularVel.y); */
 /* 			GD.Print(turningPower);
 			GD.Print(angularVelocitySteering);
 			GD.Print(angularVelocitySmoothSpeed);

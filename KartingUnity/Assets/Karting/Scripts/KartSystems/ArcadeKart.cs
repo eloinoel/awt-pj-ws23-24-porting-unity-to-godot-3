@@ -505,6 +505,7 @@ namespace KartGame.KartSystems
 
                 var angularVel = Rigidbody.angularVelocity;
 
+                Debug.Log(angularVel.magnitude);
                 Debug.Log(angularVel);
                 Debug.Log(angularVel.y);
 /*                 Debug.Log(turningPower);
@@ -584,7 +585,7 @@ namespace KartGame.KartSystems
                 m_InAir = true;
             }
 
-            bool validPosition = false;
+            /* bool validPosition = false;
             if (Physics.Raycast(transform.position + (transform.up * 0.1f), -transform.up, out RaycastHit hit, 3.0f, 1 << 9 | 1 << 10 | 1 << 11)) // Layer: ground (9) / Environment(10) / Track (11)
             {
                 Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
@@ -613,7 +614,7 @@ namespace KartGame.KartSystems
             {
                 m_LastValidPosition = transform.position;
                 m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
-            }
+            } */
 
             ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
         }
