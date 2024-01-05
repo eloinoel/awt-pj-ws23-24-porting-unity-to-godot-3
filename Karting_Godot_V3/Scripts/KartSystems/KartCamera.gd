@@ -12,6 +12,7 @@ var look_at_target
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	look_at_target = vehicle.global_transform.origin
+	self.set_perspective(60, 0.1, 5000)
 
 func _physics_process(delta):
 	# detach camera from car in editor
