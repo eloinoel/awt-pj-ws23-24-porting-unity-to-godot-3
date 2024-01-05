@@ -514,8 +514,22 @@ public class ArcadeKartVehicleBody : VehicleBody
 			powerups += p.modifiers;
 		}*/
 
+		// TODO: remove
+		ArcadeKart.Stats dummypowerup = new ArcadeKart.Stats
+		{
+			TopSpeed = 10f,
+			Acceleration = 10f,
+			AccelerationCurve = 0.2f,
+			Braking = 0f,
+			ReverseAcceleration = 0f,
+			ReverseSpeed = 0f,
+			Steer = 0f,
+			CoastingDrag = 0f,
+			Grip = 0f,
+			AddedGravity = 0f,
+		};
 		// add powerups to our final stats
-		m_FinalStats = baseStats /* + powerups */;
+		m_FinalStats = baseStats /*+ dummypowerup *//* + powerups */;
 
 		// clamp values in finalstats
 		m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);
@@ -800,7 +814,25 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
 			m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
-		}*/
+		}
+		// Airborne / Half on ground management
+  	    if (GroundPercent < 0.7f)
+		{
+			Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
+			Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
+			finalOrientationDirection.Normalize();
+			if (finalOrientationDirection.sqrMagnitude > 0.0f)
+			{
+				Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
+			}
+		} */
+		/*else if (validPosition)
+		{
+			m_LastValidPosition = transform.position;
+			m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
+		}
+
+		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
 		//m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		/* var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
@@ -818,28 +850,10 @@ public class ArcadeKartVehicleBody : VehicleBody
 			float slerpRatio = Mathf.Clamp(AirborneReorientationCoefficient * state.Step, 0.0f, 1.0f);
 			m_VerticalReference = QuatSlerp(m_VerticalReference, lerpVector, slerpRatio);
 		}
-		validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f; */
+		validPosition = GroundPercent > 0.7f && !m_HasCollision && m_VerticalReference.Dot(Vector3.Up) > 0.9f;
 
 		// Airborne / Half on ground management
-/*         if (GroundPercent < 0.7f)
-		{
-			Rigidbody.angularVelocity = new Vector3(0.0f, Rigidbody.angularVelocity.y * 0.98f, 0.0f);
-			Vector3 finalOrientationDirection = Vector3.ProjectOnPlane(transform.forward, m_VerticalReference);
-			finalOrientationDirection.Normalize();
-			if (finalOrientationDirection.sqrMagnitude > 0.0f)
-			{
-				Rigidbody.MoveRotation(Quaternion.Lerp(Rigidbody.rotation, Quaternion.LookRotation(finalOrientationDirection, m_VerticalReference), Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime)));
-			}
-		} */
-		/*else if (validPosition)
-		{
-			m_LastValidPosition = transform.position;
-			m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
-		}
-
-		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
-		// Airborne / Half on ground management
-		/* if (GroundPercent < 0.7f)
+		if (GroundPercent < 0.7f)
 		{
  			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
 			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
@@ -865,9 +879,9 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			m_LastValidPosition = state.Transform.origin;
 			m_LastValidRotation = new Quat(state.Transform.basis.GetEuler());
-		}
+		} */
 
-		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f); */
+		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
 	}
 
 	Vector3 QuatSlerp(Vector3 from, Vector3 to, float slerpRatio)
