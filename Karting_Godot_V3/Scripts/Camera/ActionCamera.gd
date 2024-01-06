@@ -9,6 +9,9 @@ export var isMainCamera : bool = false
 var look_at_target: Vector3
 # default position where the camera looks at
 var target_anchor: Vector3
+# for acceleration computation
+var previous_velocity_z: float
+
 var timer = 0 # debug
 
 # Called when the node enters the scene tree for the first time.
@@ -16,11 +19,12 @@ func _ready():
     camera.current = isMainCamera
     target_anchor = _calculate_target_anchor()
     look_at_target = vehicle.to_global(target_anchor)
+    previous_velocity_z = 0.0
 
     # original Unity settings for camera
     camera.set_perspective(60, 0.1, 5000)
 
-func _physics_process(delta):
+func _physics_process(delta: float):
     timer+=delta
     # detach camera from car in editor by adding a simple normal node as parent
 
@@ -28,40 +32,40 @@ func _physics_process(delta):
     camera_pivot.global_transform.origin = camera_pivot.global_transform.origin.linear_interpolate(vehicle.global_transform.origin, delta * 20)
     camera_pivot.global_transform.basis = camera_pivot.transform.basis.slerp(vehicle.transform.basis, delta * 5)
 
-
-    # sway camera to where we are going with the car
-    #DebugDrawingGD.draw_sphere(look_at_target)
-    var vehicle_position = vehicle.global_transform.origin
-    #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + vehicle.linear_velocity, Color(1,0,0,1), 0.1)
-    #look_at_target = look_at_target.linear_interpolate(vehicle.global_transform.origin + vehicle.linear_velocity, delta*5)
-    #DebugDrawingGD.draw_sphere(look_at_target)
-    #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + camera.global_transform.basis.y)
+    #compute acceleration
     var localVelocity = vehicle.transform.basis.xform_inv(vehicle.linear_velocity)
-    var local_target = Vector3(target_anchor.x, target_anchor.y, max(target_anchor.z, localVelocity.z))
+    var acceleration = _get_acceleration(localVelocity.z, delta)
+    previous_velocity_z = localVelocity.z
+
+    # sway the camera to where we are currently d
+    var local_target: Vector3
+    # TODO: camera acceleration is slow when accelerating
+    if localVelocity.z < 0:
+        local_target = Vector3(target_anchor.x, target_anchor.y, target_anchor.z)
+    else:
+        # determine the ratio between the current z speed and the maximum possible z speed (We get a value in the range [0,1], 0: current_speed == 0; 1: current_speed == max_speed)
+        # we then use pass this value through an easing function and multiply its result with the size of the desired range [0, max_speed]
+        # this is then used as an offset to the position the camera is looking at
+        var vehicle_max_local_speed = 15.0
+        var percent_of_offset_range = localVelocity.z / vehicle_max_local_speed;
+        local_target = Vector3(target_anchor.x, target_anchor.y, target_anchor.z + _ease_in_sine(percent_of_offset_range) * vehicle_max_local_speed)
+
+    # simple implementation without easing when slowing down
+    #local_target = Vector3(target_anchor.x, target_anchor.y, max(target_anchor.z, localVelocity.z + target_anchor.z))
     look_at_target = look_at_target.linear_interpolate(vehicle.to_global(local_target), delta * 30)
 
-    #look_at_target = vehicle.to_global(local_target)
-
+    # TODO: remove debug
     """ if(timer >= 0.5):
-        print(localVelocity.z)
-        print(target_anchor.z)
-        print("final: " + str(local_target.z))
-        print("----------")
+        #print(localVelocity.z)
+        #print(target_anchor.z)
+        #print("final: " + str(local_target.z))
+        #print(percent_of_max_speed)
+        #print(_ease_in_sine(percent_of_max_speed))
+        #print("----------")
         timer = 0 """
-    DebugDrawingGD.draw_sphere(look_at_target, 0.5, Color(0, 0, 1, 1))
+    #DebugDrawingGD.draw_sphere(look_at_target, 0.5, Color(0, 0, 1, 1))
+    #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + camera.global_transform.basis.y)
     camera.look_at(look_at_target, Vector3.UP)
-
-    """ if(not _is_driving_backwards()):
-        look_at_target = look_at_target.linear_interpolate(vehicle_position + vehicle.linear_velocity, delta*5)
-        camera.look_at(look_at_target, Vector3.UP)
-        # camera.look_at(look_at_target, camera.global_transform.basis.y)
-        # in this case the camera sometimes feels a little bit unintuitive
-    else:
-        look_at_target = look_at_target.linear_interpolate(vehicle_position, delta*5)
-        camera.look_at(look_at_target, Vector3.UP)
-        #camera.look_at(look_at_target, camera.global_transform.basis.y) """
-
-
 
 func _is_driving_backwards():
     return vehicle.linear_velocity.dot(vehicle.global_transform.basis.z) < 0
@@ -81,3 +85,18 @@ func _calculate_target_anchor():
     var target = Vector3(camera_pivot_position.x, camera_pivot_position.y, camera_pivot_position.z + z_offset)
 
     return target
+
+func _ease_in_sine(x: float):
+    return 1 - cos((x * PI) / 2)
+
+func _ease_in_quad(x: float):
+    return x * x
+
+func _ease_in_out_quart(x: float):
+    return 1 - cos((x * PI) / 2)
+
+func _get_acceleration(currentVelocity_z: float , deltaTime: float):
+    return (currentVelocity_z - previous_velocity_z) / deltaTime
+
+func _is_accelerating(acceleration: float):
+    return acceleration > 0
