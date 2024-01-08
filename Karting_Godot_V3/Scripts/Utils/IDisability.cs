@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 interface IDisability
 {
-    bool isActive { get; set; }
+    bool IsActive { get; set; }
 
     void OnEnable();
     void OnDisable();

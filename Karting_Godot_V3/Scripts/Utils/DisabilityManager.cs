@@ -4,34 +4,28 @@ using System.Collections.Generic;
 
 public class DisabilityManager : Node
 {
-    private List<DisabledNode> disabledNodes;
+    private List<DisabledNode> disabledNodes = new List<DisabledNode>();
 
     public override void _Ready()
     {
         base._Ready();
-        GD.Print(this.GetPath());
     }
 
     public void Enable(Node node)
     {
         if (!(node is IDisability)) return;
-        if (node == null)
-        {
-            GD.PrintErr("Enable: Node is null");
-            return;
-        }
-        GD.PrintErr(node);
+        if (node == null) return;
+        int index = findNodeIndexForNode(node);
+        if(index == -1) { return; }
 
         // reintroduce node to the scene
-        int index = findNodeIndexForNode(node);
-        if(index == -1) { GD.PrintErr("DisabilityManger: Could not find node: " + node); }
         NodePath parentPath = disabledNodes[index]._parentPath;
         Node parent = GetNode<Node>(parentPath);
-        parent.AddChild(node);
+        parent.CallDeferred("add_child", node);
 
         disabledNodes.RemoveAt(index);
 
-        (node as IDisability).isActive = true;
+        (node as IDisability).IsActive = true;
         ((IDisability) node).OnEnable();
     }
 
@@ -39,15 +33,16 @@ public class DisabilityManager : Node
     {
         if (!(node is IDisability)) return;
 
+        (node as IDisability).IsActive = false;
+
         //save node
         Node parent = node.GetParent();
         NodePath parentPath = parent.GetPath();
         DisabledNode dNode = new DisabledNode(node, parentPath);
         disabledNodes.Add(dNode);
 
-        parent.RemoveChild(node);
+        parent.CallDeferred("remove_child", node);
 
-        (node as IDisability).isActive = false;
         ((IDisability) node).OnDisable();
     }
 
