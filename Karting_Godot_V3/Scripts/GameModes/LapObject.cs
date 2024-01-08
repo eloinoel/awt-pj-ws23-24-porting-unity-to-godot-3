@@ -1,15 +1,16 @@
 using Godot;
 using System;
+using System.Runtime.Remoting.Messaging;
 
 public class LapObject : Area, IDisability
 {
-    public bool isActive
+    private bool isActive;
+    public bool IsActive //interface field
     {
         get => isActive;
         set => isActive = value;
     }
 
-    [Export]
     DisabilityManager disabilityManager;
 
     [Export(hintString: "Is this the first/last lap object?")]
@@ -17,15 +18,38 @@ public class LapObject : Area, IDisability
     [Export]
     public Godot.Collections.Array<NodePath> lapCheckpoints;
     public bool lapOverNextPass;
+
+
+    LapObject lapdance;
     public override void _Ready()
     {
         Connect("body_entered", this, "OnBodyEntered");
         lapOverNextPass = false;
+
+        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>("RaceScene/DisabilityManager");
+/*         if(this.Name == "LapCheckpoint2")
+        {
+            lapdance = (LapObject) GetParent().GetNode("LapCheckpoint");
+            disabilityManager.Disable(lapdance);
+        } */
     }
+
+/*     float timer = 0f;
+    bool doOnce = true;
+    public override void _Process(float delta)
+    {
+        base._Process(delta);
+        timer += delta;
+        if(timer >= 2 && doOnce && this.Name == "LapCheckpoint2")
+        {
+            GD.Print(this.Name + ", doOnce: " + doOnce);
+            disabilityManager.Enable(lapdance);
+            doOnce = false;
+        }
+    } */
 
     public void OnBodyEntered(Node Body)
     {
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>("RaceScene/DisabilityManager");
         if (Body.Name != "ArcadeKart")
             return;
 
@@ -33,14 +57,12 @@ public class LapObject : Area, IDisability
         if(!finishLap)
         {
             ((MeshInstance) this.GetChild(0)).Visible = false;
-            disabilityManager.Disable(this);
         }
         else
         {
             foreach (NodePath lapCheckpoint in lapCheckpoints)
             {
                 ((MeshInstance) GetNode<Node>(lapCheckpoint).GetChild(0)).Visible = true;
-                disabilityManager.Enable(GetNode<Node>(lapCheckpoint));
             }
         }
     }
@@ -49,7 +71,7 @@ public class LapObject : Area, IDisability
     {
         GD.Print("Enabled LapObject");
     }
-    
+
     public void OnDisable()
     {
         GD.Print("Disabled LapObject");
