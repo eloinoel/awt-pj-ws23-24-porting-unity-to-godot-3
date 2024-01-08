@@ -30,7 +30,17 @@ func _physics_process(delta: float):
 
     # cam follows car, smooth out any sudden movements
     camera_pivot.global_transform.origin = camera_pivot.global_transform.origin.linear_interpolate(vehicle.global_transform.origin, delta * 20)
-    camera_pivot.global_transform.basis = camera_pivot.transform.basis.slerp(vehicle.transform.basis, delta * 5)
+    #camera_pivot.global_transform.basis = camera_pivot.global_transform.basis.slerp(vehicle.global_transform.basis, delta * 5)
+    var y_rotation = vehicle.transform.basis.get_euler().y
+    var y_rot_pivot = camera_pivot.transform.basis.get_euler().y
+    camera_pivot.transform.basis = camera_pivot.transform.basis.rotated(camera_pivot.transform.basis.y, y_rotation - y_rot_pivot)
+    #camera_pivot.rotate_y(deg2rad(- y_rot_pivot + y_rotation))
+    #var slerped_basis = camera_pivot.transform.basis.slerp(vehicle.transform.basis, delta * 5)
+    #camera_pivot.transform.basis.y = slerped_basis.y
+
+
+    # DebugDrawingGD.draw_sphere(camera_pivot.global_transform.origin, 0.5, Color(0, 0, 1, 1))
+
 
     #compute acceleration
     var localVelocity = vehicle.transform.basis.xform_inv(vehicle.linear_velocity)
