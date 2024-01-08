@@ -75,7 +75,7 @@ func _physics_process(delta: float):
         timer = 0 """
     #DebugDrawingGD.draw_sphere(look_at_target, 0.5, Color(0, 0, 1, 1))
     #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + camera.global_transform.basis.y)
-    camera.look_at(look_at_target, Vector3.UP)
+    #camera.look_at(look_at_target, Vector3.UP)
 
 func _is_driving_backwards():
     return vehicle.linear_velocity.dot(vehicle.global_transform.basis.z) < 0
