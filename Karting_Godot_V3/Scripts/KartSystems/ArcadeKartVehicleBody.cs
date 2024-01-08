@@ -842,6 +842,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 
 		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
+		// TODO: lastvalidRotation still buggy/often misset, can lead to teleport off map glitch
 		/* var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);

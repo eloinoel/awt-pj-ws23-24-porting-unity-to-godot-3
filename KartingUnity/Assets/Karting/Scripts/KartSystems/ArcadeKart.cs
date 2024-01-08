@@ -418,7 +418,7 @@ namespace KartGame.KartSystems
                     m_LastCollisionNormal = contact.normal;
             }
         }
-        private float debugTimer = 0.0f;// TODO: remove debug
+        //private float debugTimer = 0.0f;// TODO: remove debug
         void MoveVehicle(bool accelerate, bool brake, float turnInput)
         {
             float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
@@ -428,12 +428,12 @@ namespace KartGame.KartSystems
             Vector3 localVel = transform.InverseTransformVector(Rigidbody.velocity);
 
             //TODO: remove debug
-            debugTimer += Time.deltaTime;
+/*             debugTimer += Time.deltaTime;
             if(debugTimer >= 1)
             {
                 Debug.Log("localVel: " + localVel);
                 debugTimer = 0;
-            }
+            } */
 
             bool accelDirectionIsFwd = accelInput >= 0;
             bool localVelDirectionIsFwd = localVel.z >= 0;
@@ -505,13 +505,6 @@ namespace KartGame.KartSystems
 
                 var angularVel = Rigidbody.angularVelocity;
 
-                Debug.Log(angularVel.magnitude);
-                Debug.Log(angularVel);
-                Debug.Log(angularVel.y);
-/*                 Debug.Log(turningPower);
-                Debug.Log(angularVelocitySteering);
-                Debug.Log(angularVelocitySmoothSpeed);
-                Debug.Log(Time.fixedDeltaTime); */
                 // move the Y angular velocity towards our target
                 angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed);
                 //Debug.Log(angularVel);
@@ -585,7 +578,7 @@ namespace KartGame.KartSystems
                 m_InAir = true;
             }
 
-            /* bool validPosition = false;
+            bool validPosition = false;
             if (Physics.Raycast(transform.position + (transform.up * 0.1f), -transform.up, out RaycastHit hit, 3.0f, 1 << 9 | 1 << 10 | 1 << 11)) // Layer: ground (9) / Environment(10) / Track (11)
             {
                 Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
@@ -614,7 +607,7 @@ namespace KartGame.KartSystems
             {
                 m_LastValidPosition = transform.position;
                 m_LastValidRotation.eulerAngles = new Vector3(0.0f, transform.rotation.y, 0.0f);
-            } */
+            }
 
             ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);
         }

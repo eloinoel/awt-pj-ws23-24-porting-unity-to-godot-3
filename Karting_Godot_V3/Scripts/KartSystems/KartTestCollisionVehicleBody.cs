@@ -12,8 +12,8 @@ public class KartTestCollisionVehicleBody : VehicleBody
     public override void _Ready()
     {
         GD.Print("loaded collision test kart");
-        Connect("body_entered", this, "_OnCollisionEnter");
-        Connect("body_exited", this, "_OnCollisionExit");
+        Connect("body_entered", this, "OnCollisionEnter");
+        Connect("body_exited", this, "OnCollisionExit");
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -22,13 +22,13 @@ public class KartTestCollisionVehicleBody : VehicleBody
 //      
 //  }
 
-    private void _OnCollisionEnter(Node body)
+    private void OnCollisionEnter(Node body)
     {
         GD.Print("Collision detected");
     }
 
     /* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
-    private void _OnCollisionExit(Node body)
+    private void OnCollisionExit(Node body)
     {
         GD.Print("Exited detected collision");
     }
