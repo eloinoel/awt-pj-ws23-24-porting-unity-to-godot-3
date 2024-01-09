@@ -100,4 +100,8 @@ render_target_update_mode = 0
 [node name="Camera" type="Camera" parent="Spatial/Viewport"]
 transform = Transform( -0.999999, 8.22478e-05, 0.00137627, 0, 0.998219, -0.0596548, -0.00137873, -0.0596547, -0.998218, 0, 2, -10 )
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 512, 301 )
+current = true
+
 [connection signal="pressed" from="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer/Control/PlayButton" to="." method="_on_PlayButton_pressed"]
