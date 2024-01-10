@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 
 public class ArcadeKartVehicleBody : VehicleBody
@@ -11,7 +12,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public class StatPowerup
 	{
-		public ArcadeKart.Stats modifiers;
+		public ArcadeKartVehicleBody.Stats modifiers;
 		public string PowerUpID;
 		public float ElapsedTime;
 		public float MaxTime;
@@ -104,7 +105,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	public float AirPercent { get; private set; }
 	public float GroundPercent { get; private set; }
 
-	public ArcadeKart.Stats baseStats = new ArcadeKart.Stats
+	public ArcadeKartVehicleBody.Stats baseStats = new ArcadeKartVehicleBody.Stats
 	{
 		// I hard set the settings hiw they were overwritten by the unity editor
 		TopSpeed = 15f, //10f,
@@ -301,8 +302,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	// can the kart move?
 	bool m_CanMove = true;
-	Godot.Collections.Array<StatPowerup> m_ActivePowerupList = new Godot.Collections.Array<StatPowerup>();
-	ArcadeKart.Stats m_FinalStats;
+	List<StatPowerup> m_ActivePowerupList = new List<StatPowerup>();
+	ArcadeKartVehicleBody.Stats m_FinalStats;
 
 	Godot.Quat m_LastValidRotation;
 	Godot.Vector3 m_LastValidPosition;
@@ -316,7 +317,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public void AddPowerup(StatPowerup statPowerup)
 	{
-		//Debug.Log("add Powerup");
 		m_ActivePowerupList.Add(statPowerup);
 	}
 
@@ -438,7 +438,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		/* GatherInputs(); probably not needed*/
 
 		// apply our powerups to create our finalStats
-		TickPowerups();
+		TickPowerups(state);
 
 		// apply our physics properties
 		/* Unitys rigidbodies have a centerOfMass property that influences how collisions play out (Godots do not) */
@@ -494,11 +494,27 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 	} */
 
-	void TickPowerups()
+	void TickPowerups(PhysicsDirectBodyState state)
 	{
-		/*// remove all elapsed powerups
-		m_ActivePowerupList.RemoveAll((p) => { return p.ElapsedTime > p.MaxTime; });
-		//Debug.Log(m_ActivePowerupList.Count);
+		// remove all elapsed powerups
+		//m_ActivePowerupList.RemoveAll((p) => { return p.ElapsedTime > p.MaxTime; });
+/* 		for (int i = m_ActivePowerupList.Count-1; i >= 0; i--)
+		{
+			StatPowerup powerup = m_ActivePowerupList[i];
+			if (powerup.ElapsedTime > powerup.MaxTime)
+			{
+				m_ActivePowerupList.Remove(powerup);
+			}
+		} */
+		//GD.Print(m_ActivePowerupList);
+		if (m_ActivePowerupList.Count > 0)
+		{
+			StatPowerup powerup = m_ActivePowerupList[0];
+			if (powerup.ElapsedTime > powerup.MaxTime)
+			{
+				m_ActivePowerupList.Clear();
+			}
+		}
 
 		// zero out powerups before we add them all up
 		var powerups = new Stats();
@@ -509,28 +525,14 @@ public class ArcadeKartVehicleBody : VehicleBody
 			var p = m_ActivePowerupList[i];
 
 			// add elapsed time
-			p.ElapsedTime += Time.fixedDeltaTime;
+			p.ElapsedTime += state.Step;
 
 			// add up the powerups
 			powerups += p.modifiers;
-		}*/
+		}
 
-		// TODO: remove
-		ArcadeKart.Stats dummypowerup = new ArcadeKart.Stats
-		{
-			TopSpeed = 10f,
-			Acceleration = 10f,
-			AccelerationCurve = 0.2f,
-			Braking = 0f,
-			ReverseAcceleration = 0f,
-			ReverseSpeed = 0f,
-			Steer = 0f,
-			CoastingDrag = 0f,
-			Grip = 0f,
-			AddedGravity = 0f,
-		};
 		// add powerups to our final stats
-		m_FinalStats = baseStats /*+ dummypowerup *//* + powerups */;
+		m_FinalStats = baseStats + powerups;
 
 		// clamp values in finalstats
 		m_FinalStats.Grip = Mathf.Clamp(m_FinalStats.Grip, 0, 1);

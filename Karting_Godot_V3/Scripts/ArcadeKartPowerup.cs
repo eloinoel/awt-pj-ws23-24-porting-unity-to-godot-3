@@ -3,10 +3,22 @@ using System;
 
 public class ArcadeKartPowerup : Area
 {
-
-    public ArcadeKart.StatPowerup boostStats = new ArcadeKart.StatPowerup
+    public ArcadeKartVehicleBody.StatPowerup boostStats = new ArcadeKartVehicleBody.StatPowerup
     {
-        MaxTime = 5
+        MaxTime = 5f,
+        modifiers = new ArcadeKartVehicleBody.Stats
+        {
+            TopSpeed = 10f,
+            Acceleration = 10f,
+            AccelerationCurve = 0.2f,
+            Braking = 0f,
+            ReverseAcceleration = 0f,
+            ReverseSpeed = 0f,
+            Steer = 0f,
+            CoastingDrag = 0f,
+            Grip = 0f,
+            AddedGravity = 0f,
+        }
     };
 
     public bool isCoolingDown { get; private set; }
@@ -38,11 +50,12 @@ public class ArcadeKartPowerup : Area
         }
     }
 
-    private void OnTriggerEnter(Node body)
+    private void OnTriggerEnter(Node Body)
     {
         if (isCoolingDown) return;
-
-        var kart = body as ArcadeKart;
+        if (Body.Name != "ArcadeKart")
+            return;
+        var kart = Body as ArcadeKartVehicleBody;
 
         lastActivatedTimestamp = HelperFunctions.GetTime();
         // reset elapsed time if this boost has already been used before
@@ -100,5 +113,4 @@ public class ArcadeKartPowerup : Area
             trailRenderer.enabled = false;
         }
     } */
-
 }
