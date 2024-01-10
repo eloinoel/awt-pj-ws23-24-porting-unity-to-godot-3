@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections;
 
 public enum GameState{Play, Won, Lost}
 
@@ -25,6 +26,7 @@ public class GameFlowManager : Node
     [Export(hintString: "Sound played on win")]
     public AudioClip victorySound; */
     [Export(hintString: "Prefab for the win game message")]
+    public NodePath winDisplayMessagePath;
     public DisplayMessage winDisplayMessage;
     /* [Export] //TODO: playback the race countdown
     public PlayableDirector raceCountdownTrigger; */
@@ -34,26 +36,53 @@ public class GameFlowManager : Node
     [Export(hintString: "This string has to be the name of the scene you want to load when losing")]
     public string loseSceneName = "LoseScene";
     [Export(hintString: "Prefab for the lose game message")]
+    public NodePath loseDisplayMessagePath;
     public DisplayMessage loseDisplayMessage;
 
     public GameState gameState { get; private set; }
 
-    // DONT NEED THIS, ONLY 1 KART: public bool autoFindKarts = true;
+    // DONT NEED public bool autoFindKarts = true; // ONLY 1 KART in scene
+    [Export(hintString: "Vehicle body player kart")]
     public NodePath kartPath;
-    public VehicleBody playerKart;
+    private ArcadeKartVehicleBody playerKart;
 
     // DONT NEED: ArcadeKart[] karts;
+    [Export(hintString: "Objective Manager node")]
+    public NodePath objectiveManagerPath;
     ObjectiveManager m_ObjectiveManager;
+
+    [Export(hintString: "Time Manager node")]
+    public NodePath timeManagerPath;
     TimeManager m_TimeManager;
     float m_TimeLoadEndGameScene;
     string m_SceneToLoad;
     float elapsedTimeBeforeEndScene = 0;
 
+    DisabilityManager disabilityManager;
+
 
     public override void _Ready()
     {
-        playerKart = GetNode<VehicleBody>(kartPath); // this allegedly 
+        disabilityManager = (DisabilityManager) GetTree().Root.GetNode<Node>(GameConstants.disabilityManagerPath);
 
+        playerKart = GetNode<ArcadeKartVehicleBody>(kartPath);
+
+        m_ObjectiveManager = GetNode<ObjectiveManager>(objectiveManagerPath);
+
+        m_TimeManager = GetNode<TimeManager>(timeManagerPath);
+
+        //AudioUtility.SetMasterVolume(1); TODO:
+
+        winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
+        loseDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
+        disabilityManager.Disable(winDisplayMessage);
+        disabilityManager.Disable(loseDisplayMessage);
+
+        m_TimeManager.StopRace();
+        playerKart.SetCanMove(false);
+
+        //run race countdown animation
+        ShowRaceCountdownAnimation();
 
     }
 
@@ -96,13 +125,13 @@ public class GameFlowManager : Node
             k.SetCanMove(true);
         }
         m_TimeManager.StartRace();
-    }
+    }*/
 
     void ShowRaceCountdownAnimation() {
-        raceCountdownTrigger.Play();
+        //raceCountdownTrigger.Play(); //TODO:
     }
 
-    IEnumerator ShowObjectivesRoutine() {
+    /* IEnumerator ShowObjectivesRoutine() {
         while (m_ObjectiveManager.Objectives.Count == 0)
             yield return null;
         yield return new WaitForSecondsRealtime(0.2f);
@@ -111,9 +140,9 @@ public class GameFlowManager : Node
            if (m_ObjectiveManager.Objectives[i].displayMessage)m_ObjectiveManager.Objectives[i].displayMessage.Display();
            yield return new WaitForSecondsRealtime(1f);
         }
-    }
+    } */
 
-
+/*
     void Update()
     {
 
