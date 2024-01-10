@@ -131,7 +131,7 @@ public class GameFlowManager : Node
         //raceCountdownTrigger.Play(); //TODO:
     }
 
-    IEnumerator ShowObjectivesRoutine() {
+    /* IEnumerator ShowObjectivesRoutine() {
         while (m_ObjectiveManager.Objectives.Count == 0)
             yield return null;
         yield return new WaitForSecondsRealtime(0.2f);
@@ -140,7 +140,7 @@ public class GameFlowManager : Node
            if (m_ObjectiveManager.Objectives[i].displayMessage)m_ObjectiveManager.Objectives[i].displayMessage.Display();
            yield return new WaitForSecondsRealtime(1f);
         }
-    }
+    } */
 
 /*
     void Update()
