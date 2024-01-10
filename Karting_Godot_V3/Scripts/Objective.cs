@@ -7,7 +7,7 @@ public enum GameMode
     TimeLimit, Crash, Laps
 }
 
-public abstract class Objective : Node
+public abstract class Objective : Node, IDisability
 {
     [Export(hintString: "Which game mode are you playing?")]
     public GameMode gameMode;
@@ -41,28 +41,36 @@ public abstract class Objective : Node
     public bool isBlocking() => !(isOptional || isCompleted);
 
 //TODO:
-    /* public UnityAction<UnityActionUpdateObjective> onUpdateObjective;
+    // public UnityAction<UnityActionUpdateObjective> onUpdateObjective;
 
+    [Export(hintString: "Handle HUD notifications")] // TODO: Check if preotected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
+    [Export(hintString: "Handle HUD objectives")]
     protected ObjectiveHUDManger m_ObjectiveHUDManger;
-    
-    public static Action<TargetObject> OnRegisterPickup;
-    public static Action<TargetObject> OnUnregisterPickup;
-    
-    public DisplayMessage displayMessage;
 
-    private List<TargetObject> pickups = new List<TargetObject>();
+    public static Action<LapObject> OnRegisterPickup;
+    public static Action<LapObject> OnUnregisterPickup;
 
-    public List<TargetObject> Pickups => pickups;
+    // public DisplayMessage displayMessage;
+
+    private List<LapObject> pickups = new List<LapObject>();
+
+    public List<LapObject> Pickups => pickups;
     public int NumberOfPickupsTotal { get; private set; }
     public int NumberOfPickupsRemaining => Pickups.Count;
-    
+    private bool isActive;
+    public bool IsActive
+    {
+        get => isActive;
+        set => isActive = value;
+    }
+
     public int NumberOfActivePickupsRemaining()
     {
         int total = 0;
         for (int i = 0; i < Pickups.Count; i++)
         {
-            if (Pickups[i].active) total++;
+            if (Pickups[i].IsActive) total++;
         }
 
         return total;
@@ -70,7 +78,7 @@ public abstract class Objective : Node
 
     protected abstract void ReachCheckpoint(int remaining);
     
-    void OnEnable()
+    public void OnEnable()
     {
         OnRegisterPickup += RegisterPickup;
         OnUnregisterPickup += UnregisterPickup;
@@ -81,21 +89,21 @@ public abstract class Objective : Node
         // add this objective to the list contained in the objective manager
         ObjectiveManager.RegisterObjective(this);
 
+        // NOTE: We dont find object by types here anymore, because we simply export ObjectiveHUDManager and NotificationHUDManager and set them through the editor
         // register this objective in the ObjectiveHUDManger
-        m_ObjectiveHUDManger = FindObjectOfType<ObjectiveHUDManger>();
-        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManger, Objective>(m_ObjectiveHUDManger, this);
+/*         m_ObjectiveHUDManger = FindObjectOfType<ObjectiveHUDManger>();
+        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManger, Objective>(m_ObjectiveHUDManger, this); */
         m_ObjectiveHUDManger.RegisterObjective(this);
 
         // register this objective in the NotificationHUDManager
-        m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
-        DebugUtility.HandleErrorIfNullFindObject<NotificationHUDManager, Objective>(m_NotificationHUDManager, this);
+/*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
+        DebugUtility.HandleErrorIfNullFindObject<NotificationHUDManager, Objective>(m_NotificationHUDManager, this); */
         m_NotificationHUDManager.RegisterObjective(this);
     }
 
     public void UpdateObjective(string descriptionText, string counterText, string notificationText)
     {
-        onUpdateObjective?.Invoke(new UnityActionUpdateObjective(this, descriptionText, counterText, false,
-            notificationText));
+        // TODO: onUpdateObjective?.Invoke(new UnityActionUpdateObjective(this, descriptionText, counterText, false, notificationText));
     }
 
     public void CompleteObjective(string descriptionText, string counterText, string notificationText)
@@ -112,8 +120,8 @@ public abstract class Objective : Node
     {
         return "";
     }
-    
-    public void RegisterPickup(TargetObject pickup)
+
+    public void RegisterPickup(LapObject pickup)
     {
         if (pickup.gameMode != gameMode) return;
 
@@ -122,14 +130,14 @@ public abstract class Objective : Node
         NumberOfPickupsTotal++;
     }
 
-    public void UnregisterPickup(TargetObject pickupCollected)
+    public void UnregisterPickup(LapObject pickupCollected)
     {
         if (pickupCollected.gameMode != gameMode) return;
 
         // removes the pickup from the list, so that we can keep track of how many are left on the map
         if (pickupCollected.gameMode == GameMode.Laps)
         {
-            pickupCollected.active = false;
+            pickupCollected.IsActive = false;
 
             LapObject lapObject = (LapObject) pickupCollected;
 
@@ -137,7 +145,7 @@ public abstract class Objective : Node
 
             if (!lapObject.lapOverNextPass)
             {
-                TimeDisplay.OnUpdateLap();
+                // TODO: TimeDisplay.OnUpdateLap();
                 lapObject.lapOverNextPass = true;
                 return;
             }
@@ -146,15 +154,15 @@ public abstract class Objective : Node
 
             ReachCheckpoint(0);
             ResetPickups();
-            TimeDisplay.OnUpdateLap();
+            // TODO: TimeDisplay.OnUpdateLap();
 
         }
         else
         {
             ReachCheckpoint(NumberOfPickupsRemaining - 1);
             Pickups.Remove(pickupCollected);
-            if (gameMode == GameMode.Laps)
-                KartGame.Track.TimeDisplay.OnUpdateLap();
+            /* TODO: if (gameMode == GameMode.Laps)
+                KartGame.Track.TimeDisplay.OnUpdateLap(); */
         }
     }
 
@@ -162,11 +170,11 @@ public abstract class Objective : Node
     {
         for (int i = 0; i < Pickups.Count; i++)
         {
-            Pickups[i].active = true;
+            Pickups[i].IsActive = true;
         }
     }
-    
-    void OnDisable()
+
+    public void OnDisable()
     {
         OnRegisterPickup -= RegisterPickup;
         OnUnregisterPickup -= UnregisterPickup;
@@ -174,7 +182,7 @@ public abstract class Objective : Node
 
 }
 
-public class UnityActionUpdateObjective
+/* public class UnityActionUpdateObjective
 {
     public Objective objective;
     public string descriptionText;
@@ -189,5 +197,5 @@ public class UnityActionUpdateObjective
         this.counterText = counterText;
         this.isComplete = isComplete;
         this.notificationText = notificationText;
-    } */
-}
+    }
+} */
