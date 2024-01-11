@@ -61,6 +61,7 @@ public class GameFlowManager : Node
     DisabilityManager disabilityManager;
 
 
+
     public override void _Ready()
     {
         disabilityManager = (DisabilityManager) GetTree().Root.GetNode<Node>(GameConstants.disabilityManagerPath);
@@ -71,7 +72,7 @@ public class GameFlowManager : Node
 
         m_TimeManager = GetNode<TimeManager>(timeManagerPath);
 
-        //AudioUtility.SetMasterVolume(1); TODO:
+        // AudioUtility.SetMasterVolume(1); TODO:
 
         winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
         loseDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
@@ -81,57 +82,50 @@ public class GameFlowManager : Node
         m_TimeManager.StopRace();
         playerKart.SetCanMove(false);
 
-        //run race countdown animation
+        // run race countdown animation
         ShowRaceCountdownAnimation();
 
-    }
-
-/*     void Start()
-    {
+        // async methods for animations
+        ShowObjectivesRoutine();
         
-
-        m_ObjectiveManager = FindObjectOfType<ObjectiveManager>();
-        DebugUtility.HandleErrorIfNullFindObject<ObjectiveManager, GameFlowManager>(m_ObjectiveManager, this);
-
-        m_TimeManager = FindObjectOfType<TimeManager>();
-        DebugUtility.HandleErrorIfNullFindObject<TimeManager, GameFlowManager>(m_TimeManager, this);
-
-        AudioUtility.SetMasterVolume(1);
-
-        winDisplayMessage.gameObject.SetActive(false);
-        loseDisplayMessage.gameObject.SetActive(false);
-
-        m_TimeManager.StopRace();
-        foreach (ArcadeKart k in karts)
-        {
-            k.SetCanMove(false);
-        }
-
-        //run race countdown animation
-        ShowRaceCountdownAnimation();
-        StartCoroutine(ShowObjectivesRoutine());
-
-        StartCoroutine(CountdownThenStartRaceRoutine());
     }
 
-    IEnumerator CountdownThenStartRaceRoutine() {
+    /* IEnumerator CountdownThenStartRaceRoutine() {
         yield return new WaitForSeconds(3f);
         StartRace();
-    }
+    } */
 
-    void StartRace() {
+    /* void StartRace() {
         foreach (ArcadeKart k in karts)
         {
             k.SetCanMove(true);
         }
         m_TimeManager.StartRace();
-    }*/
+    } */
 
     void ShowRaceCountdownAnimation() {
         //raceCountdownTrigger.Play(); //TODO:
     }
 
-    /* IEnumerator ShowObjectivesRoutine() {
+    async void ShowObjectivesRoutine() {
+        while(m_ObjectiveManager.Objectives.Count == 0)
+        {
+            await ToSignal(GetTree(), "idle_frame");
+        }
+
+        await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+
+        for(int i = 0; i < m_ObjectiveManager.Objectives.Count; i++)
+        {
+            if(m_ObjectiveManager.Objectives[i].displayMessage != null)
+            {
+                m_ObjectiveManager.Objectives[i].displayMessage.Display();
+            }
+            await ToSignal(GetTree().CreateTimer(1f), "timeout");
+        }
+    }
+
+/*     IEnumerator ShowObjectivesRoutine() {
         while (m_ObjectiveManager.Objectives.Count == 0)
             yield return null;
         yield return new WaitForSecondsRealtime(0.2f);

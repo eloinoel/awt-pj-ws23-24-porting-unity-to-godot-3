@@ -51,7 +51,7 @@ public abstract class Objective : Node, IDisability
     public static Action<LapObject> OnRegisterPickup;
     public static Action<LapObject> OnUnregisterPickup;
 
-    // public DisplayMessage displayMessage;
+    public DisplayMessage displayMessage; //TODO: implement
 
     private List<LapObject> pickups = new List<LapObject>();
 
