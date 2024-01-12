@@ -4,14 +4,14 @@ using Godot;
 
 public class AudioManager
 {
-    public AudioStreamPlayer audioMixer;
+/*     public AudioStreamPlayer audioMixer;
 
     public void EnsureSFXDestruction(AudioStream source)
     {
         StartCoroutine("DelayedSFXDestruction", source);
     }
 
-    private IEnumerator DelayedSFXDestruction(AudioSource source)
+    private IEnumerator DelayedSFXDestruction(AudioStream source)
     {
         while (source.isPlaying)
         {
@@ -19,5 +19,5 @@ public class AudioManager
         }
 
         GameObject.Destroy(source.gameObject);
-    }
+    } */
 }
