@@ -110,7 +110,7 @@ public abstract class Objective : MonoBehaviour
     {
         return "";
     }
-    
+
     public void RegisterPickup(TargetObject pickup)
     {
         if (pickup.gameMode != gameMode) return;
