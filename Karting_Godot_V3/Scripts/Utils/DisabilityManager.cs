@@ -32,15 +32,27 @@ public class DisabilityManager : Node
     public void Disable(Node node)
     {
         if (!(node is IDisability)) return;
+        if (!(node as IDisability).IsActive) {
+            GD.Print((node as IDisability).IsActive);
+            GD.PrintErr("DisabilityManager: Disable: Tried disabling inactive node " + node.Name);
+            return;
+        }
 
-        (node as IDisability).IsActive = false;
-
-        //save node
+        // get necessary data
         Node parent = node.GetParent();
         NodePath parentPath = parent.GetPath();
+
+        // check if parent has node as child,
+        var children = parent.GetChildren();
+        if(!children.Contains(node)) {
+            GD.PrintErr("DisabilityManager: Disable: Parent " + parent.Name + " doesn't have child " + node.Name);
+            return;
+        }
+
+        //save node and disable
+        (node as IDisability).IsActive = false;
         DisabledNode dNode = new DisabledNode(node, parentPath);
         disabledNodes.Add(dNode);
-
         parent.CallDeferred("remove_child", node);
 
         ((IDisability) node).OnDisable();

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TimeManager : Node
+public class TimeManager : Node, IDisability
 {
     public bool IsFinite { get; private set; }
     public float TotalTime { get; private set; }
@@ -15,6 +15,13 @@ public class TimeManager : Node
     public static Action<float> OnAdjustTime;
     public static Action<int, bool, GameMode> OnSetTime;
 
+    private bool isActive = true;
+    public bool IsActive
+    {
+        get => isActive;
+        set => isActive = value;
+    }
+
     public override void _Ready()
     {
         base._Ready();
@@ -22,15 +29,14 @@ public class TimeManager : Node
         TimeRemaining = TotalTime;
     }
 
-    //TODO: this callback doesn't work in GODOT, maybe use public override void _EnterTree()
-    void OnEnable()
+    //TODO: maybe needs to be called in _Ready method also
+    public void OnEnable()
     {
         OnAdjustTime += AdjustTime;
         OnSetTime += SetTime;
     }
 
-    //TODO: this callback doesn't work in GODOT, maybe use public override void _ExitTree()
-    private void OnDisable()
+    public void OnDisable()
     {
         OnAdjustTime -= AdjustTime;
         OnSetTime -= SetTime;

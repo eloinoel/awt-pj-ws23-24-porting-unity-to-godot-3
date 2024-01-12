@@ -75,18 +75,18 @@ public class GameFlowManager : Node
         // AudioUtility.SetMasterVolume(1); TODO:
 
         winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
-        loseDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
+        loseDisplayMessage = GetNode<DisplayMessage>(loseDisplayMessagePath);
         disabilityManager.Disable(winDisplayMessage);
         disabilityManager.Disable(loseDisplayMessage);
 
-        m_TimeManager.StopRace();
-        playerKart.SetCanMove(false);
+        //m_TimeManager.StopRace();
+        //playerKart.SetCanMove(false);
 
         // run race countdown animation
-        ShowRaceCountdownAnimation();
+        //ShowRaceCountdownAnimation();
 
         // async methods for animations
-        ShowObjectivesRoutine();
+        //ShowObjectivesRoutine();
         
     }
 
