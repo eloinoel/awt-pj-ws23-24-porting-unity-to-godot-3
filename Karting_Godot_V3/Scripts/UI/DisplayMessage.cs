@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class DisplayMessage : Node
+public class DisplayMessage : Node, IDisability
 {
     //[TextArea]
     [Export(hintString: "The text that will be displayed")]
@@ -21,9 +21,17 @@ public class DisplayMessage : Node
 
     private NotificationToast notification;
 
+
+    private bool isActive = true;
+    public bool IsActive
+    {
+        get => isActive;
+        set => isActive = value;
+    }
+
     //TODO: possibly need to link this callback to something
     // probably by deleting and reinstantiating node and then using  public override void _EnterTree()
-    void OnEnable()
+    public void OnEnable()
     {
         // gets time in micro secs
         m_InitTime = HelperFunctions.GetTime();
@@ -39,8 +47,10 @@ public class DisplayMessage : Node
         m_WasDisplayed = false;
     }
 
+    public void OnDisable() {}
+
     // Update is called once per frame
-    void Update()
+    public override void _Process(float delta)
     {
         if (!autoDisplayOnAwake) return;
         if (m_WasDisplayed) return;

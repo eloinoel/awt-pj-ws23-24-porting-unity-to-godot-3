@@ -4,7 +4,7 @@ using System.Runtime.Remoting.Messaging;
 
 public class LapObject : Area, IDisability
 {
-    private bool isActive;
+    private bool isActive = true;
     public bool IsActive //interface field
     {
         get => isActive;

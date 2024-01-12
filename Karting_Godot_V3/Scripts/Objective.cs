@@ -43,7 +43,7 @@ public abstract class Objective : Node, IDisability
 //TODO:
     // public UnityAction<UnityActionUpdateObjective> onUpdateObjective;
 
-    [Export(hintString: "Handle HUD notifications")] // TODO: Check if preotected can be exported
+    [Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
     [Export(hintString: "Handle HUD objectives")]
     protected ObjectiveHUDManger m_ObjectiveHUDManger;
@@ -51,14 +51,14 @@ public abstract class Objective : Node, IDisability
     public static Action<LapObject> OnRegisterPickup;
     public static Action<LapObject> OnUnregisterPickup;
 
-    // public DisplayMessage displayMessage;
+    public DisplayMessage displayMessage; //TODO: implement
 
     private List<LapObject> pickups = new List<LapObject>();
 
     public List<LapObject> Pickups => pickups;
     public int NumberOfPickupsTotal { get; private set; }
     public int NumberOfPickupsRemaining => Pickups.Count;
-    private bool isActive;
+    private bool isActive = true;
     public bool IsActive
     {
         get => isActive;
@@ -77,7 +77,8 @@ public abstract class Objective : Node, IDisability
     }
 
     protected abstract void ReachCheckpoint(int remaining);
-    
+
+    // TODO: check if this should be called in _Ready method also
     public void OnEnable()
     {
         OnRegisterPickup += RegisterPickup;

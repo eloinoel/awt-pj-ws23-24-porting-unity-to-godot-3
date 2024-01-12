@@ -10,7 +10,7 @@ public class ObjectiveManager : Node
 
     public static Action<Objective> RegisterObjective;
 
-    public void OnEnable()
+    public override void _Ready()
     {
         RegisterObjective += OnRegisterObjective;
     }
