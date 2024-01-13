@@ -8,7 +8,7 @@ namespace KartGame.KartSystems
     /// </summary>
     public partial class EngineAudio : Node
     {
-        public ArcadeKart arcadeKart;
+        public ArcadeKartVehicleBody arcadeKart;
 
         [Export(PropertyHint.Range, "0.0f, 1.0f")]
         public float RPM;
@@ -42,9 +42,9 @@ namespace KartGame.KartSystems
 
         public override void _Ready()
         {
-            /* m_RandomBuffer = new float[97];
+            m_RandomBuffer = new float[97];
             for (var i = 0; i < m_RandomBuffer.Length; i++)
-                m_RandomBuffer[i] = Random.Range(-1, 1);
+                m_RandomBuffer[i] = (float) GD.RandRange(-1.0f, 1.0f);
             intake.Init();
             compression.Init();
             combustion.Init();
@@ -52,20 +52,21 @@ namespace KartGame.KartSystems
 
             m_Stroke = 0;
             m_Time = 0;
-            m_SecondsPerSample = 1f / AudioSettings.outputSampleRate; */
+            m_SecondsPerSample = 1f / AudioServer.GetMixRate()/* AudioSettings.outputSampleRate */;
         }
 
-/*         void Update()
+        public override void _Process(float delta)
         {
-            RPM = arcadeKart != null ? Mathf.Abs(arcadeKart.LocalSpeed())  : 0;
+            RPM = arcadeKart != null ? Mathf.Abs(arcadeKart.LocalSpeed()) : 0;
             m_DeltaRPM = RPM - m_LastRPM;
 
             //damp the movement of m_LastRPM
-            m_LastRPM = Mathf.Lerp(m_LastRPM, RPM, Time.deltaTime * 100);
-            if (Time.timeScale < 1)
+            m_LastRPM = Mathf.Lerp(m_LastRPM, RPM, delta * 100);
+            /* PREV: if (Time.timeScale < 1)
                 m_Volume = 0;
             else
-                m_Volume = 1;
+                m_Volume = 1; */
+            m_Volume = 1;
         }
 
         void OnAudioFilterRead(float[] data, int channels)
@@ -162,6 +163,6 @@ namespace KartGame.KartSystems
                 m_LastSampleL = sampleL;
                 m_LastSampleR = sampleR;
             }
-        } */
+        }
     }
 }

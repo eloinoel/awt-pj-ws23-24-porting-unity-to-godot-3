@@ -10,9 +10,4 @@ public class HelperFunctions : Node
     {
         return Time.GetTicksUsec() / 1000000.0f;
     }
-    
-    public static float FloatRange(float min = 0.0f, float max = 1.0f) {
-        var random = new Random();
-        return (float) (random.NextDouble() * (max - min) + min);
-    }
 }
