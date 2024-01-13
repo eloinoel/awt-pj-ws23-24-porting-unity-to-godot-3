@@ -12,6 +12,9 @@ public class DisplayMessage : Node, IDisability
     [Export(hintString: "Delay before displaying the message")]
     public float delayBeforeShowing;
 
+    [Export(hintString: "DisplayMessageManager node path")]
+    public NodePath displayMessageManagerPath;
+
 
     float m_InitTime = float.NegativeInfinity;
 
@@ -29,19 +32,24 @@ public class DisplayMessage : Node, IDisability
         set => isActive = value;
     }
 
-    //TODO: possibly need to link this callback to something
-    // probably by deleting and reinstantiating node and then using  public override void _EnterTree()
+    public override void _Ready()
+    {
+        base._Ready();
+
+        OnEnable(); // In Unity OnEnable is also called after Awake
+    }
+
     public void OnEnable()
     {
         // gets time in micro secs
         m_InitTime = HelperFunctions.GetTime();
         if (m_DisplayMessageManager == null)
             // Prev: m_DisplayMessageManager = FindObjectOfType<DisplayMessageManager>();
-            m_DisplayMessageManager = GetNode<DisplayMessageManager>("/root/DisplayMessageManager");
+            m_DisplayMessageManager = GetNode<DisplayMessageManager>(displayMessageManagerPath);
 
         // prev: DebugUtility.HandleErrorIfNullFindObject<DisplayMessageManager, DisplayMessage>(m_DisplayMessageManager, this);
         if (m_DisplayMessageManager == null)
-            GD.PrintErr("Error at DisplayMessage.cs: DisplayMessageManger is null.");
+            GD.PrintErr("Error at DisplayMessage.cs: DisplayMessageManager is null.");
 
 
         m_WasDisplayed = false;

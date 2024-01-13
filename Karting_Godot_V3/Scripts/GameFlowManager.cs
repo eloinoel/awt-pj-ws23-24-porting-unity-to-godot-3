@@ -60,6 +60,9 @@ public class GameFlowManager : Node
 
     DisabilityManager disabilityManager;
 
+    [Export(hintString: "no delay until race starts if true")]
+    public bool debugMode;
+
 
 
     public override void _Ready()
@@ -79,29 +82,30 @@ public class GameFlowManager : Node
         disabilityManager.Disable(winDisplayMessage);
         disabilityManager.Disable(loseDisplayMessage);
 
-        //m_TimeManager.StopRace();
-        //playerKart.SetCanMove(false);
+        if (!debugMode)
+        {
+            m_TimeManager.StopRace();
+            playerKart.SetCanMove(false);
 
-        // run race countdown animation
-        //ShowRaceCountdownAnimation();
+            // run race countdown animation
+            ShowRaceCountdownAnimation();
 
-        // async methods for animations
-        //ShowObjectivesRoutine();
-        
+            // async methods for animations
+            ShowObjectivesRoutine();
+            CountdownThenStartRaceRoutine();
+        }
     }
 
-    /* IEnumerator CountdownThenStartRaceRoutine() {
-        yield return new WaitForSeconds(3f);
+    async void CountdownThenStartRaceRoutine()
+    {
+        await ToSignal(GetTree().CreateTimer(3f), "timeout");
         StartRace();
-    } */
+    }
 
-    /* void StartRace() {
-        foreach (ArcadeKart k in karts)
-        {
-            k.SetCanMove(true);
-        }
+    void StartRace() {
+        playerKart.SetCanMove(true);
         m_TimeManager.StartRace();
-    } */
+    }
 
     void ShowRaceCountdownAnimation() {
         //raceCountdownTrigger.Play(); //TODO:
@@ -125,87 +129,97 @@ public class GameFlowManager : Node
         }
     }
 
-/*     IEnumerator ShowObjectivesRoutine() {
-        while (m_ObjectiveManager.Objectives.Count == 0)
-            yield return null;
-        yield return new WaitForSecondsRealtime(0.2f);
-        for (int i = 0; i < m_ObjectiveManager.Objectives.Count; i++)
-        {
-           if (m_ObjectiveManager.Objectives[i].displayMessage)m_ObjectiveManager.Objectives[i].displayMessage.Display();
-           yield return new WaitForSecondsRealtime(1f);
-        }
-    } */
+    /* Unity way of async functions
 
-/*
-    void Update()
+        /* IEnumerator CountdownThenStartRaceRoutine() {
+            yield return new WaitForSeconds(3f);
+            StartRace();
+        }
+        IEnumerator ShowObjectivesRoutine() {
+            while (m_ObjectiveManager.Objectives.Count == 0)
+                yield return null;
+            yield return new WaitForSecondsRealtime(0.2f);
+            for (int i = 0; i < m_ObjectiveManager.Objectives.Count; i++)
+            {
+               if (m_ObjectiveManager.Objectives[i].displayMessage)m_ObjectiveManager.Objectives[i].displayMessage.Display();
+               yield return new WaitForSecondsRealtime(1f);
+            }
+        } */
+
+    public override void _Process(float delta)
     {
+        base._Process(delta);
 
         if (gameState != GameState.Play)
         {
-            elapsedTimeBeforeEndScene += Time.deltaTime;
+            elapsedTimeBeforeEndScene += delta;
             if(elapsedTimeBeforeEndScene >= endSceneLoadDelay)
             {
 
-                float timeRatio = 1 - (m_TimeLoadEndGameScene - Time.time) / endSceneLoadDelay;
-                endGameFadeCanvasGroup.alpha = timeRatio;
+                float timeRatio = 1 - (m_TimeLoadEndGameScene - HelperFunctions.GetTime()) / endSceneLoadDelay;
 
-                float volumeRatio = Mathf.Abs(timeRatio);
+                //TODO:
+                //endGameFadeCanvasGroup.alpha = timeRatio;
+
+                // TODO: Audio
+                /* float volumeRatio = Mathf.Abs(timeRatio);
                 float volume = Mathf.Clamp(1 - volumeRatio, 0, 1);
-                AudioUtility.SetMasterVolume(volume);
+                AudioUtility.SetMasterVolume(volume); */
 
                 // See if it's time to load the end scene (after the delay)
-                if (Time.time >= m_TimeLoadEndGameScene)
+                if (HelperFunctions.GetTime() >= m_TimeLoadEndGameScene)
                 {
-                    SceneManager.LoadScene(m_SceneToLoad);
+                    GetTree().ChangeScene(m_SceneToLoad);
                     gameState = GameState.Play;
                 }
             }
-        }
-        else
-        {
-            if (m_ObjectiveManager.AreAllObjectivesCompleted())
-                EndGame(true);
+            else
+            {
+                if (m_ObjectiveManager.AreAllObjectivesCompleted())
+                    EndGame(true);
 
-            if (m_TimeManager.IsFinite && m_TimeManager.IsOver)
-                EndGame(false);
+                if (m_TimeManager.IsFinite && m_TimeManager.IsOver)
+                    EndGame(false);
+            }
         }
     }
 
     void EndGame(bool win)
     {
         // unlocks the cursor before leaving the scene, to be able to click buttons
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        Input.MouseMode = Input.MouseModeEnum.Visible;
 
         m_TimeManager.StopRace();
 
         // Remember that we need to load the appropriate end scene after a delay
         gameState = win ? GameState.Won : GameState.Lost;
-        endGameFadeCanvasGroup.gameObject.SetActive(true);
+
+        //endGameFadeCanvasGroup.gameObject.SetActive(true); TODO:
+
         if (win)
         {
             m_SceneToLoad = winSceneName;
-            m_TimeLoadEndGameScene = Time.time + endSceneLoadDelay + delayBeforeFadeToBlack;
+            m_TimeLoadEndGameScene = HelperFunctions.GetTime() + endSceneLoadDelay + delayBeforeFadeToBlack;
 
-            // play a sound on win
-            var audioSource = gameObject.AddComponent<AudioSource>();
+            // TODO: play a sound on win
+            /* var audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.clip = victorySound;
             audioSource.playOnAwake = false;
             audioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.HUDVictory);
-            audioSource.PlayScheduled(AudioSettings.dspTime + delayBeforeWinMessage);
+            audioSource.PlayScheduled(AudioSettings.dspTime + delayBeforeWinMessage); */
 
             // create a game message
             winDisplayMessage.delayBeforeShowing = delayBeforeWinMessage;
-            winDisplayMessage.gameObject.SetActive(true);
+            disabilityManager.Enable(winDisplayMessage);
         }
         else
         {
             m_SceneToLoad = loseSceneName;
-            m_TimeLoadEndGameScene = Time.time + endSceneLoadDelay + delayBeforeFadeToBlack;
+            m_TimeLoadEndGameScene = HelperFunctions.GetTime() + endSceneLoadDelay + delayBeforeFadeToBlack;
 
             // create a game message
             loseDisplayMessage.delayBeforeShowing = delayBeforeWinMessage;
-            loseDisplayMessage.gameObject.SetActive(true);
+            disabilityManager.Enable(loseDisplayMessage);
         }
-    } */
+    }
 }

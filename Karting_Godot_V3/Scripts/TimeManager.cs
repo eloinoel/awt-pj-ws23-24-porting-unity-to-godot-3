@@ -27,9 +27,9 @@ public class TimeManager : Node, IDisability
         base._Ready();
         IsFinite = false;
         TimeRemaining = TotalTime;
+        OnEnable(); // In Unity OnEnable is also called after awake
     }
 
-    //TODO: maybe needs to be called in _Ready method also
     public void OnEnable()
     {
         OnAdjustTime += AdjustTime;
