@@ -40,37 +40,19 @@ public class LapObject : Area, IDisability
     LapObject lapdance;
     public override void _Ready()
     {
+        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
         Connect("body_entered", this, "OnBodyEntered");
-        lapOverNextPass = false;
+        OnEnable(); // In Unity OnEnable is also called after awake
 
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>("RaceScene/DisabilityManager");
-/*         if(this.Name == "LapCheckpoint2")
-        {
-            lapdance = (LapObject) GetParent().GetNode("LapCheckpoint");
-            disabilityManager.Disable(lapdance);
-        } */
+        Register(); // in Unity called in Start(), which comes after onEnable
     }
-
-/*     float timer = 0f;
-    bool doOnce = true;
-    public override void _Process(float delta)
-    {
-        base._Process(delta);
-        timer += delta;
-        if(timer >= 2 && doOnce && this.Name == "LapCheckpoint2")
-        {
-            GD.Print(this.Name + ", doOnce: " + doOnce);
-            disabilityManager.Enable(lapdance);
-            doOnce = false;
-        }
-    } */
 
     public void OnBodyEntered(Node Body)
     {
         if (Body.Name != "ArcadeKart")
             return;
 
-        // TODO: Objective.OnUnregisterPickup?.Invoke(this);
+        Objective.OnUnregisterPickup?.Invoke(this);
         if(!finishLap)
         {
             ((MeshInstance) this.GetChild(0)).Visible = false;
@@ -84,13 +66,18 @@ public class LapObject : Area, IDisability
         }
     }
 
+    protected void Register()
+    {
+        Objective.OnRegisterPickup?.Invoke(this);
+    }
+
     public void OnEnable()
     {
-        GD.Print("Enabled LapObject");
+        lapOverNextPass = false;
     }
 
     public void OnDisable()
     {
-        GD.Print("Disabled LapObject");
+
     }
 }

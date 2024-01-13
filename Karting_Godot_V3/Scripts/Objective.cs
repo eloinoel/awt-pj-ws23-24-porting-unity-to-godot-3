@@ -78,7 +78,12 @@ public abstract class Objective : Node, IDisability
 
     protected abstract void ReachCheckpoint(int remaining);
 
-    // TODO: check if this should be called in _Ready method also
+    public override void _Ready()
+    {
+        base._Ready();
+        OnEnable(); // In Unity OnEnable is also called after Awake
+    }
+
     public void OnEnable()
     {
         OnRegisterPickup += RegisterPickup;
