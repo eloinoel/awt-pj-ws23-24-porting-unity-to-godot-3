@@ -4,6 +4,7 @@ var is_paused = false setget set_is_paused
 
 func _ready():
 	is_paused = false
+	visible = false
 
 
 func _unhandled_input(event):
