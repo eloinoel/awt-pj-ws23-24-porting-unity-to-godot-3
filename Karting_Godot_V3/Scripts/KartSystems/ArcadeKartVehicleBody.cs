@@ -556,22 +556,23 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 	public float LocalSpeed()
 	{
-/* 		if (m_CanMove)
+		Vector3 Forward = GlobalTransform.basis.z.Normalized();
+		if (m_CanMove)
 		{
-			float dot = Vector3.Dot(transform.forward, Rigidbody.velocity);
-			if (MinAngleToFinishDrift.Abs(dot) > 0.1f)
+			float dot = Forward.Dot(this.LinearVelocity);
+			if (Mathf.Abs(dot) > 0.1f)
 			{
-				float speed = Rigidbody.velocity.magnitude;
-				return DriftControl < 0 ? -(speed / m_FinalStats.ReverseSpeed) : (speed / m_FinalStats.TopSpeed);
+				float speed = this.LinearVelocity.Length();
+				return dot < 0 ? -(speed / m_FinalStats.ReverseSpeed) : (speed / m_FinalStats.TopSpeed);
 			}
 			return 0f;
 		}
 		else
 		{
 			// use this value to play kart sound when it is waiting the race start countdown.
-			return Input.Accelerate ? 1.0f : 0.0f;
-		} */
-		return 0f; // TODO: Dummy return
+			return Input.IsActionPressed("forward") ? 1.0f : 0.0f;
+		}
+		return 0f;
 	}
 
 	// see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot

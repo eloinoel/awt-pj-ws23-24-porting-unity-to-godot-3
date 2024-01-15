@@ -42,10 +42,10 @@ namespace KartGame.KartSystems
                 }
                 else
                 {
-                    buffer = new float[clip.GetData().Length];
+                    buffer = new float[clip.Data.Length];
                     //PREV: clip.GetData (buffer, 0);
-                    for (var i = 0; i < clip.GetData().Length; i++)
-                        buffer[i] = clip.GetData()[i];
+                    for (var i = 0; i < clip.Data.Length; i++)
+                        buffer[i] = clip.Data[i];
                 }
             }
         }

@@ -43,7 +43,7 @@ namespace KartGame.KartSystems
                 Drift.volume = arcadeKart.IsDrifting && arcadeKart.GroundPercent > 0.0f ? arcadeKart.Rigidbody.velocity.magnitude / arcadeKart.GetMaxSpeed() : 0.0f;
             }
 
-            IdleSound.volume    = Mathf.Lerp(0.6f, 0.0f, kartSpeed * 4);
+            IdleSound.volume = Mathf.Lerp(0.6f, 0.0f, kartSpeed * 4);
 
             if (kartSpeed < 0.0f)
             {
@@ -59,8 +59,6 @@ namespace KartGame.KartSystems
                 RunningSound.volume = Mathf.Lerp(0.1f, RunningSoundMaxVolume, kartSpeed * 1.2f);
                 RunningSound.pitch = Mathf.Lerp(0.3f, RunningSoundMaxPitch, kartSpeed + (Mathf.Sin(Time.time) * .1f));
             }
-
-            
         }
     }
 }
