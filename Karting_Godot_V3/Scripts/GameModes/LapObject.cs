@@ -36,8 +36,6 @@ public class LapObject : Area, IDisability
     public Godot.Collections.Array<NodePath> lapCheckpoints;
     public bool lapOverNextPass;
 
-
-    LapObject lapdance;
     public override void _Ready()
     {
         disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);

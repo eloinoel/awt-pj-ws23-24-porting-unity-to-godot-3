@@ -43,14 +43,15 @@ public abstract class Objective : Node, IDisability
 //TODO:
     // public UnityAction<UnityActionUpdateObjective> onUpdateObjective;
 
-    [Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
+    //[Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
-    [Export(hintString: "Handle HUD objectives")]
+    //[Export(hintString: "Handle HUD objectives")]
     protected ObjectiveHUDManger m_ObjectiveHUDManger;
 
     public static Action<LapObject> OnRegisterPickup;
     public static Action<LapObject> OnUnregisterPickup;
 
+    [Export(hintString: "show objective at start of game")]
     public DisplayMessage displayMessage; //TODO: implement
 
     private List<LapObject> pickups = new List<LapObject>();
