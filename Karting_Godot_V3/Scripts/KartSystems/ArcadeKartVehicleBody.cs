@@ -291,6 +291,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	const float k_NullSpeed = 0.01f;
 	Godot.Vector3 m_VerticalReference = Vector3.Up;
 
+	float kartTurnInput = 0.0f;
 	// Drift params
 	public bool WantsToDrift { get; private set; } = false;
 	public bool IsDrifting { get; private set; } = false;
@@ -368,6 +369,25 @@ public class ArcadeKartVehicleBody : VehicleBody
 		spring.spring = SuspensionSpring;
 		spring.damper = SuspensionDamp;
 		wheel.suspensionSpring = spring; */
+	}
+
+	// Smooth axis values like in unity
+	float smoothInput(float currentInput, float turnInput, float delta)
+	{
+		float gravity = 3.0f;
+		float sensitivity = 3.0f;
+		// return to resting Input 0.0f
+		if(turnInput == 0.0f && currentInput < 0.0f) {
+			return Mathf.Clamp(currentInput + gravity*delta, -1.0f, 0.0f);
+		} else if(turnInput == 0.0f && currentInput > 0.0f) {
+			return Mathf.Clamp(currentInput - gravity*delta, 0.0f, 1.0f);
+		}
+		// This implements unitys Snap property
+		if((currentInput > 0.0f && turnInput < 0.0f) || (currentInput < 0.0f && turnInput > 0.0f)) {
+			currentInput = 0.0f;
+		}
+		// smoothly transition to target input with the linear speed defined by sensitivity
+		return Mathf.Clamp(currentInput + sensitivity*delta*turnInput, -1.0f, 1.0f);
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -471,7 +491,9 @@ public class ArcadeKartVehicleBody : VehicleBody
 		// apply vehicle physics
 		if (m_CanMove)
 		{
-			MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), Input.GetAxis("right","left"), state);
+			kartTurnInput = smoothInput(kartTurnInput, Input.GetAxis("right","left"), state.Step);
+			MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), kartTurnInput, state);
+			//MoveVehicle(Input.IsActionPressed("forward"), Input.IsActionPressed("backward"), Input.GetAxis("right","left"), state);
 		}
 		GroundAirborne(state);
 
