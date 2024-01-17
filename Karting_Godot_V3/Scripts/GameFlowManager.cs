@@ -23,9 +23,8 @@ public class GameFlowManager : Node
     public float delayBeforeFadeToBlack = 4f;
     [Export(hintString: "Duration of delay before the win message")]
     public float delayBeforeWinMessage = 2f;
-    /* //TODO: play sound when victory
     [Export(hintString: "Sound played on win")]
-    public AudioClip victorySound; */
+    public AudioStreamOGGVorbis victorySound;
     [Export(hintString: "Prefab for the win game message")]
     public NodePath winDisplayMessagePath;
     public DisplayMessage winDisplayMessage;
@@ -91,6 +90,7 @@ public class GameFlowManager : Node
         this.Connect(countdownSignalName, racecountdown, "_on_trigger_race_countdown");
 
         // AudioUtility.SetMasterVolume(1); TODO:
+        AudioServer.SetBusVolumeDb(0, 0.0f);
 
         winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
         loseDisplayMessage = GetNode<DisplayMessage>(loseDisplayMessagePath);
@@ -179,10 +179,9 @@ public class GameFlowManager : Node
                 //TODO:
                 //endGameFadeCanvasGroup.alpha = timeRatio;
 
-                // TODO: Audio
-                /* float volumeRatio = Mathf.Abs(timeRatio);
+                float volumeRatio = Mathf.Abs(timeRatio);
                 float volume = Mathf.Clamp(1 - volumeRatio, 0, 1);
-                AudioUtility.SetMasterVolume(volume); */
+                AudioServer.SetBusVolumeDb(0, GD.Linear2Db(volume));
 
                 // See if it's time to load the end scene (after the delay)
                 if (HelperFunctions.GetTime() >= m_TimeLoadEndGameScene)
@@ -220,11 +219,12 @@ public class GameFlowManager : Node
             m_TimeLoadEndGameScene = HelperFunctions.GetTime() + endSceneLoadDelay + delayBeforeFadeToBlack;
 
             // TODO: play a sound on win
-            /* var audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = victorySound;
-            audioSource.playOnAwake = false;
-            audioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.HUDVictory);
-            audioSource.PlayScheduled(AudioSettings.dspTime + delayBeforeWinMessage); */
+            AudioStreamPlayer victorySoundPlayer = new AudioStreamPlayer();
+            victorySoundPlayer.Stream = victorySound;
+            victorySoundPlayer.Autoplay = false;
+            victorySoundPlayer.Bus = "HUDVictory";
+            victorySoundPlayer.Play();
+            GetTree().Root.AddChild(victorySoundPlayer);
 
             // create a game message
             winDisplayMessage.delayBeforeShowing = delayBeforeWinMessage;
