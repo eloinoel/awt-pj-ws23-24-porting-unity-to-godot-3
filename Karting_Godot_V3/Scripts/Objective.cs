@@ -100,7 +100,7 @@ public abstract class Objective : Node, IDisability
         // register this objective in the ObjectiveHUDManger
 /*         m_ObjectiveHUDManger = FindObjectOfType<ObjectiveHUDManger>();
         DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManger, Objective>(m_ObjectiveHUDManger, this); */
-        m_ObjectiveHUDManger.RegisterObjective(this);
+        m_ObjectiveHUDManger.RegisterObjective(this); // TODO: implement
 
         // register this objective in the NotificationHUDManager
 /*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();

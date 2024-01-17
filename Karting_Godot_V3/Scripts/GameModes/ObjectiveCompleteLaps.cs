@@ -22,7 +22,7 @@ public class ObjectiveCompleteLaps : Objective
             title = $"Complete {lapsToComplete} {targetName}s";
 
         // ---- Start ----
-        //Start();
+        //Start(); //TODO: call method when finished implementing
     }
 
     private async void Start()
