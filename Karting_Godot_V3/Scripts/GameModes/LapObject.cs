@@ -23,12 +23,10 @@ public class LapObject : Area, IDisability
     public LayerMask layerMask;
 
     [Tooltip("The point at which the collect VFX is spawned")]
-    public Transform CollectVFXSpawnPoint;
+    public Transform CollectVFXSpawnPoint;*/
 
-    [Header("Sounds")]
-
-    [Tooltip("Sound played when receiving damages")]
-    public AudioClip CollectSound; */
+    [Export(hintString: "Sound played when receiving damages")]
+    public AudioStreamOGGVorbis CollectSound;
 
     [Export(hintString: "Is this the first/last lap object?")]
     public bool finishLap;
