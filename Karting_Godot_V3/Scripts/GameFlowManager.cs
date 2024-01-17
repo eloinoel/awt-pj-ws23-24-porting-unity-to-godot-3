@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections;
+using System.Diagnostics;
 
 public enum GameState{Play, Won, Lost}
 
@@ -64,6 +65,16 @@ public class GameFlowManager : Node
     public bool debugMode;
 
 
+    // Racecountdown stuff
+    [Signal]
+    public delegate void start_race_countdown();
+
+    [Export]
+    public NodePath RacecountdownNodePath;
+    private Node2D racecountdown;
+    private string countdownSignalName = "start_race_countdown";
+
+    Stopwatch sw = new Stopwatch();
 
     public override void _Ready()
     {
@@ -74,6 +85,10 @@ public class GameFlowManager : Node
         m_ObjectiveManager = GetNode<ObjectiveManager>(objectiveManagerPath);
 
         m_TimeManager = GetNode<TimeManager>(timeManagerPath);
+
+        // connect to gdscript for countdown
+        racecountdown = GetNode<Node2D>(RacecountdownNodePath);
+        this.Connect(countdownSignalName, racecountdown, "_on_trigger_race_countdown");
 
         // AudioUtility.SetMasterVolume(1); TODO:
 
@@ -87,6 +102,7 @@ public class GameFlowManager : Node
             m_TimeManager.StopRace();
             playerKart.SetCanMove(false);
 
+            sw.Start();
             // run race countdown animation
             ShowRaceCountdownAnimation();
 
@@ -100,6 +116,8 @@ public class GameFlowManager : Node
     {
         await ToSignal(GetTree().CreateTimer(3f), "timeout");
         StartRace();
+        sw.Stop();
+        GD.Print("Elapsed time: {0}", sw.Elapsed);
     }
 
     void StartRace() {
@@ -108,7 +126,7 @@ public class GameFlowManager : Node
     }
 
     void ShowRaceCountdownAnimation() {
-        //raceCountdownTrigger.Play(); //TODO:
+        EmitSignal(countdownSignalName);
     }
 
     async void ShowObjectivesRoutine() {
