@@ -22,15 +22,16 @@ public class ObjectiveCompleteLaps : Objective
             title = $"Complete {lapsToComplete} {targetName}s";
 
         // ---- Start ----
-        //Start(); //TODO: call method when finished implementing
+        Start(); //TODO: call method when finished implementing
     }
 
     private async void Start()
     {
         TimeManager.OnSetTime(totalTimeInSecs, isTimed, gameMode);
-        TimeDisplay.OnSetLaps(lapsToComplete);
+        // TODO: TimeDisplay.OnSetLaps(lapsToComplete);
         await ToSignal(GetTree(), "idle_frame");
         Register();
+        GD.Print("Start ObjectiveCompleteLaps");
     }
 
     protected override void ReachCheckpoint(int remaining)

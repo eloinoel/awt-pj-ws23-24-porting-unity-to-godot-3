@@ -46,7 +46,7 @@ public abstract class Objective : Node, IDisability
     //[Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
     //[Export(hintString: "Handle HUD objectives")]
-    protected ObjectiveHUDManger m_ObjectiveHUDManger;
+    protected ObjectiveHUDManager m_ObjectiveHUDManager;
 
     public static Action<LapObject> OnRegisterPickup;
     public static Action<LapObject> OnUnregisterPickup;
@@ -97,10 +97,11 @@ public abstract class Objective : Node, IDisability
         ObjectiveManager.RegisterObjective(this);
 
         // NOTE: We dont find object by types here anymore, because we simply export ObjectiveHUDManager and NotificationHUDManager and set them through the editor
-        // register this objective in the ObjectiveHUDManger
-/*         m_ObjectiveHUDManger = FindObjectOfType<ObjectiveHUDManger>();
-        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManger, Objective>(m_ObjectiveHUDManger, this); */
-        m_ObjectiveHUDManger.RegisterObjective(this); // TODO: implement
+        // register this objective in the ObjectiveHUDManager
+/*         m_ObjectiveHUDManager = FindObjectOfType<ObjectiveHUDManager>();
+        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManager, Objective>(m_ObjectiveHUDManager, this); */
+        m_ObjectiveHUDManager.RegisterObjective(this); // TODO: implement
+        GD.Print("Register Objective");
 
         // register this objective in the NotificationHUDManager
 /*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
@@ -119,7 +120,7 @@ public abstract class Objective : Node, IDisability
         UpdateObjective(descriptionText, counterText, notificationText);
 
         // unregister this objective form both HUD managers
-        m_ObjectiveHUDManger.UnregisterObjective(this);
+        m_ObjectiveHUDManager.UnregisterObjective(this);
         m_NotificationHUDManager.UnregisterObjective(this);
     }
 

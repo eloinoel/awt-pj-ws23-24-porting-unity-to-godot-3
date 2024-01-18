@@ -11,6 +11,7 @@ public class ObjectiveHUDManager : Node
 	[Export(hintString: "Prefab for the primary objectives")]
 	public PoolObjectDef secondaryObjectivePrefab;*/
 	[Export(hintString: "Prefab for the primary objectives")]
+	public NodePath primaryObjectivePrefabPath;
 	public ObjectiveToast primaryObjectivePrefab;
 
 	System.Collections.Generic.Dictionary<Objective, ObjectiveToast> m_ObjectivesDictionary;
@@ -18,6 +19,8 @@ public class ObjectiveHUDManager : Node
 	public override void _Ready()
 	{
 		m_ObjectivesDictionary = new System.Collections.Generic.Dictionary<Objective, ObjectiveToast>();
+		primaryObjectivePrefab = GetNode<ObjectiveToast>(primaryObjectivePrefabPath);
+		GD.Print("ObjectiveHUDManager woke up");
 	}
 
 	public void RegisterObjective(Objective objective)
@@ -39,6 +42,7 @@ public class ObjectiveHUDManager : Node
 		m_ObjectivesDictionary.Add(objective, toast);
 
 		objectivePanel.UpdateTable(toast.gameObject);*/
+		GD.Print("Register Objective");
 		ObjectiveToast toast = primaryObjectivePrefab;
 		toast.Initialize(objective.title, objective.description, objective.GetUpdatedCounterAmount(), objective.isOptional, objective.delayVisible);
 
