@@ -1,3 +1,25 @@
-[gd_scene format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scripts/Track/TimeDisplay.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/GameHUD/LapTimeCanvas/TimeDisplayItem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scripts/UI/UITable.cs" type="Script" id=3]
 
 [node name="Node2D" type="Node2D"]
+position = Vector2( 0, 24 )
+script = ExtResource( 1 )
+currentLapTextPath = NodePath("CurrentLap")
+bestLaptTextPath = NodePath("BestLap")
+finishedLapsParentPath = NodePath("FinishedLaps")
+
+[node name="FinishedLaps" type="Control" parent="."]
+margin_left = 824.0
+margin_top = 104.0
+margin_right = 864.0
+margin_bottom = 152.0
+script = ExtResource( 3 )
+
+[node name="CurrentLap" parent="." instance=ExtResource( 2 )]
+position = Vector2( 688, 0 )
+
+[node name="BestLap" parent="." instance=ExtResource( 2 )]
+position = Vector2( 688, 53 )

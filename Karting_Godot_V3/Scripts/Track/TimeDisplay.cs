@@ -14,15 +14,18 @@ public class TimeDisplay : Node, IDisability
     DisabilityManager disabilityManager;
 
     [Export(hintString: "Display the time for the current lap.")]
-    public TimeDisplayItem currentLapText;
+    public NodePath currentLapTextPath;
+    private TimeDisplayItem currentLapText;
     [Export(hintString: "Display the time for the best lap.")]
-    public TimeDisplayItem bestLapText;
+    public NodePath bestLaptTextPath;
+    private TimeDisplayItem bestLapText;
 
     /* [Export(hintString: "Pool object for the time display UI item.")]
-    public PoolObjectDef timeDisplayItem;
+    public PoolObjectDef timeDisplayItem;  */
 
     [Export(hintString: "Finished lap info will be displayed under this parent.")]
-    public UITable finishedLapsParent; */
+    public NodePath finishedLapsParentPath;
+    private UITable finishedLapsParent;
 
     public static Action OnUpdateLap;
     public static Action<int> OnSetLaps;
@@ -38,7 +41,12 @@ public class TimeDisplay : Node, IDisability
     public override void _Ready()
     {
         base._Ready();
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
+        //TODO: reenable disabilityManager when inserting in race scene
+        //disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
+
+        currentLapText = GetNode<TimeDisplayItem>(currentLapTextPath);
+        bestLapText = GetNode<TimeDisplayItem>(bestLaptTextPath);
+        finishedLapsParent = GetNode<UITable>(finishedLapsParentPath);
 
         currentLapText.SetText("");
         bestLapText.SetText("");
@@ -74,7 +82,7 @@ public class TimeDisplay : Node, IDisability
 //TODO:
     void SetLaps(int laps)
     {
-
+        GD.Print("SetLaps");
         /* for (int i = 0; i < laps; i++)
         {
             TimeDisplayItem newItem = timeDisplayItem.getObject(false, finishedLapsParent.transform).GetComponent<TimeDisplayItem>();
@@ -87,7 +95,7 @@ public class TimeDisplay : Node, IDisability
 //TODO:
     TimeDisplayItem GetItem(int i)
     {
-
+        GD.Print("GetLaps");
         /* if (i >= lapTimesText.Count)
         {
             TimeDisplayItem newItem = timeDisplayItem.getObject(false, finishedLapsParent.transform).GetComponent<TimeDisplayItem>();
@@ -126,7 +134,6 @@ public class TimeDisplay : Node, IDisability
         AddFinishedLapTime(finishedLapTimes.Count - 1);
 
         bestLapText.SetText(DisplaySessionBestLapTime());
-
 
         if (finishedLapTimes.Count == lapTimesText.Count)
         {

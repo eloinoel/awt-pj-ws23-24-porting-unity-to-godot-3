@@ -27,7 +27,8 @@ public class TimeDisplayItem : Node, IDisability
     public override void _Ready()
     {
         base._Ready();
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
+        //TODO: reenable disabilityManager when inserting in race scene
+        //disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
 
         try {
             display = GetNode<Label>(displayPath);
