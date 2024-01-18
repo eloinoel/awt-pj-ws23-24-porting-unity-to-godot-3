@@ -70,10 +70,8 @@ public class GameFlowManager : Node
 
     [Export]
     public NodePath RacecountdownNodePath;
-    private Node2D racecountdown;
+    private RaceCountdown racecountdown;
     private string countdownSignalName = "start_race_countdown";
-
-    Stopwatch sw = new Stopwatch();
 
     public override void _Ready()
     {
@@ -86,8 +84,8 @@ public class GameFlowManager : Node
         m_TimeManager = GetNode<TimeManager>(timeManagerPath);
 
         // connect to gdscript for countdown
-        racecountdown = GetNode<Node2D>(RacecountdownNodePath);
-        this.Connect(countdownSignalName, racecountdown, "_on_trigger_race_countdown");
+        racecountdown = GetNode<RaceCountdown>(RacecountdownNodePath);
+        //this.Connect(countdownSignalName, racecountdown, "OnTriggerRaceCountdown"); for connecting to gdscript
 
         // AudioUtility.SetMasterVolume(1); TODO:
         AudioServer.SetBusVolumeDb(0, 0.0f);
@@ -102,7 +100,6 @@ public class GameFlowManager : Node
             m_TimeManager.StopRace();
             playerKart.SetCanMove(false);
 
-            sw.Start();
             // run race countdown animation
             ShowRaceCountdownAnimation();
 
@@ -116,8 +113,6 @@ public class GameFlowManager : Node
     {
         await ToSignal(GetTree().CreateTimer(3f), "timeout");
         StartRace();
-        sw.Stop();
-        GD.Print("Elapsed time: {0}", sw.Elapsed);
     }
 
     void StartRace() {
@@ -126,7 +121,8 @@ public class GameFlowManager : Node
     }
 
     void ShowRaceCountdownAnimation() {
-        EmitSignal(countdownSignalName);
+        //EmitSignal(countdownSignalName); for c# to gdscript interaction
+        racecountdown.CallDeferred("TriggerRaceCountdown"); // call when node has finished loading
     }
 
     async void ShowObjectivesRoutine() {

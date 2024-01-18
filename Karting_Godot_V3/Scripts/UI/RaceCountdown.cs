@@ -46,8 +46,7 @@ public class RaceCountdown : Node
         Go = GetNode<Label>("CenterContainer/GO");
     }
 
-
-    private void _OnTriggerRaceCountdown()
+    public void TriggerRaceCountdown()
     {
         countdownTimer.Start(countdownDuration);
         audioPlayer.Stream = soundTick;

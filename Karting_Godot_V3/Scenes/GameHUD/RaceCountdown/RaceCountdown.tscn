@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/GameHUD/Roboto-Bold.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://Scenes/GameHUD/RaceCountdown/RaceCountdown.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/UI/RaceCountdown.cs" type="Script" id=2]
 [ext_resource path="res://Scenes/GameHUD/Gradiants.png" type="Texture" id=3]
 [ext_resource path="res://Scenes/GameHUD/RaceCountdown/RobotoBold160.tres" type="DynamicFont" id=4]
 
@@ -110,4 +110,4 @@ text = "GO"
 align = 1
 valign = 1
 
-[connection signal="timeout" from="CountdownTimer" to="." method="_on_CountdownTimer_timeout"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_OnCoundownTimerTimeout"]

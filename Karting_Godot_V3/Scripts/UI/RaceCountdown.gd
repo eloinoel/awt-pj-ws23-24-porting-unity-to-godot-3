@@ -24,7 +24,6 @@ func _on_trigger_race_countdown():
     $CenterContainer/Three.visible = true
     $ObjectiveMessage.visible = true
     countdownState = CountdownState.THREE
-    $CountdownTimer.start(1)
 
 func _on_CountdownTimer_timeout():
     audioPlayer = $AudioStreamPlayer
