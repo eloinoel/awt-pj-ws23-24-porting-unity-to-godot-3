@@ -122,24 +122,27 @@ public class ObjectiveToast : Node2D
 
 		if (m_IsMovingIn && !m_IsMovingOut)
 		{
+			float movedOutDistance = 93.5f /* + 18.0f */;
+			float hOffset = 18.0f;
 			// move in
 			if (timeSinceFadeStarted < moveInDuration)
 			{
 				// PREV: m_RectTransform.anchoredPosition =
 				//	new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y);
-				canvasGroup.Transform = canvasGroup.Transform.Translated(new Vector2((1 - (timeSinceFadeStarted / moveInDuration)) * 50.0f, 0.0f));
+				canvasGroup.Position = new Vector2((timeSinceFadeStarted / moveInDuration) * movedOutDistance - movedOutDistance + hOffset, canvasGroup.Position.y);
 			}
 			else
 			{
 				// making sure the position is exact
 				// PREV: m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y);
-				//canvasGroup.Transform = canvasGroup.Transform.Translated(new Vector2(-canvasGroup.Transform.origin.x, 0.0f));
+				canvasGroup.Position = new Vector2(0.0f + hOffset, canvasGroup.Position.y);
 
 				m_IsMovingIn = false;
 			}
 
 		}
 
+        // NOTE: This was not used in the unity Karting project, thus we ignore it ;)
 		/*if (m_IsFadingOut)
 		{
 			// fade out
