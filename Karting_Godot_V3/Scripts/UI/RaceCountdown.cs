@@ -57,7 +57,7 @@ public class RaceCountdown : Node
         audioPlayer.Stream = soundTick;
         audioPlayer.Play();
         helperFunctions.FadeIn(Three);
-        helperFunctions.FadeIn(objectiveMessage);
+        helperFunctions.FadeIn(objectiveMessage, 0.5f);
         //Three.Visible = true;
         //objectiveMessage.Visible = true;
         countdownState = CountdownState.THREE;
@@ -97,7 +97,7 @@ public class RaceCountdown : Node
                 break;
             case CountdownState.GO:
                 helperFunctions.FadeOut(Go);
-                helperFunctions.FadeOut(objectiveMessage);
+                helperFunctions.FadeOut(objectiveMessage, 0.5f);
                 //Go.Visible = false;
                 //objectiveMessage.Visible = false;
                 countdownState = CountdownState.FINISHED;
