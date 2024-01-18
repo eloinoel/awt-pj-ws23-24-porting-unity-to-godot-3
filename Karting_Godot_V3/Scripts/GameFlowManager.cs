@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections;
+using System.Diagnostics;
 
 public enum GameState{Play, Won, Lost}
 
@@ -63,6 +64,14 @@ public class GameFlowManager : Node
     public bool debugMode;
 
 
+    // Racecountdown stuff
+    [Signal]
+    public delegate void start_race_countdown();
+
+    [Export]
+    public NodePath RacecountdownNodePath;
+    private RaceCountdown racecountdown;
+    private string countdownSignalName = "start_race_countdown";
 
     public override void _Ready()
     {
@@ -74,6 +83,11 @@ public class GameFlowManager : Node
 
         m_TimeManager = GetNode<TimeManager>(timeManagerPath);
 
+        // connect to gdscript for countdown
+        racecountdown = GetNode<RaceCountdown>(RacecountdownNodePath);
+        //this.Connect(countdownSignalName, racecountdown, "OnTriggerRaceCountdown"); for connecting to gdscript
+
+        // AudioUtility.SetMasterVolume(1); TODO:
         AudioServer.SetBusVolumeDb(0, 0.0f);
 
         winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
@@ -107,7 +121,8 @@ public class GameFlowManager : Node
     }
 
     void ShowRaceCountdownAnimation() {
-        //raceCountdownTrigger.Play(); //TODO:
+        //EmitSignal(countdownSignalName); for c# to gdscript interaction
+        racecountdown.CallDeferred("TriggerRaceCountdown"); // call when node has finished loading
     }
 
     async void ShowObjectivesRoutine() {
