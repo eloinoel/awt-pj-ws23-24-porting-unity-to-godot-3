@@ -68,6 +68,7 @@ public class ObjectiveToast : Node2D
 		SetDescriptionText(descText);
 		counterTextContent.Text = counterText;
 
+		m_AudioSource = new AudioStreamPlayer();
 		// LayoutRebuilder.ForceRebuildLayoutImmediate(m_RectTransform); // TODO: Here too i imagine that this isnt needed in godot (We'll see ;))
 
 		m_StartFadeTime = HelperFunctions.GetTime() + delay;
@@ -124,13 +125,15 @@ public class ObjectiveToast : Node2D
 			// move in
 			if (timeSinceFadeStarted < moveInDuration)
 			{
-/* 				m_RectTransform.anchoredPosition =
-					new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y); */
+				// PREV: m_RectTransform.anchoredPosition =
+				//	new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y);
+				canvasGroup.Transform = canvasGroup.Transform.Translated(new Vector2((1 - (timeSinceFadeStarted / moveInDuration)) * 50.0f, 0.0f));
 			}
 			else
 			{
 				// making sure the position is exact
-/* 				m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y); */
+				// PREV: m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y);
+				//canvasGroup.Transform = canvasGroup.Transform.Translated(new Vector2(-canvasGroup.Transform.origin.x, 0.0f));
 
 				m_IsMovingIn = false;
 			}
@@ -174,8 +177,9 @@ public class ObjectiveToast : Node2D
 
 	void PlaySound(AudioStream sound)
 	{
-		if (sound != null)
+		if (sound != null) {
 			return;
+		}
 
 		if (m_AudioSource != null)
 		{
