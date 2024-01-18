@@ -18,7 +18,6 @@ config/icon="res://Scenes/RaceScene/icon.png"
 
 DebugDrawingCS="*res://Scripts/Utils/DebugDrawing.cs"
 DebugDrawingGD="*res://Scripts/Utils/DebugDrawing.gd"
-HelperFunctions="*res://Scripts/Utils/HelperFunctions.cs"
 
 [display]
 

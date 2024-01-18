@@ -26,6 +26,10 @@ public class RaceCountdown : Node
     Label Three;
     Label Go;
 
+    [Export]
+    NodePath helperFunctionsPath;
+    HelperFunctions helperFunctions;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -44,6 +48,7 @@ public class RaceCountdown : Node
         Two = GetNode<Label>("CenterContainer/Two");
         Three = GetNode<Label>("CenterContainer/Three");
         Go = GetNode<Label>("CenterContainer/GO");
+        helperFunctions = GetNode<HelperFunctions>(helperFunctionsPath);
     }
 
     public void TriggerRaceCountdown()
@@ -51,8 +56,10 @@ public class RaceCountdown : Node
         countdownTimer.Start(countdownDuration);
         audioPlayer.Stream = soundTick;
         audioPlayer.Play();
-        Three.Visible = true;
-        objectiveMessage.Visible = true;
+        helperFunctions.FadeIn(Three);
+        helperFunctions.FadeIn(objectiveMessage);
+        //Three.Visible = true;
+        //objectiveMessage.Visible = true;
         countdownState = CountdownState.THREE;
     }
 
@@ -63,26 +70,36 @@ public class RaceCountdown : Node
             case CountdownState.THREE:
                 countdownTimer.Start(countdownDuration);
                 audioPlayer.Play();
+                //helperFunctions.FadeOut(Three);
+                helperFunctions.FadeIn(Two);
                 Three.Visible = false;
-                Two.Visible = true;
+                //Two.Visible = true;
                 countdownState = CountdownState.TWO;
                 break;
             case CountdownState.TWO:
+                countdownTimer.Start(countdownDuration);
                 audioPlayer.Play();
+                //helperFunctions.FadeOut(Two);
+                helperFunctions.FadeIn(One);
                 Two.Visible = false;
-                One.Visible = true;
+                //One.Visible = true;
                 countdownState = CountdownState.ONE;
                 break;
             case CountdownState.ONE:
+                countdownTimer.Start(countdownDuration);
                 audioPlayer.Stream = soundGo;
                 audioPlayer.Play();
+                //helperFunctions.FadeOut(One);
+                helperFunctions.FadeIn(Go);
                 One.Visible = false;
-                Go.Visible = true;
+                //Go.Visible = true;
                 countdownState = CountdownState.GO;
                 break;
             case CountdownState.GO:
-                Go.Visible = false;
-                objectiveMessage.Visible = false;
+                helperFunctions.FadeOut(Go);
+                helperFunctions.FadeOut(objectiveMessage);
+                //Go.Visible = false;
+                //objectiveMessage.Visible = false;
                 countdownState = CountdownState.FINISHED;
                 break;
             default:
