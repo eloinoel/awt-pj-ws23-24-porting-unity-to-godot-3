@@ -45,8 +45,9 @@ public abstract class Objective : Node, IDisability
 
     //[Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
-    //[Export(hintString: "Handle HUD objectives")]
-    protected ObjectiveHUDManger m_ObjectiveHUDManger;
+    [Export(hintString: "Handle HUD objectives")]
+    protected NodePath m_ObjectiveHUDManagerPath;
+    protected ObjectiveHUDManager m_ObjectiveHUDManager;
 
     public static Action<LapObject> OnRegisterPickup;
     public static Action<LapObject> OnUnregisterPickup;
@@ -82,6 +83,7 @@ public abstract class Objective : Node, IDisability
     public override void _Ready()
     {
         base._Ready();
+        m_ObjectiveHUDManager = GetNode<ObjectiveHUDManager>(m_ObjectiveHUDManagerPath);
         OnEnable(); // In Unity OnEnable is also called after Awake
     }
 
@@ -97,15 +99,16 @@ public abstract class Objective : Node, IDisability
         ObjectiveManager.RegisterObjective(this);
 
         // NOTE: We dont find object by types here anymore, because we simply export ObjectiveHUDManager and NotificationHUDManager and set them through the editor
-        // register this objective in the ObjectiveHUDManger
-/*         m_ObjectiveHUDManger = FindObjectOfType<ObjectiveHUDManger>();
-        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManger, Objective>(m_ObjectiveHUDManger, this); */
-        m_ObjectiveHUDManger.RegisterObjective(this); // TODO: implement
+        // register this objective in the ObjectiveHUDManager
+/*         m_ObjectiveHUDManager = FindObjectOfType<ObjectiveHUDManager>();
+        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManager, Objective>(m_ObjectiveHUDManager, this); */
+        m_ObjectiveHUDManager.RegisterObjective(this); // TODO: implement
+        GD.Print("Register Objective");
 
         // register this objective in the NotificationHUDManager
 /*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
         DebugUtility.HandleErrorIfNullFindObject<NotificationHUDManager, Objective>(m_NotificationHUDManager, this); */
-        m_NotificationHUDManager.RegisterObjective(this);
+        //m_NotificationHUDManager.RegisterObjective(this);
     }
 
     public void UpdateObjective(string descriptionText, string counterText, string notificationText)
@@ -119,7 +122,7 @@ public abstract class Objective : Node, IDisability
         UpdateObjective(descriptionText, counterText, notificationText);
 
         // unregister this objective form both HUD managers
-        m_ObjectiveHUDManger.UnregisterObjective(this);
+        m_ObjectiveHUDManager.UnregisterObjective(this);
         m_NotificationHUDManager.UnregisterObjective(this);
     }
 

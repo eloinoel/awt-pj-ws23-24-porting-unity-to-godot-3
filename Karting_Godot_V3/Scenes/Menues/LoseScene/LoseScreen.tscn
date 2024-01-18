@@ -4,7 +4,6 @@
 [ext_resource path="res://Scenes/Menues/LoseScene/IntroSceneBackground_7.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/Menues/IntroMenu/Roboto-Black.ttf" type="DynamicFontData" id=3]
 
-
 [sub_resource type="DynamicFont" id=1]
 size = 128
 font_data = ExtResource( 3 )
