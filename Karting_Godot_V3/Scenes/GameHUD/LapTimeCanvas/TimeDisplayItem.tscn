@@ -6,20 +6,27 @@
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
-displayPath = NodePath("TextureRect/CenterContainer2/Time")
-titlePath = NodePath("TextureRect/Control/Title")
+displayPath = NodePath("ScaleRect/CenterContainer2/Time")
+titlePath = NodePath("ScaleRect/Control/Title")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="ScaleRect" type="Control" parent="."]
+margin_right = 384.0
+margin_bottom = 48.0
+rect_scale = Vector2( 0.8, 0.8 )
+
+[node name="TextureRect" type="TextureRect" parent="ScaleRect"]
+modulate = Color( 1, 1, 1, 0.658824 )
 margin_right = 384.0
 margin_bottom = 48.0
 texture = ExtResource( 3 )
 expand = true
 
-[node name="Control" type="Control" parent="TextureRect"]
-margin_right = 192.0
+[node name="Control" type="Control" parent="ScaleRect"]
+margin_left = 20.0
+margin_right = 212.0
 margin_bottom = 48.0
 
-[node name="Title" type="Label" parent="TextureRect/Control"]
+[node name="Title" type="Label" parent="ScaleRect/Control"]
 margin_left = 40.0
 margin_top = 6.0
 margin_right = 150.0
@@ -30,14 +37,14 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = ExtResource( 2 )
 text = "Current:"
 
-[node name="CenterContainer2" type="CenterContainer" parent="TextureRect"]
+[node name="CenterContainer2" type="CenterContainer" parent="ScaleRect"]
 margin_left = 200.0
 margin_right = 368.0
 margin_bottom = 48.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
-[node name="Time" type="Label" parent="TextureRect/CenterContainer2"]
+[node name="Time" type="Label" parent="ScaleRect/CenterContainer2"]
 margin_left = 46.0
 margin_top = 6.0
 margin_right = 122.0

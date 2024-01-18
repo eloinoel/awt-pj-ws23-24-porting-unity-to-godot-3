@@ -11,7 +11,7 @@ public class UITable : Node
 
     public void UpdateTable(Node newItem)
     {
-        if (newItem != null) newItem.GetNode<TextureRect>("TextureRect").RectScale = new Vector2(1f, 1f);
+        //if (newItem != null) newItem.GetNode<Control>("ScaleRect").RectScale = new Vector2(1f, 1f); //TODO: custom scaling probably makes this obsolete?
 
         int childCount = GetChildCount();
 
@@ -20,7 +20,7 @@ public class UITable : Node
         float height = 0;
         for (int i = 0; i < childCount; i++)
         {
-            TextureRect childRect = GetChild<Node>(i).GetNode<TextureRect>("TextureRect");
+            Control childRect = GetChild<Node>(i).GetNode<Control>("ScaleRect");
             Vector2 size = childRect.RectSize;
             height += down ? -size.y : size.y;
             if (i != 0) height += down? -offset : offset;
