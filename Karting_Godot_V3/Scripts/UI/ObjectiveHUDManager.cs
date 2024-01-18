@@ -19,6 +19,8 @@ public class ObjectiveHUDManager : Node
 	public override void _Ready()
 	{
 		m_ObjectivesDictionary = new System.Collections.Generic.Dictionary<Objective, ObjectiveToast>();
+/* 		Node node = GetNode<Node>(primaryObjectivePrefabPath);
+		primaryObjectivePrefab = GetNode<ObjectiveToast>(node.GetChild(0).GetPath()); */
 		primaryObjectivePrefab = GetNode<ObjectiveToast>(primaryObjectivePrefabPath);
 		GD.Print("ObjectiveHUDManager woke up");
 	}

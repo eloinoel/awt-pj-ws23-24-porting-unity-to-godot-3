@@ -45,7 +45,8 @@ public abstract class Objective : Node, IDisability
 
     //[Export(hintString: "Handle HUD notifications")] // TODO: Check if protected can be exported
     protected NotificationHUDManager m_NotificationHUDManager;
-    //[Export(hintString: "Handle HUD objectives")]
+    [Export(hintString: "Handle HUD objectives")]
+    protected NodePath m_ObjectiveHUDManagerPath;
     protected ObjectiveHUDManager m_ObjectiveHUDManager;
 
     public static Action<LapObject> OnRegisterPickup;
@@ -82,6 +83,7 @@ public abstract class Objective : Node, IDisability
     public override void _Ready()
     {
         base._Ready();
+        m_ObjectiveHUDManager = GetNode<ObjectiveHUDManager>(m_ObjectiveHUDManagerPath);
         OnEnable(); // In Unity OnEnable is also called after Awake
     }
 
@@ -106,7 +108,7 @@ public abstract class Objective : Node, IDisability
         // register this objective in the NotificationHUDManager
 /*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
         DebugUtility.HandleErrorIfNullFindObject<NotificationHUDManager, Objective>(m_NotificationHUDManager, this); */
-        m_NotificationHUDManager.RegisterObjective(this);
+        //m_NotificationHUDManager.RegisterObjective(this);
     }
 
     public void UpdateObjective(string descriptionText, string counterText, string notificationText)
