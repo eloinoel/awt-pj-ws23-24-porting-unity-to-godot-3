@@ -12,8 +12,9 @@ public class GameFlowManager : Node
     [Export(hintString: "Duration of the fade-to-black at the end of the game")]
     public float endSceneLoadDelay = 3f;
     // The canvas group of the fade-to-black screen
-    /* [Export]
-    public CanvasGroup endGameFadeCanvasGroup; */
+    [Export]
+    public NodePath endGameFadeCanvasGroupPath;
+    public ColorRect endGameFadeCanvasGroup;
 
     // Win
 
@@ -75,6 +76,7 @@ public class GameFlowManager : Node
 
     public override void _Ready()
     {
+        endGameFadeCanvasGroup = GetNode<ColorRect>(endGameFadeCanvasGroupPath);
         disabilityManager = (DisabilityManager) GetTree().Root.GetNode<Node>(GameConstants.disabilityManagerPath);
 
         playerKart = GetNode<ArcadeKartVehicleBody>(kartPath);
@@ -87,7 +89,6 @@ public class GameFlowManager : Node
         racecountdown = GetNode<RaceCountdown>(RacecountdownNodePath);
         //this.Connect(countdownSignalName, racecountdown, "OnTriggerRaceCountdown"); for connecting to gdscript
 
-        // AudioUtility.SetMasterVolume(1); TODO:
         AudioServer.SetBusVolumeDb(0, 0.0f);
 
         winDisplayMessage = GetNode<DisplayMessage>(winDisplayMessagePath);
@@ -172,8 +173,8 @@ public class GameFlowManager : Node
 
                 float timeRatio = 1 - (m_TimeLoadEndGameScene - HelperFunctions.GetTime()) / endSceneLoadDelay;
 
-                //TODO:
                 //endGameFadeCanvasGroup.alpha = timeRatio;
+                endGameFadeCanvasGroup.Modulate = new Color(0.0f, 0.0f, 0.0f, timeRatio);
 
                 float volumeRatio = Mathf.Abs(timeRatio);
                 float volume = Mathf.Clamp(1 - volumeRatio, 0, 1);
@@ -214,7 +215,7 @@ public class GameFlowManager : Node
             m_SceneToLoad = winSceneName;
             m_TimeLoadEndGameScene = HelperFunctions.GetTime() + endSceneLoadDelay + delayBeforeFadeToBlack;
 
-            // TODO: play a sound on win
+            // TODO: play a sound after a delay (currently it plays it immediately)
             AudioStreamPlayer victorySoundPlayer = new AudioStreamPlayer();
             victorySoundPlayer.Stream = victorySound;
             victorySoundPlayer.Autoplay = false;
