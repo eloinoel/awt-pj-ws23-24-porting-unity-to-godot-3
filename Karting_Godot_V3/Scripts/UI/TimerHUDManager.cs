@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+//TODO: delete this File and corresponding node if not needed
+//this was probably for the race countdown in Unity
 public class TimerHUDManager : Node
 {
     //public TextMeshProUGUI timerText;
@@ -12,19 +14,16 @@ public class TimerHUDManager : Node
     private void Start()
     {
         m_TimeManager = GetNode<TimeManager>(timeManagerPath);
-        /* m_TimeManager = FindObjectOfType<TimeManager>();
-        DebugUtility.HandleErrorIfNullFindObject<TimeManager, ObjectiveReachTargets>(m_TimeManager, this);
 
-
-        if (m_TimeManager.IsFinite)
+        /* if (m_TimeManager.IsFinite)
         {
             timerText.text = "";
         } */
     }
     
-    void Update()
+/*     void Update()
     {
-        /* if (m_TimeManager.IsFinite)
+        if (m_TimeManager.IsFinite)
         {   
             timerText.gameObject.SetActive(true);
             int timeRemaining = (int) Math.Ceiling(m_TimeManager.TimeRemaining);
@@ -33,6 +32,6 @@ public class TimerHUDManager : Node
         else
         {
             timerText.gameObject.SetActive(false);
-        } */
-    }
+        }
+    } */
 }

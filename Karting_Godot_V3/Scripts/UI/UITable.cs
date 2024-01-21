@@ -24,8 +24,6 @@ public class UITable : Control
 
         int childCount = GetChildCount();
 
-        //RectTransform hi = GetComponent<RectTransform>(); //this is the RecTransform
-
         float height = 0;
         for (int i = 0; i < childCount; i++)
         {
