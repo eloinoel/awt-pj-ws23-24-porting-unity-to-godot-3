@@ -1,28 +1,44 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Fonts/Roboto-Bold.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://Scenes/GameHUD/TAB.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/GameHUD/GameHUD/PauseTabFont.tres" type="DynamicFont" id=1]
 
-[sub_resource type="DynamicFont" id=1]
-size = 32
-font_data = ExtResource( 1 )
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.101961, 0.101961, 0.101961, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Node2D" type="Node2D"]
+position = Vector2( 25, 25 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Panel" type="Panel" parent="."]
+margin_right = 94.0
+margin_bottom = 43.0
+custom_styles/panel = SubResource( 1 )
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
-margin_left = 42.0
-margin_top = 29.0
-margin_right = 554.0
-margin_bottom = 541.0
-rect_scale = Vector2( 0.2, 0.15 )
-texture = ExtResource( 4 )
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 94.0
+margin_bottom = 43.0
 
-[node name="TabMenu" type="Label" parent="CanvasLayer"]
-margin_left = 60.0
-margin_top = 45.0
-margin_right = 209.0
-margin_bottom = 100.0
-custom_fonts/font = SubResource( 1 )
-text = "TAB       Pause/Options"
+[node name="Label" type="Label" parent="CenterContainer"]
+margin_left = 28.0
+margin_top = 9.0
+margin_right = 66.0
+margin_bottom = 33.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 1 )
+text = "TAB"
+
+[node name="CenterContainer2" type="CenterContainer" parent="."]
+margin_left = 105.0
+margin_right = 237.0
+margin_bottom = 43.0
+
+[node name="Label" type="Label" parent="CenterContainer2"]
+margin_top = 9.0
+margin_right = 132.0
+margin_bottom = 33.0
+custom_fonts/font = ExtResource( 1 )
+text = "Pause/Options"
