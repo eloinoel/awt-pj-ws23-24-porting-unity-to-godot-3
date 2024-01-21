@@ -96,6 +96,12 @@ public class ObjectiveToast : Node2D
 		descriptionTextContent.Text = text;
 		// TODO: "see if this is necessary" subTitleRect.gameObject.SetActive(!string.IsNullOrEmpty(text));
 	}
+	
+	public void SetCounterText(string text)
+	{
+		counterTextContent.Text = text;
+	}
+
 	public override void _Process(float delta)
 	{
 		float timeSinceFadeStarted = HelperFunctions.GetTime() - m_StartFadeTime;
@@ -142,7 +148,7 @@ public class ObjectiveToast : Node2D
 
 		}
 
-        // NOTE: This was not used in the unity Karting project, thus we ignore it ;)
+		// NOTE: This was not used in the unity Karting project, thus we ignore it ;)
 		/*if (m_IsFadingOut)
 		{
 			// fade out
