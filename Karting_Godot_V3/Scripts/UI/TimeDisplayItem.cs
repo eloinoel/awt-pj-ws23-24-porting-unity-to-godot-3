@@ -1,18 +1,8 @@
 using Godot;
 using System;
 
-public class TimeDisplayItem : Node2D, IDisability
+public class TimeDisplayItem : Node2D
 {
-
-    private bool isActive = true;
-    public bool IsActive //interface field
-    {
-        get => isActive;
-        set => isActive = value;
-    }
-    DisabilityManager disabilityManager;
-
-
     [Export(hintString: "A reference to the Label to display the time.")]
     protected NodePath displayPath;
 
@@ -26,8 +16,6 @@ public class TimeDisplayItem : Node2D, IDisability
     public override void _Ready()
     {
         base._Ready();
-        //TODO: reenable disabilityManager when inserting in race scene
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
 
         try {
             display = GetNode<Label>(displayPath);
@@ -36,16 +24,6 @@ public class TimeDisplayItem : Node2D, IDisability
         {
             GD.PrintErr("TimeDisplayItem: Could not get Labels for displaying time or title");
         }
-
-        OnEnable(); //in Unity, onEnable is also called after awake
-    }
-
-    public void OnEnable()
-    {
-    }
-
-    public void OnDisable()
-    {
     }
 
     /// <summary>
@@ -61,10 +39,10 @@ public class TimeDisplayItem : Node2D, IDisability
         }
         if (string.IsNullOrEmpty(text))
         {
-            display.Visible = false;
+            Visible = false;
             return;
         }
-        display.Visible = true;
+        Visible = true;
         display.Text = text;
     }
 

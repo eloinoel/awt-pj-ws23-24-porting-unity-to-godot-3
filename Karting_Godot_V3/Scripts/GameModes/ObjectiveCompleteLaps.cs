@@ -28,7 +28,7 @@ public class ObjectiveCompleteLaps : Objective
         timeDisplay = GetNode<TimeDisplay>(timeDisplayNodePath);
 
         // ---- Start ----
-        Start(); //TODO: call method when finished implementing
+        Start();
     }
 
     private async void Start()

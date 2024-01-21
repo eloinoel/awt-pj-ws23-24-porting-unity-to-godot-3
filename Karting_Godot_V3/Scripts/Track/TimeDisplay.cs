@@ -2,17 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// TODO: create node for this in the scene
-public class TimeDisplay : Node, IDisability
+public class TimeDisplay : Node
 {
-    private bool isActive = true;
-    public bool IsActive //interface field
-    {
-        get => isActive;
-        set => isActive = value;
-    }
-    DisabilityManager disabilityManager;
-
     [Export(hintString: "Display the time for the current lap.")]
     public NodePath currentLapTextPath;
     private TimeDisplayItem currentLapText;
@@ -43,8 +34,6 @@ public class TimeDisplay : Node, IDisability
     public override void _Ready()
     {
         base._Ready();
-        //TODO: reenable disabilityManager when inserting in race scene
-        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
 
         currentLapText = GetNode<TimeDisplayItem>(currentLapTextPath);
         bestLapText = GetNode<TimeDisplayItem>(bestLaptTextPath);
@@ -54,22 +43,19 @@ public class TimeDisplay : Node, IDisability
         bestLapText.SetText("");
         currentLapText.SetTitle("Current:");
         bestLapText.SetTitle("Best Lap:");
+        currentLapText.Visible = false;
+        bestLapText.Visible = false;
         currentLapStartTime = 0;
         lapsOver = false;
 
         OnEnable(); // called after awake in Unity
     }
 
+    //this callback will not work in Godot with disabilityManager Plugin we wrote for this project
     public void OnEnable()
     {
         OnUpdateLap += UpdateLap;
         OnSetLaps += SetLaps;
-    }
-
-    public void OnDisable()
-    {
-        OnUpdateLap -= UpdateLap;
-        OnSetLaps -= SetLaps;
     }
 
     public override void _Process(float delta)
@@ -88,10 +74,7 @@ public class TimeDisplay : Node, IDisability
         {
             var newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
             finishedLapsParent.AddChild(newItem);
-            //newItem.Position = new Vector2(currentLapText.Position.x, finishedLapsParent.RectPosition.y);
-            //disabilityManager.Disable(newItem); //TODO: readd at the end
-            //var newItemScaleRect = newItem.GetChild<Control>(0);
-            //newItem.Position = new Vector2(newItem.Position.x - newItemScaleRect.RectSize.x / 2, newItem.Position.y - newItemScaleRect.RectSize.y / 2);
+            newItem.Visible = false;
             finishedLapsParent.UpdateTable(newItem);
 
             lapTimesText.Add(newItem);
@@ -103,9 +86,7 @@ public class TimeDisplay : Node, IDisability
         if (i >= lapTimesText.Count)
         {
             TimeDisplayItem newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
-            AddChild(newItem);
-            // Prev: newItem.Position = finishedLapsParent.RectPosition;
-            newItem.Position = new Vector2(currentLapText.Position.x, finishedLapsParent.RectPosition.y);
+            finishedLapsParent.AddChild(newItem);
             finishedLapsParent.UpdateTable(newItem);
             lapTimesText.Add(newItem);
             return newItem;
@@ -144,8 +125,7 @@ public class TimeDisplay : Node, IDisability
         if (finishedLapTimes.Count == lapTimesText.Count)
         {
             lapsOver = true;
-            // Prev: currentLapText.gameObject.SetActive(false);
-            disabilityManager.Disable(currentLapText);
+            currentLapText.Visible = false;
         }
     }
 
@@ -156,8 +136,7 @@ public class TimeDisplay : Node, IDisability
 
         newItem.SetText(getTimeString(finishedLapTimes[lap]));
         newItem.SetTitle($"Lap {lap+1}:");
-        // Prev: newItem.gameObject.SetActive(true); // TODO: maybe this should be made differently
-        disabilityManager.Enable(newItem);
+        newItem.Visible = true;
     }
 
     string DisplayCurrentLapTime()

@@ -156,7 +156,7 @@ public abstract class Objective : Node, IDisability
 
             if (!lapObject.lapOverNextPass)
             {
-                // TODO: TimeDisplay.OnUpdateLap();
+                TimeDisplay.OnUpdateLap();
                 lapObject.lapOverNextPass = true;
                 return;
             }
@@ -165,15 +165,15 @@ public abstract class Objective : Node, IDisability
 
             ReachCheckpoint(0);
             ResetPickups();
-            // TODO: TimeDisplay.OnUpdateLap();
+            TimeDisplay.OnUpdateLap();
 
         }
         else
         {
             ReachCheckpoint(NumberOfPickupsRemaining - 1);
             Pickups.Remove(pickupCollected);
-            /* TODO: if (gameMode == GameMode.Laps)
-                KartGame.Track.TimeDisplay.OnUpdateLap(); */
+            if (gameMode == GameMode.Laps)
+                TimeDisplay.OnUpdateLap();
         }
     }
 
