@@ -1,8 +1,7 @@
 using Godot;
 using System;
 
-//TODO: create nodes in scene tree
-public class TimeDisplayItem : Node, IDisability
+public class TimeDisplayItem : Node2D, IDisability
 {
 
     private bool isActive = true;
@@ -28,7 +27,7 @@ public class TimeDisplayItem : Node, IDisability
     {
         base._Ready();
         //TODO: reenable disabilityManager when inserting in race scene
-        //disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
+        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
 
         try {
             display = GetNode<Label>(displayPath);
