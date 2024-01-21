@@ -182,7 +182,7 @@ public class GameFlowManager : Node
                 // See if it's time to load the end scene (after the delay)
                 if (HelperFunctions.GetTime() >= m_TimeLoadEndGameScene)
                 {
-                    GetTree().ChangeScene("Scenes/Menues/"+m_SceneToLoad+"/"+m_SceneToLoad);
+                    GetTree().ChangeScene("Scenes/Menues/"+m_SceneToLoad+"/"+m_SceneToLoad+".tscn");
                     gameState = GameState.Play;
                 }
             }
