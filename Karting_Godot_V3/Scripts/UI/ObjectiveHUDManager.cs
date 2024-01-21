@@ -22,15 +22,15 @@ public class ObjectiveHUDManager : Node
 /* 		Node node = GetNode<Node>(primaryObjectivePrefabPath);
 		primaryObjectivePrefab = GetNode<ObjectiveToast>(node.GetChild(0).GetPath()); */
 		primaryObjectivePrefab = GetNode<ObjectiveToast>(primaryObjectivePrefabPath);
-		GD.Print("ObjectiveHUDManager woke up");
 	}
 
 	public void RegisterObjective(Objective objective)
 	{
-		/* TODO: objective.onUpdateObjective += OnUpdateObjective;
+		// PREV: objective.onUpdateObjective += OnUpdateObjective;
+		objective.onUpdateObjective += OnUpdateObjective;
 
 		// instanciate the Ui element for the new objective
-		GameObject objectiveUIInstance = objective.isOptional ? secondaryObjectivePrefab.getObject(true, objectivePanel.transform) : primaryObjectivePrefab.getObject(true, objectivePanel.transform);
+		/* GameObject objectiveUIInstance = objective.isOptional ? secondaryObjectivePrefab.getObject(true, objectivePanel.transform) : primaryObjectivePrefab.getObject(true, objectivePanel.transform);
 
 		if (!objective.isOptional)
 			objectiveUIInstance.transform.SetSiblingIndex(0);
@@ -44,7 +44,6 @@ public class ObjectiveHUDManager : Node
 		m_ObjectivesDictionary.Add(objective, toast);
 
 		objectivePanel.UpdateTable(toast.gameObject);*/
-		GD.Print("Register Objective");
 		ObjectiveToast toast = primaryObjectivePrefab;
 		toast.Initialize(objective.title, objective.description, objective.GetUpdatedCounterAmount(), objective.isOptional, objective.delayVisible);
 
@@ -66,21 +65,22 @@ public class ObjectiveHUDManager : Node
 		m_ObjectivesDictionary.Remove(objective); */
 	}
 
-	/*void OnUpdateObjective(UnityActionUpdateObjective updateObjective)
+	void OnUpdateObjective(ActionUpdateObjective updateObjective)
 	{
 		if (m_ObjectivesDictionary.TryGetValue(updateObjective.objective, out ObjectiveToast toast))
-			//&& !string.IsNullOrEmpty(descriptionText))
 		{
 			// set the new updated description for the objective, and forces the content size fitter to be recalculated
-			Canvas.ForceUpdateCanvases();
+			// Canvas.ForceUpdateCanvases();
 			if (!string.IsNullOrEmpty(updateObjective.descriptionText))
 				toast.SetDescriptionText(updateObjective.descriptionText);
 
-			if (!string.IsNullOrEmpty(updateObjective.counterText))
-				toast.counterTextContent.text = updateObjective.counterText;
+ 			if (!string.IsNullOrEmpty(updateObjective.counterText))
+				toast.SetCounterText(updateObjective.counterText);
+			
+			GD.Print("Update Lap Counter");
 
-			RectTransform toastRectTransform = toast.GetComponent<RectTransform>();
-			if (toastRectTransform != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(toastRectTransform);
+			/*RectTransform toastRectTransform = toast.GetComponent<RectTransform>();
+			if (toastRectTransform != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(toastRectTransform); */
 		}
-	} */
+	}
 }

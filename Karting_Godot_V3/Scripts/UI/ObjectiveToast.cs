@@ -68,6 +68,7 @@ public class ObjectiveToast : Node2D
 		SetDescriptionText(descText);
 		counterTextContent.Text = counterText;
 
+		m_AudioSource = new AudioStreamPlayer();
 		// LayoutRebuilder.ForceRebuildLayoutImmediate(m_RectTransform); // TODO: Here too i imagine that this isnt needed in godot (We'll see ;))
 
 		m_StartFadeTime = HelperFunctions.GetTime() + delay;
@@ -95,6 +96,12 @@ public class ObjectiveToast : Node2D
 		descriptionTextContent.Text = text;
 		// TODO: "see if this is necessary" subTitleRect.gameObject.SetActive(!string.IsNullOrEmpty(text));
 	}
+	
+	public void SetCounterText(string text)
+	{
+		counterTextContent.Text = text;
+	}
+
 	public override void _Process(float delta)
 	{
 		float timeSinceFadeStarted = HelperFunctions.GetTime() - m_StartFadeTime;
@@ -121,22 +128,27 @@ public class ObjectiveToast : Node2D
 
 		if (m_IsMovingIn && !m_IsMovingOut)
 		{
+			float movedOutDistance = 93.5f /* + 18.0f */;
+			float hOffset = 18.0f;
 			// move in
 			if (timeSinceFadeStarted < moveInDuration)
 			{
-/* 				m_RectTransform.anchoredPosition =
-					new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y); */
+				// PREV: m_RectTransform.anchoredPosition =
+				//	new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y);
+				canvasGroup.Position = new Vector2((timeSinceFadeStarted / moveInDuration) * movedOutDistance - movedOutDistance + hOffset, canvasGroup.Position.y);
 			}
 			else
 			{
 				// making sure the position is exact
-/* 				m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y); */
+				// PREV: m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y);
+				canvasGroup.Position = new Vector2(0.0f + hOffset, canvasGroup.Position.y);
 
 				m_IsMovingIn = false;
 			}
 
 		}
 
+		// NOTE: This was not used in the unity Karting project, thus we ignore it ;)
 		/*if (m_IsFadingOut)
 		{
 			// fade out
@@ -174,8 +186,9 @@ public class ObjectiveToast : Node2D
 
 	void PlaySound(AudioStream sound)
 	{
-		if (sound != null)
+		if (sound != null) {
 			return;
+		}
 
 		if (m_AudioSource != null)
 		{
