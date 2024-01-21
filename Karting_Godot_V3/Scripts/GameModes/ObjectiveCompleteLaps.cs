@@ -4,10 +4,14 @@ using System;
 public class ObjectiveCompleteLaps : Objective
 {
     [Export(hintString: "How many laps should the player complete before the game is over?")]
-    public int lapsToComplete;
+    public int lapsToComplete = 3;
 
     [Export(hintString: "Start sending notification about remaining laps when this amount of laps is left")]
     public int notificationLapsRemainingThreshold = 1;
+
+    [Export(hintString: "timeDisplay prefab path")]
+    public NodePath timeDisplayNodePath;
+    private TimeDisplay timeDisplay;
 
     public int currentLap { get; private set; }
 
@@ -21,6 +25,8 @@ public class ObjectiveCompleteLaps : Objective
         if (string.IsNullOrEmpty(title))
             title = $"Complete {lapsToComplete} {targetName}s";
 
+        timeDisplay = GetNode<TimeDisplay>(timeDisplayNodePath);
+
         // ---- Start ----
         Start(); //TODO: call method when finished implementing
     }
@@ -28,7 +34,8 @@ public class ObjectiveCompleteLaps : Objective
     private async void Start()
     {
         TimeManager.OnSetTime(totalTimeInSecs, isTimed, gameMode);
-        // TODO: TimeDisplay.OnSetLaps(lapsToComplete);
+        timeDisplay.CallDeferred("SetLaps", lapsToComplete);
+        //TimeDisplay.OnSetLaps(lapsToComplete);
         await ToSignal(GetTree(), "idle_frame");
         Register();
         GD.Print("Start ObjectiveCompleteLaps");

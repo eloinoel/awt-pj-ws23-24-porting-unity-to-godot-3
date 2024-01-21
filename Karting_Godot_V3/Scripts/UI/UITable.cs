@@ -1,17 +1,26 @@
 using Godot;
 using System;
 
-public class UITable : Node
+public class UITable : Control
 {
     [Export(hintString:"How much space should there be between items?")]
-    public float offset = 25;
+    public float offset = 7;
 
     [Export(hintString:"Add new the new items below existing items.")]
     public bool down = true;
 
     public void UpdateTable(Node newItem)
     {
-        //if (newItem != null) newItem.GetNode<Control>("ScaleRect").RectScale = new Vector2(1f, 1f); //TODO: custom scaling probably makes this obsolete?
+        float scaling = 0.8f;
+        float xdiff = 0f; // used to determine x position offset later on
+        if (newItem != null)
+        {
+            //make finished lap times rects smaller
+            var scaleRect = newItem.GetNode<Control>("ScaleRect");
+            xdiff = scaleRect.RectSize.x * scaleRect.RectScale.x;
+            scaleRect.RectScale = new Vector2(scaleRect.RectScale.x * scaling, scaleRect.RectScale.y * scaling);
+            xdiff -= scaleRect.RectSize.x * scaleRect.RectScale.x;
+        }
 
         int childCount = GetChildCount();
 
@@ -20,16 +29,18 @@ public class UITable : Node
         float height = 0;
         for (int i = 0; i < childCount; i++)
         {
-            Control childRect = GetChild<Node>(i).GetNode<Control>("ScaleRect");
-            Vector2 size = childRect.RectSize;
-            height += down ? -size.y : size.y;
-            if (i != 0) height += down? -offset : offset;
+            Node2D child = GetChild<Node2D>(i);
+            Control childScaleRect = GetChild<Node>(i).GetNode<Control>("ScaleRect");
+            Vector2 size = childScaleRect.RectSize;
 
-            Vector2 newPos = new Vector2();
+            if (i != 0)
+            {
+                height += down ? size.y * childScaleRect.RectScale.y : -size.y * childScaleRect.RectScale.y;
+                height += down? offset : -offset;
+            }
 
-            newPos.y = height;
-            newPos.x = 0;//-child.pivot.x * size.x * hi.localScale.x;
-            childRect.RectPosition = newPos;
+            Vector2 newPos = new Vector2(xdiff / 2, height);
+            child.Position = newPos;
         }
     }
 }

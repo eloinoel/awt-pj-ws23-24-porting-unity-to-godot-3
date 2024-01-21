@@ -22,6 +22,8 @@ public class TimeDisplay : Node, IDisability
 
     /* [Export(hintString: "Pool object for the time display UI item.")]
     public PoolObjectDef timeDisplayItem;  */
+    [Export(hintString:"Prefab to TimeDisplayItem")]
+    public string TimeDisplayItemPrefabPath = "res://Scenes/GameHUD/LapTimeCanvas/TimeDisplayItem.tscn";
 
     [Export(hintString: "Finished lap info will be displayed under this parent.")]
     public NodePath finishedLapsParentPath;
@@ -42,7 +44,7 @@ public class TimeDisplay : Node, IDisability
     {
         base._Ready();
         //TODO: reenable disabilityManager when inserting in race scene
-        //disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
+        disabilityManager = (DisabilityManager) GetTree().GetRoot().GetNode<Node>(GameConstants.disabilityManagerPath);
 
         currentLapText = GetNode<TimeDisplayItem>(currentLapTextPath);
         bestLapText = GetNode<TimeDisplayItem>(bestLaptTextPath);
@@ -79,31 +81,35 @@ public class TimeDisplay : Node, IDisability
         currentLapText.SetText(DisplayCurrentLapTime());
     }
 
-//TODO:
     void SetLaps(int laps)
     {
-        GD.Print("SetLaps");
-        /* for (int i = 0; i < laps; i++)
+        GD.Print("setLaps: laps: " + laps);
+        for (int i = 0; i < laps; i++)
         {
-            TimeDisplayItem newItem = timeDisplayItem.getObject(false, finishedLapsParent.transform).GetComponent<TimeDisplayItem>();
-            finishedLapsParent.UpdateTable(newItem.gameObject);
+            var newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
+            finishedLapsParent.AddChild(newItem);
+            //newItem.Position = new Vector2(currentLapText.Position.x, finishedLapsParent.RectPosition.y);
+            //disabilityManager.Disable(newItem); //TODO: readd at the end
+            //var newItemScaleRect = newItem.GetChild<Control>(0);
+            //newItem.Position = new Vector2(newItem.Position.x - newItemScaleRect.RectSize.x / 2, newItem.Position.y - newItemScaleRect.RectSize.y / 2);
+            finishedLapsParent.UpdateTable(newItem);
 
             lapTimesText.Add(newItem);
-        } */
+        }
     }
 
-//TODO:
     TimeDisplayItem GetItem(int i)
     {
-        GD.Print("GetLaps");
-        /* if (i >= lapTimesText.Count)
+        if (i >= lapTimesText.Count)
         {
-            TimeDisplayItem newItem = timeDisplayItem.getObject(false, finishedLapsParent.transform).GetComponent<TimeDisplayItem>();
-            finishedLapsParent.UpdateTable(newItem.gameObject);
+            TimeDisplayItem newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
+            AddChild(newItem);
+            // Prev: newItem.Position = finishedLapsParent.RectPosition;
+            newItem.Position = new Vector2(currentLapText.Position.x, finishedLapsParent.RectPosition.y);
+            finishedLapsParent.UpdateTable(newItem);
             lapTimesText.Add(newItem);
             return newItem;
-        } */
-
+        }
         return lapTimesText[i];
     }
 
