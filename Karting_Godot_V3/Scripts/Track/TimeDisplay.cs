@@ -54,6 +54,8 @@ public class TimeDisplay : Node, IDisability
         bestLapText.SetText("");
         currentLapText.SetTitle("Current:");
         bestLapText.SetTitle("Best Lap:");
+        currentLapText.Visible = false;
+        bestLapText.Visible = false;
         currentLapStartTime = 0;
         lapsOver = false;
 
@@ -89,7 +91,8 @@ public class TimeDisplay : Node, IDisability
             var newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
             finishedLapsParent.AddChild(newItem);
             //newItem.Position = new Vector2(currentLapText.Position.x, finishedLapsParent.RectPosition.y);
-            //disabilityManager.Disable(newItem); //TODO: readd at the end
+            //disabilityManager.Disable(newItem); //TODO: readd or set invisible at the end
+            newItem.Visible = false;
             //var newItemScaleRect = newItem.GetChild<Control>(0);
             //newItem.Position = new Vector2(newItem.Position.x - newItemScaleRect.RectSize.x / 2, newItem.Position.y - newItemScaleRect.RectSize.y / 2);
             finishedLapsParent.UpdateTable(newItem);
