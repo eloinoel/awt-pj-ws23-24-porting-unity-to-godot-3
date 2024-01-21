@@ -31,7 +31,6 @@ public class ObjectiveCompleteLaps : Objective
         // TODO: TimeDisplay.OnSetLaps(lapsToComplete);
         await ToSignal(GetTree(), "idle_frame");
         Register();
-        GD.Print("Start ObjectiveCompleteLaps");
     }
 
     protected override void ReachCheckpoint(int remaining)

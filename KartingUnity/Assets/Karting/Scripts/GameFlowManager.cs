@@ -115,7 +115,6 @@ public class GameFlowManager : MonoBehaviour
 
     void Update()
     {
-
         if (gameState != GameState.Play)
         {
             elapsedTimeBeforeEndScene += Time.deltaTime;

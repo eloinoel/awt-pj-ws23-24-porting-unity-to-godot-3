@@ -24,7 +24,7 @@ public class GameFlowManager : Node
     [Export(hintString: "Duration of delay before the win message")]
     public float delayBeforeWinMessage = 2f;
     [Export(hintString: "Sound played on win")]
-    public AudioStreamOGGVorbis victorySound;
+    public AudioStreamSample victorySound;
     [Export(hintString: "Prefab for the win game message")]
     public NodePath winDisplayMessagePath;
     public DisplayMessage winDisplayMessage;
@@ -186,14 +186,14 @@ public class GameFlowManager : Node
                     gameState = GameState.Play;
                 }
             }
-            else
-            {
-                if (m_ObjectiveManager.AreAllObjectivesCompleted())
-                    EndGame(true);
+        }
+        else
+        {
+            if (m_ObjectiveManager.AreAllObjectivesCompleted())
+                EndGame(true);
 
-                if (m_TimeManager.IsFinite && m_TimeManager.IsOver)
-                    EndGame(false);
-            }
+            if (m_TimeManager.IsFinite && m_TimeManager.IsOver)
+                EndGame(false);
         }
     }
 
