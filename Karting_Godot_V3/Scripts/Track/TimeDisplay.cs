@@ -69,7 +69,6 @@ public class TimeDisplay : Node
 
     void SetLaps(int laps)
     {
-        GD.Print("setLaps: laps: " + laps);
         for (int i = 0; i < laps; i++)
         {
             var newItem = (TimeDisplayItem) GD.Load<PackedScene>(TimeDisplayItemPrefabPath).Instance();
