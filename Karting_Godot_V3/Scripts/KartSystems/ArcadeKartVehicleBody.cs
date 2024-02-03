@@ -480,10 +480,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 
             state.LinearVelocity = targetLinearVelocity;
             state.AngularVelocity = targetAngularVelocity;
-
-            GD.Print(state.LinearVelocity);
-            GD.Print(state.AngularVelocity);
-
         }
         // so stat stablising is not applied every frame the collision is detected
         prevHasCollision = m_HasCollision;
@@ -659,7 +655,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 
         if (contactCount > 0)
         {
-            GD.Print("collision");
             m_HasCollision = true;
             for(int i = 0; i < contactCount; i++)
             {
