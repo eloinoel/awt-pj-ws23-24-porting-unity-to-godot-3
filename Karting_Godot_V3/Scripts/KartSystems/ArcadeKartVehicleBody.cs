@@ -6,6 +6,13 @@ using System.Diagnostics.Eventing.Reader;
 public class ArcadeKartVehicleBody : VehicleBody
 {
 
+    private Vector3 targetLinearVelocity;
+    private Vector3 targetAngularVelocity;
+    private float linearDamping = 0.1f; 
+    private float angularDamping = 0.5f; 
+    private float collisionSlowdownFactor = 0.8f; // Slowdown factor (50% of current speed)
+
+    private bool prevHasCollision = false;
     //-----------------------------------------
     //----------------- STATS -----------------
     //-----------------------------------------
@@ -444,8 +451,43 @@ public class ArcadeKartVehicleBody : VehicleBody
         } */
     }
 
+    private void ApplyStabilizingImpulse(PhysicsDirectBodyState state)
+    {
+        // Define the stabilizing impulse magnitude
+        float angularImpulseMagnitude = 10.0f;
+        float linearImpulseMagnitude = 5.0f;
+
+        // Apply an angular impulse to stop any unwanted rotation
+        Vector3 angularImpulse = -state.AngularVelocity * angularImpulseMagnitude;
+        state.ApplyImpulse(Vector3.Zero, angularImpulse);
+
+        // Apply a linear impulse to correct tilt
+        Vector3 upDirection = Vector3.Up;
+        Vector3 correctionImpulse = (upDirection - state.Transform.basis.y) * linearImpulseMagnitude;
+        state.ApplyImpulse(Vector3.Zero, correctionImpulse);
+    }
+
     public override void _IntegrateForces(PhysicsDirectBodyState state)
     {
+
+        if (m_HasCollision && !prevHasCollision)
+        {
+            ApplyStabilizingImpulse(state);
+            // stabalize Kart in collision
+        
+            targetLinearVelocity = state.LinearVelocity * (1.0f - linearDamping);
+            targetAngularVelocity = state.AngularVelocity * (1.0f - angularDamping);
+
+            state.LinearVelocity = targetLinearVelocity;
+            state.AngularVelocity = targetAngularVelocity;
+
+            GD.Print(state.LinearVelocity);
+            GD.Print(state.AngularVelocity);
+
+        }
+        // so stat stablising is not applied every frame the collision is detected
+        prevHasCollision = m_HasCollision;
+
         //base._IntegrateForces(state);
 
         UpdateSuspensionParams(FrontLeftWheel);
@@ -563,7 +605,7 @@ public class ArcadeKartVehicleBody : VehicleBody
         // while in the air, fall faster
         if (AirPercent >= 1)
         {
-            state.LinearVelocity += new Vector3(0, -1, 0) * state.Step * m_FinalStats.AddedGravity;
+            state.LinearVelocity += new Vector3(0, -10, 0) * state.Step * m_FinalStats.AddedGravity;
         }
     }
 
@@ -617,6 +659,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
         if (contactCount > 0)
         {
+            GD.Print("collision");
             m_HasCollision = true;
             for(int i = 0; i < contactCount; i++)
             {
@@ -768,7 +811,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
             // rotate rigidbody's velocity as well to generate immediate velocity redirection
             // manual velocity steering coefficient
-            float velocitySteering = 25f;
+            float velocitySteering = 35f;
 
             // If the karts lands with a forward not in the velocity direction, we start the drift
             /*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
