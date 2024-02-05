@@ -25,6 +25,10 @@ HelperFunctions="*res://Scripts/Utils/HelperFunctions.cs"
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/Trail/plugin.cfg" )
+
 [global]
 
 group=false
