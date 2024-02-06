@@ -4,7 +4,7 @@
 [ext_resource path="res://Scenes/GameHUD/LapTimeCanvas/TimeDisplayItem.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/UI/UITable.cs" type="Script" id=3]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D2" type="Node2D"]
 position = Vector2( 0, 24 )
 script = ExtResource( 1 )
 currentLapTextPath = NodePath("CurrentLap")

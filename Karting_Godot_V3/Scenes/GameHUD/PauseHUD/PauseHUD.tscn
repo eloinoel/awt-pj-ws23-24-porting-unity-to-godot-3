@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/GameHUD/PauseHUD/PauseHUD.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/GameHUD/ControlHUD/ControlScheme_PopUp.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/GameHUD/PauseHUD/ControlScheme_PopUp.png" type="Texture" id=2]
 
 [node name="PauseScreen" type="Node2D"]
 pause_mode = 2
@@ -15,36 +15,6 @@ margin_bottom = 1080.0
 rect_scale = Vector2( 0.33, 0.33 )
 texture = ExtResource( 2 )
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 586.0
-margin_top = 326.0
-margin_right = 908.0
-margin_bottom = 482.0
-
-[node name="CenterContainer" type="CenterContainer" parent="CenterContainer"]
-margin_left = 108.0
-margin_top = 68.0
-margin_right = 214.0
-margin_bottom = 88.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/CenterContainer"]
-margin_right = 106.0
-margin_bottom = 20.0
-
-[node name="Controls" type="Button" parent="CenterContainer/CenterContainer/HBoxContainer"]
-visible = false
-margin_right = 180.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 180, 0 )
-text = "Show Controls"
-
-[node name="Resume" type="Button" parent="CenterContainer/CenterContainer/HBoxContainer"]
-margin_right = 106.0
-margin_bottom = 20.0
-text = "Resume Game"
-
 [node name="BG" type="ColorRect" parent="."]
 visible = false
 margin_left = 209.0
@@ -52,6 +22,3 @@ margin_top = 137.0
 margin_right = 840.0
 margin_bottom = 463.0
 color = Color( 0.133333, 0.12549, 0.12549, 0.737255 )
-
-[connection signal="pressed" from="CenterContainer/CenterContainer/HBoxContainer/Controls" to="." method="_on_Controls_pressed"]
-[connection signal="pressed" from="CenterContainer/CenterContainer/HBoxContainer/Resume" to="." method="_on_Resume_pressed"]
