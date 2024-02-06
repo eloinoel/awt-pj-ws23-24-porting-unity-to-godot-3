@@ -5,7 +5,7 @@ public class ArcadeKartPowerup : Area
 {
     public ArcadeKartVehicleBody.StatPowerup boostStats = new ArcadeKartVehicleBody.StatPowerup
     {
-        MaxTime = 5f,
+        MaxTime = 3f,
         modifiers = new ArcadeKartVehicleBody.Stats
         {
             TopSpeed = 10f,
@@ -32,10 +32,20 @@ public class ArcadeKartPowerup : Area
 
     private TrailRenderer[] laserTrails; */
 
+    [Signal]
+    public delegate void enableLaserTrails();
+    private string enableLaserTrailSignalName = "enableLaserTrails";
+    [Export]
+    public NodePath LaserTrailManagerPath;
+
     public override void _Ready()
     {
         Connect("body_entered", this, "OnTriggerEnter");
         lastActivatedTimestamp = -9999f;
+
+        //connect to gdscript for laser trail plugin
+        Spatial laserTrailManager = GetNode<Spatial>(LaserTrailManagerPath);
+        Connect(enableLaserTrailSignalName, laserTrailManager, "enableLaserTrails");
     }
 
     public override void _Process(float delta)
@@ -67,50 +77,14 @@ public class ArcadeKartPowerup : Area
         //onPowerupActivated.Invoke();
         isCoolingDown = true;
 
+        GD.Print("Powerup"); //TODO: remove debug
+        //call gd script to activate laser trails
+        EmitSignal(enableLaserTrailSignalName);
+
         //if (disableGameObjectWhenActivated) this.gameObject.SetActive(false);
 
         // enableLaserTrails(kart);
     }
 
-    /* private void enableLaserTrails(ArcadeKart kart)
-    {
-        var wheels = kart.transform.Find("Wheels");
-        if (wheels)
-        {
-            this.laserTrails = new TrailRenderer[2];
-            // get wheels with laser trail
-            var wheelRearLeft = wheels.transform.Find("WheelRearLeft");
-            if (wheelRearLeft)
-            {
-                var laserTrail = wheelRearLeft.GetChild(0);
-                if (laserTrail)
-                {
-                    this.laserTrails[0] = laserTrail.GetComponent<TrailRenderer>();
-                    this.laserTrails[0].enabled = true;
-                }
-                    
-            }
 
-            var wheelRearRight = wheels.transform.Find("WheelRearRight");
-            if (wheelRearRight)
-            {
-                var laserTrail = wheelRearRight.GetChild(0);
-                if (laserTrail)
-                {
-                    this.laserTrails[1] = laserTrail.GetComponent<TrailRenderer>();
-                    this.laserTrails[1].enabled = true;
-                }
-            }
-
-            Invoke("disableLaserTrails", boostStats.MaxTime);
-        }
-    }
-
-    private void disableLaserTrails()
-    {
-        foreach(var trailRenderer in this.laserTrails)
-        {
-            trailRenderer.enabled = false;
-        }
-    } */
 }
