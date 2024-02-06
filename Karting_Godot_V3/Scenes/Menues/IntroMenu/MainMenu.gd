@@ -23,9 +23,7 @@ func _process(delta):
 
 
 func _on_PlayButton_pressed():
-	print('play')
 	get_tree().change_scene(race_scene_path)
 
 func _on_MenuButton_pressed():
-	print('Menu')
-	get_tree().change_scene("res://IntroMenu/MainMenu.tscn")
+	get_tree().change_scene("res://Scenes/Menues/IntroMenu/MainMenu.tscn")
