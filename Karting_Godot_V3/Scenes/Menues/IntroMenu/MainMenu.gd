@@ -1,6 +1,5 @@
 extends Node2D
 
-
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -12,7 +11,7 @@ func set_path(new_path : String) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$Control2/ControlsImage.visible = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,3 +26,10 @@ func _on_PlayButton_pressed():
 
 func _on_MenuButton_pressed():
 	get_tree().change_scene("res://Scenes/Menues/IntroMenu/MainMenu.tscn")
+
+
+func _on_ControlButton_pressed():
+    $Control2/ControlsImage.visible = true
+
+func _on_CloseControls_pressed():
+    $Control2/ControlsImage.visible = false

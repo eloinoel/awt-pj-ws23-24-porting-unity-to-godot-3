@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://Scenes/Menues/IntroMenu/MainMenuControlFont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Scenes/Menues/IntroMenu/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Menues/IntroMenu/IntroSceneBackground_1.png" type="Texture" id=3]
 [ext_resource path="res://Scenes/Menues/IntroMenu/Roboto-Black.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Scenes/GameHUD/PauseHUD/ControlScheme_PopUp.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 128
@@ -87,8 +89,35 @@ custom_fonts/font = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 text = "Control"
 
+[node name="ControlsImage" type="TextureRect" parent="Control2"]
+margin_left = 171.0
+margin_top = 134.0
+margin_right = 2219.0
+margin_bottom = 1080.0
+rect_scale = Vector2( 0.33, 0.33 )
+texture = ExtResource( 5 )
+
+[node name="CloseControls" type="Button" parent="Control2/ControlsImage"]
+margin_left = 1878.79
+margin_top = 39.3939
+margin_right = 2008.79
+margin_bottom = 166.394
+text = "x"
+
+[node name="Label" type="Label" parent="Control2/ControlsImage/CloseControls"]
+margin_left = 39.3938
+margin_top = -3.0303
+margin_right = 175.394
+margin_bottom = 114.97
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_fonts/font = ExtResource( 1 )
+text = "x"
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 512, 298 )
 current = true
 
 [connection signal="pressed" from="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer/Control/PlayButton" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2/MarginContainer/Control/ControlButton" to="." method="_on_ControlButton_pressed"]
+[connection signal="pressed" from="Control2/ControlsImage/CloseControls" to="." method="_on_CloseControls_pressed"]
