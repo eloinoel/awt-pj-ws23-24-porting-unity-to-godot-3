@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scenes/Menues/IntroMenu/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Menues/LoseScene/LoseScene.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Menues/LoseScene/IntroSceneBackground_7.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/Menues/IntroMenu/Roboto-Black.ttf" type="DynamicFontData" id=3]
 
