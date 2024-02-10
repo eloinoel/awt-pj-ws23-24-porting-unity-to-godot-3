@@ -113,7 +113,8 @@ public class ArcadeKartVehicleBody : VehicleBody
     public float AirPercent { get; private set; }
     public float GroundPercent { get; private set; }
 
-    public ArcadeKartVehicleBody.Stats baseStats = new ArcadeKartVehicleBody.Stats
+    //original
+    /* public ArcadeKartVehicleBody.Stats baseStats = new ArcadeKartVehicleBody.Stats
     {
         // I hard set the settings hiw they were overwritten by the unity editor
         TopSpeed = 15f, //10f,
@@ -126,6 +127,22 @@ public class ArcadeKartVehicleBody : VehicleBody
         CoastingDrag = 5f, //4f,
         Grip = 0.97f, //.95f,
         AddedGravity = 1f,
+    }; */
+
+    //tuning effort
+    public ArcadeKartVehicleBody.Stats baseStats = new ArcadeKartVehicleBody.Stats
+    {
+        // I hard set the settings hiw they were overwritten by the unity editor
+        TopSpeed = 17f, //10f,
+        Acceleration = 7f, //5f,
+        AccelerationCurve = 0.5f, //4f,
+        Braking = 16f, //10f,
+        ReverseAcceleration = 3f, //5f,
+        ReverseSpeed = 10f, //5f,
+        Steer = 5f, //5f,
+        CoastingDrag = 5f, //4f,
+        Grip = 0.99f, //.95f,
+        AddedGravity = 1.5f,
     };
 
     //-----------------------------------------
