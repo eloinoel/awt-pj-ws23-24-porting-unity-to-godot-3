@@ -77,7 +77,6 @@ public class ArcadeKartPowerup : Area
         //onPowerupActivated.Invoke();
         isCoolingDown = true;
 
-        GD.Print("Powerup"); //TODO: remove debug
         //call gd script to activate laser trails
         EmitSignal(enableLaserTrailSignalName);
 

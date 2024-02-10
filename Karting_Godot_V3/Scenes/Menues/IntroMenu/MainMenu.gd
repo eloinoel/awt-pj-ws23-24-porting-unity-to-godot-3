@@ -29,7 +29,7 @@ func _on_MenuButton_pressed():
 
 
 func _on_ControlButton_pressed():
-    $Control2/ControlsImage.visible = true
+	$Control2/ControlsImage.visible = true
 
 func _on_CloseControls_pressed():
-    $Control2/ControlsImage.visible = false
+	$Control2/ControlsImage.visible = false

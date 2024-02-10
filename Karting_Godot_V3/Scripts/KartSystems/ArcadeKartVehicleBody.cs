@@ -8,8 +8,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 
     private Vector3 targetLinearVelocity;
     private Vector3 targetAngularVelocity;
-    private float linearDamping = 0.1f; 
-    private float angularDamping = 0.5f; 
+    private float linearDamping = 0.1f;
+    private float angularDamping = 0.5f;
     private float collisionSlowdownFactor = 0.8f; // Slowdown factor (50% of current speed)
 
     private bool prevHasCollision = false;
@@ -472,7 +472,7 @@ public class ArcadeKartVehicleBody : VehicleBody
     public override void _IntegrateForces(PhysicsDirectBodyState state)
     {
 
-        if (m_HasCollision && !prevHasCollision)
+        /* if (m_HasCollision && !prevHasCollision)
         {
             // stabalize Kart in collision
             ApplyStabilizingImpulse(state);
@@ -486,7 +486,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
         }
         // so stat stablising is not applied every frame the collision is detected
-        prevHasCollision = m_HasCollision;
+        prevHasCollision = m_HasCollision; */
 
         //base._IntegrateForces(state);
 
@@ -810,7 +810,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 
             // rotate rigidbody's velocity as well to generate immediate velocity redirection
             // manual velocity steering coefficient
-            float velocitySteering = 35f;
+            float velocitySteering = 25f;
 
             // If the karts lands with a forward not in the velocity direction, we start the drift
             /*if (GroundPercent >= 0.0f && m_PreviousGroundPercent < 0.1f)
