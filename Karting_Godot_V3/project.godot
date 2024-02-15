@@ -22,6 +22,7 @@ HelperFunctions="*res://Scripts/Utils/HelperFunctions.cs"
 
 [display]
 
+window/size/resizable=false
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
