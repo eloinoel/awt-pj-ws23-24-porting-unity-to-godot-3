@@ -1,10 +1,23 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=38 format=2]
 
-[ext_resource path="res://Scripts/KartPlayer.gd" type="Script" id=1]
-[ext_resource path="res://Scripts/KartSystems/KartCamera.gd" type="Script" id=2]
-[ext_resource path="res://Scenes/RaceScene/Materials/KartWheels.material" type="Material" id=3]
+[ext_resource path="res://Scripts/Camera/ActionCamera.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/KartSystems/KartAnimation/EnableLaserTrails.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/RaceScene/PlayerAnimation.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/RaceScene/Materials/KartBody.material" type="Material" id=4]
 [ext_resource path="res://Scenes/RaceScene/Materials/Material_Player.material" type="Material" id=5]
+[ext_resource path="res://Scenes/RaceScene/Materials/KartWheels.material" type="Material" id=6]
+[ext_resource path="res://Scripts/KartSystems/ArcadeKartVehicleBody.cs" type="Script" id=7]
+[ext_resource path="res://Scripts/KartSystems/KartAudio/ArcadeEngineAudio.cs" type="Script" id=8]
+[ext_resource path="res://addons/Trail/trail_3d.gd" type="Script" id=9]
+[ext_resource path="res://Prefabs/ActionCamera.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Prefabs/SmokeVFX/SmokeVFX.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Audio/SFX/engine-running.ogg" type="AudioStream" id=12]
+[ext_resource path="res://Audio/SFX/engine-idle.ogg" type="AudioStream" id=13]
+[ext_resource path="res://Audio/SFX/engine-rev.ogg" type="AudioStream" id=14]
+[ext_resource path="res://Audio/SFX/engine_start.ogg" type="AudioStream" id=15]
+[ext_resource path="res://addons/Trail/assets/trail_2.png" type="Texture" id=16]
+[ext_resource path="res://Prefabs/SmokeVFX/smoke_04.png" type="Texture" id=17]
+[ext_resource path="res://Audio/SFX/Tire_Screeching.wav" type="AudioStream" id=18]
 
 [sub_resource type="ArrayMesh" id=2]
 resource_name = "RaceScene_Kart_Body"
@@ -49,7 +62,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194743,
 "index_count": 4524,
-"material": ExtResource( 3 ),
+"material": ExtResource( 6 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 1541
@@ -64,7 +77,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194743,
 "index_count": 4524,
-"material": ExtResource( 3 ),
+"material": ExtResource( 6 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 1579
@@ -79,11 +92,45 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194743,
 "index_count": 4524,
-"material": ExtResource( 3 ),
+"material": ExtResource( 6 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 1511
 }
+
+[sub_resource type="Shader" id=101]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_disabled,diffuse_toon,specular_disabled,shadows_disabled,ambient_light_disabled;
+uniform vec4 albedo : hint_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform sampler2D texture_emission : hint_albedo;
+uniform float emission_energy = 1.0;
+
+
+void vertex() {
+	if (!OUTPUT_IS_SRGB) {
+		COLOR.rgb = mix( pow((COLOR.rgb + vec3(0.055)) * (1.0 / (1.0 + 0.055)), vec3(2.4)), COLOR.rgb* (1.0 / 12.92), lessThan(COLOR.rgb,vec3(0.04045)) );
+	}
+}
+
+
+void fragment() {
+	ALBEDO = albedo.rgb;
+	vec3 emission_tex = texture(texture_emission, UV).rgb;
+	EMISSION = emission_tex * emission_energy* COLOR.rgb;
+	ALPHA = clamp(emission_tex.r*2.0, 0, 1)*COLOR.a*albedo.a;
+}"
+
+[sub_resource type="ShaderMaterial" id=102]
+shader = SubResource( 101 )
+shader_param/albedo = Color( 0, 0, 0, 1 )
+shader_param/emission_energy = 3.0
+shader_param/texture_emission = ExtResource( 16 )
+
+[sub_resource type="Curve" id=104]
+_data = [ Vector2( 0.0047619, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=103]
+colors = PoolColorArray( 0.921569, 0.921569, 0.921569, 0.388235, 0.937255, 0.937255, 0.937255, 0.133333 )
 
 [sub_resource type="ArrayMesh" id=9]
 resource_name = "RaceScene_WheelRearRight"
@@ -94,7 +141,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194743,
 "index_count": 4524,
-"material": ExtResource( 3 ),
+"material": ExtResource( 6 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 1540
@@ -266,12 +313,57 @@ bind/48/name = "RightFoot"
 bind/48/bone = -1
 bind/48/pose = Transform( -3.70804e-08, 0.999999, -0.0016738, 1, 2.69352e-08, 5.23998e-09, -1.10937e-08, -0.00167376, -0.999999, -0.0625672, 0.124676, -0.0124029 )
 
-[node name="KartPlayer" type="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.989, 0.25, 3.106 )
-mass = 250.0
-contacts_reported = 1
+[sub_resource type="Curve" id=106]
+_data = [ Vector2( 0, 0.494318 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=107]
+curve = SubResource( 106 )
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 1
+emission_sphere_radius = 0.1
+direction = Vector3( 1, 0.5, -1 )
+spread = 0.0
+gravity = Vector3( 0, 1, 0 )
+initial_velocity = 1.0
+initial_velocity_random = 0.5
+linear_accel = 1.0
+linear_accel_random = 1.0
+radial_accel_random = 0.07
+scale = 0.1
+scale_random = 0.42
+scale_curve = SubResource( 107 )
+
+[sub_resource type="SpatialMaterial" id=108]
+flags_transparent = true
+flags_unshaded = true
+params_cull_mode = 2
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 1, 1, 1, 0.0862745 )
+albedo_texture = ExtResource( 17 )
+
+[sub_resource type="QuadMesh" id=109]
+material = SubResource( 108 )
+
+[sub_resource type="CapsuleMesh" id=105]
+
+[node name="ArcadeKart" type="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.004, 0.253824, 6.212 )
+mass = 17.86
+continuous_cd = true
+contacts_reported = 4
 contact_monitor = true
-script = ExtResource( 1 )
+script = ExtResource( 7 )
+SuspensionHeight = 0.1
+SuspensionSpring = 70000.0
+SuspensionDamp = 5000.0
+FrontLeftWheelPath = NodePath("front_left_wheel")
+FrontRightWheelPath = NodePath("front_right_wheel")
+RearLeftWheelPath = NodePath("back_left_wheel")
+RearRightWheelPath = NodePath("back_right_wheel")
 
 [node name="Kart_Body" type="MeshInstance" parent="."]
 visible = false
@@ -283,73 +375,135 @@ material/0 = ExtResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.576263, 0 )
 shape = SubResource( 56 )
 
+[node name="LaserTrailManager" type="Spatial" parent="."]
+script = ExtResource( 2 )
+
 [node name="front_left_wheel" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.404, 0.102919, 0.586 )
+use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.137
 wheel_friction_slip = 1.0
 suspension_travel = 0.3
-suspension_stiffness = 15.0
-suspension_max_force = 1500.0
-damping_compression = 2.0
-damping_relaxation = 2.0
+suspension_stiffness = 150.0
+suspension_max_force = 300.0
+damping_compression = 10.0
+damping_relaxation = 12.0
 
 [node name="WheelFrontLeft" type="MeshInstance" parent="front_left_wheel"]
 mesh = SubResource( 6 )
-material/0 = ExtResource( 3 )
+material/0 = ExtResource( 6 )
 
 [node name="front_right_wheel" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.404, 0.102919, 0.568 )
+use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.137
 wheel_friction_slip = 1.0
 suspension_travel = 0.3
-suspension_stiffness = 15.0
-suspension_max_force = 1500.0
-damping_compression = 2.0
-damping_relaxation = 2.0
+suspension_stiffness = 150.0
+suspension_max_force = 300.0
+damping_compression = 10.0
+damping_relaxation = 12.0
 
 [node name="WheelFrontRight" type="MeshInstance" parent="front_right_wheel"]
 mesh = SubResource( 7 )
-material/0 = ExtResource( 3 )
+material/0 = ExtResource( 6 )
 
 [node name="back_left_wheel" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.408, 0.102919, -0.681 )
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.163
-wheel_friction_slip = 1.0
-suspension_travel = 0.3
-suspension_stiffness = 15.0
-suspension_max_force = 1500.0
-damping_compression = 2.0
-damping_relaxation = 2.0
+wheel_friction_slip = 0.8
+suspension_travel = 0.15
+suspension_stiffness = 150.0
+suspension_max_force = 300.0
+damping_compression = 10.0
+damping_relaxation = 12.0
 
 [node name="WheelRearLeft" type="MeshInstance" parent="back_left_wheel"]
 mesh = SubResource( 8 )
-material/0 = ExtResource( 3 )
+material/0 = ExtResource( 6 )
 
-[node name="LaserTrail" type="Spatial" parent="back_left_wheel/WheelRearLeft"]
+[node name="Trail3D" type="ImmediateGeometry" parent="back_left_wheel"]
+material_override = SubResource( 102 )
+script = ExtResource( 9 )
+segments = 30
+base_width = 0.1
+width_profile = SubResource( 104 )
+color_gradient = SubResource( 103 )
 
 [node name="back_right_wheel" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.408, 0.102919, -0.681 )
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.163
-wheel_friction_slip = 1.0
-suspension_travel = 0.3
-suspension_stiffness = 15.0
-suspension_max_force = 1500.0
-damping_compression = 2.0
-damping_relaxation = 2.0
+wheel_friction_slip = 0.8
+suspension_travel = 0.15
+suspension_stiffness = 150.0
+suspension_max_force = 300.0
+damping_compression = 10.0
+damping_relaxation = 12.0
 
 [node name="WheelRearRight" type="MeshInstance" parent="back_right_wheel"]
 mesh = SubResource( 9 )
-material/0 = ExtResource( 3 )
+material/0 = ExtResource( 6 )
 
-[node name="LaserTrail2" type="Spatial" parent="back_right_wheel/WheelRearRight"]
+[node name="Trail3D" type="ImmediateGeometry" parent="back_right_wheel"]
+material_override = SubResource( 102 )
+script = ExtResource( 9 )
+segments = 30
+base_width = 0.1
+width_profile = SubResource( 104 )
+color_gradient = SubResource( 103 )
+
+[node name="ArcadeEngineAudio" type="Spatial" parent="."]
+script = ExtResource( 8 )
+StartSoundPath = NodePath("engine_start")
+IdleSoundPath = NodePath("engine_idle")
+RunningSoundPath = NodePath("engine_running")
+DriftPath = NodePath("drift")
+ReverseSoundPath = NodePath("engine_reverse")
+ReverseSoundMaxVolume = 0.394
+arcadeKartPath = NodePath("..")
+
+[node name="engine_start" type="AudioStreamPlayer3D" parent="ArcadeEngineAudio"]
+stream = ExtResource( 15 )
+attenuation_model = 2
+autoplay = true
+bus = "SFX"
+
+[node name="engine_idle" type="AudioStreamPlayer3D" parent="ArcadeEngineAudio"]
+stream = ExtResource( 13 )
+attenuation_model = 2
+unit_size = 10.0
+autoplay = true
+bus = "SFX"
+
+[node name="engine_running" type="AudioStreamPlayer3D" parent="ArcadeEngineAudio"]
+stream = ExtResource( 12 )
+attenuation_model = 2
+unit_size = 5.0
+autoplay = true
+bus = "SFX"
+
+[node name="engine_reverse" type="AudioStreamPlayer3D" parent="ArcadeEngineAudio"]
+stream = ExtResource( 14 )
+attenuation_model = 2
+unit_size = 5.0
+autoplay = true
+bus = "SFX"
+
+[node name="drift" type="AudioStreamPlayer3D" parent="ArcadeEngineAudio"]
+stream = ExtResource( 18 )
+attenuation_model = 2
+unit_db = -80.0
+unit_size = 5.0
+autoplay = true
+bus = "Drift"
 
 [node name="KartVisual" type="Spatial" parent="."]
 
@@ -417,7 +571,8 @@ skin = SubResource( 3 )
 material/0 = ExtResource( 4 )
 
 [node name="PlayerIdle" type="Spatial" parent="KartVisual"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00942993, 0, -0.0899999 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00942993, 0, -0.0899997 )
+script = ExtResource( 3 )
 
 [node name="Root1" type="Spatial" parent="KartVisual/PlayerIdle"]
 
@@ -764,12 +919,29 @@ mesh = SubResource( 4 )
 skin = SubResource( 5 )
 material/0 = ExtResource( 5 )
 
-[node name="Node" type="Node" parent="."]
+[node name="ActionCamera" type="Node" parent="." instance=ExtResource( 10 )]
+script = ExtResource( 1 )
+isMainCamera = true
 
-[node name="CameraPivot" type="Spatial" parent="Node"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.989, 0.25, 3.106 )
+[node name="SmokeVFX" type="Particles" parent="." instance=ExtResource( 11 )]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.280927, 0.449407, -1.10718 )
+amount = 10
+lifetime = 0.54
+randomness = 0.47
+fixed_fps = 60
+fract_delta = false
+process_material = SubResource( 1 )
+draw_pass_1 = SubResource( 109 )
 
-[node name="Kart Camera" type="Camera" parent="Node/CameraPivot"]
-transform = Transform( -1, -1.6985e-08, 8.5757e-08, 0, 0.980945, 0.194286, -8.74228e-08, 0.194286, -0.980945, 0, 3, -6 )
-far = 8192.0
-script = ExtResource( 2 )
+[node name="PinJoint" type="PinJoint" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225847, 0 )
+visible = false
+nodes/node_a = NodePath("..")
+nodes/node_b = NodePath("WeigtNode")
+
+[node name="WeigtNode" type="RigidBody" parent="PinJoint"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.78982, 0 )
+mass = 0.01
+
+[node name="MeshInstance" type="MeshInstance" parent="PinJoint/WeigtNode"]
+mesh = SubResource( 105 )
