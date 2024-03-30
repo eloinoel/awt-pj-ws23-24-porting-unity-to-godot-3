@@ -47,12 +47,12 @@ public class ObjectiveHUDManager : Node
 
 	public void UnregisterObjective(Objective objective)
 	{
-		/* TODO: objective.onUpdateObjective -= OnUpdateObjective;
+		/* objective.onUpdateObjective -= OnUpdateObjective;
 
 		// if the objective if in the list, make it fade out, and remove it from the list
 		if (m_ObjectivesDictionary.TryGetValue(objective, out ObjectiveToast toast))
 			toast.Complete();
-		
+
 		m_ObjectivesDictionary.Remove(objective); */
 	}
 
@@ -61,15 +61,11 @@ public class ObjectiveHUDManager : Node
 		if (m_ObjectivesDictionary.TryGetValue(updateObjective.objective, out ObjectiveToast toast))
 		{
 			// set the new updated description for the objective, and forces the content size fitter to be recalculated
-			// Canvas.ForceUpdateCanvases();
 			if (!string.IsNullOrEmpty(updateObjective.descriptionText))
 				toast.SetDescriptionText(updateObjective.descriptionText);
 
  			if (!string.IsNullOrEmpty(updateObjective.counterText))
 				toast.SetCounterText(updateObjective.counterText);
-			
-			/*RectTransform toastRectTransform = toast.GetComponent<RectTransform>();
-			if (toastRectTransform != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(toastRectTransform); */
 		}
 	}
 }

@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-//TODO: delete this at the end if dont need for testing anymore
 public class KartTestCollisionVehicleBody : VehicleBody
 {
     // Declare member variables here. Examples:

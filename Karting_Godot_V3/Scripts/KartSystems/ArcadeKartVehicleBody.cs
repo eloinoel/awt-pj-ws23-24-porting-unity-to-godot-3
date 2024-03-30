@@ -155,7 +155,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	/// <summary>
 	/// The transform that determines the position of the kart's mass.
 	/// </summary>
-	public Transform CenterOfMass; //TODO: change type
+	public Transform CenterOfMass;
 
 	[Export(PropertyHint.Range, "0.0f, 20.0f,")]
 	/// <summary>
@@ -275,8 +275,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 	float m_CurrentGrip = 1.0f;
 	float m_DriftTurningPower = 0.0f;
 	float m_PreviousGroundPercent = 1.0f;
-/*  readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>(); //TODO: change types */
-/*  readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>(); //TODO: change types */
+/*  readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>();*/
+/*  readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>();*/
 
 	// can the kart move?
 	bool m_CanMove = true;
@@ -301,7 +301,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	public void SetCanMove(bool move) => m_CanMove = move;
 	public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
-	//TODO: needs adjustment for collection maneuvering
+	//NOTE: needs adjustment for collection maneuvering
 	private void ActivateDriftVFX(bool active)
 	{
 		/*foreach (var vfx in m_DriftSparkInstances)
@@ -337,7 +337,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 		} */
 	}
 
-	//TODO:
 	void UpdateSuspensionParams(VehicleWheel wheel)
 	{
 		/* wheel.suspensionDistance = SuspensionHeight;
@@ -397,27 +396,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 		//setup collision callbacks with the CollisionShape
 		Connect("body_entered", this, "_OnCollisionEnter");
 		Connect("body_exited", this, "_OnCollisionExit");
-
-		//TODO: add in vfx when necessary
-		/* if (DriftSparkVFX != null)
-		{
-			AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
-			AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
-		} */
-
-		/* if (DriftTrailPrefab != null)
-		{
-			AddTrailToWheel(RearLeftWheel);
-			AddTrailToWheel(RearRightWheel);
-		} */
-
-		/* if (NozzleVFX != null)
-		{
-			foreach (var nozzle in Nozzles)
-			{
-				Instantiate(NozzleVFX, nozzle, false);
-			}
-		} */
 	}
 
 	private void ApplyStabilizingImpulse(PhysicsDirectBodyState state)
@@ -475,7 +453,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
 
-		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
 		if (FrontLeftWheel.IsInContact() && FrontLeftWheel.GetContactBody() != null)
 			groundedCount++;
@@ -619,7 +596,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 	}
 
-	/* TODO:
+	/*
 	void OnCollisionStay(Collision collision)
 	{
 		m_HasCollision = true;
@@ -794,7 +771,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 
 		ActivateDriftVFX(IsDrifting && GroundPercent > 0.0f);*/
-		// TODO: lastvalidRotation still buggy/often misset, can lead to teleport off map glitch
+		// NOTE: lastvalidRotation still buggy/often misset, can lead to teleport off map glitch
 		/* var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
@@ -817,7 +794,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		if (GroundPercent < 0.7f)
 		{
 			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
-			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
+			Forward = Rigidbody.GlobalTransform.basis.z;
 			Plane projectionPlane = new Plane(m_VerticalReference, 0.0f);
 			Vector3 finalOrientationDirection = projectionPlane.Project(Forward);
 			finalOrientationDirection = finalOrientationDirection.Normalized();
@@ -832,8 +809,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 				Quat lerpQuat = new Quat(QuatSlerp(Rotation, lookAt.GetEuler(), slerpRatio));
 				state.Transform = state.Transform.LookingAt(finalOrientationDirection, m_VerticalReference);
 				//state.Transform.basis.RotationQuat = lerpQuat;
-				// state.Transform = state.GetTransform().
-				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
 			}
 		}
 		else if (validPosition)

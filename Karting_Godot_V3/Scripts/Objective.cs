@@ -43,8 +43,6 @@ public abstract class Objective : Node, IDisability
     public Action<ActionUpdateObjective> onUpdateObjective;
 
     [Export(hintString: "Handle HUD notifications")]
-    /* TODO: protected NotificationHUDManager m_NotificationHUDManager;
-    [Export(hintString: "Handle HUD objectives")] */
     protected NodePath m_ObjectiveHUDManagerPath;
     protected ObjectiveHUDManager m_ObjectiveHUDManager;
 
@@ -52,7 +50,7 @@ public abstract class Objective : Node, IDisability
     public static Action<LapObject> OnUnregisterPickup;
 
     [Export(hintString: "show objective at start of game")]
-    public DisplayMessage displayMessage; //TODO: implement
+    public DisplayMessage displayMessage;
 
     private List<LapObject> pickups = new List<LapObject>();
 
@@ -99,19 +97,14 @@ public abstract class Objective : Node, IDisability
 
         // NOTE: We dont find object by types here anymore, because we simply export ObjectiveHUDManager and NotificationHUDManager and set them through the editor
         // register this objective in the ObjectiveHUDManager
-/*         m_ObjectiveHUDManager = FindObjectOfType<ObjectiveHUDManager>();
-        DebugUtility.HandleErrorIfNullFindObject<ObjectiveHUDManager, Objective>(m_ObjectiveHUDManager, this); */
-        m_ObjectiveHUDManager.RegisterObjective(this); // TODO: implement
+        m_ObjectiveHUDManager.RegisterObjective(this);
 
         // register this objective in the NotificationHUDManager
-/*         m_NotificationHUDManager = FindObjectOfType<NotificationHUDManager>();
-        DebugUtility.HandleErrorIfNullFindObject<NotificationHUDManager, Objective>(m_NotificationHUDManager, this); */
-        //m_NotificationHUDManager.RegisterObjective(this);
+        // m_NotificationHUDManager.RegisterObjective(this);
     }
 
     public void UpdateObjective(string descriptionText, string counterText, string notificationText)
     {
-        // TODO: onUpdateObjective?.Invoke(new UnityActionUpdateObjective(this, descriptionText, counterText, false, notificationText));
         if(onUpdateObjective != null) {
             onUpdateObjective(new ActionUpdateObjective(this, descriptionText, counterText, false, notificationText));
         }
@@ -124,7 +117,7 @@ public abstract class Objective : Node, IDisability
 
         // unregister this objective form both HUD managers
         m_ObjectiveHUDManager.UnregisterObjective(this);
-        // TODO: m_NotificationHUDManager.UnregisterObjective(this);
+        // m_NotificationHUDManager.UnregisterObjective(this);
     }
 
     public virtual string GetUpdatedCounterAmount()

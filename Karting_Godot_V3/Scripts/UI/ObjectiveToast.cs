@@ -43,7 +43,7 @@ public class ObjectiveToast : Node2D
 	bool m_IsMovingOut;
 	AudioStreamPlayer m_AudioSource;
 	[Export(hintString: "Area that the objectives are displayed in")]
-	Transform m_RectTransform; // TODO: Set to ObjectiveToastPrimary node2d in editor
+	Transform m_RectTransform;
 
 	public void Initialize(string titleText, string descText, string counterText, bool isOptionnal, float delay)
 	{

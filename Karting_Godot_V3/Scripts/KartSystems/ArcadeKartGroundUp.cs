@@ -128,7 +128,7 @@ public class ArcadeKartGroundUp : RigidBody
 	/// <summary>
 	/// The transform that determines the position of the kart's mass.
 	/// </summary>
-	public Transform CenterOfMass; //TODO: change type
+	public Transform CenterOfMass;
 
 	[Export(PropertyHint.Range, "0.0f, 20.0f,")]
 	/// <summary>
@@ -247,8 +247,8 @@ public class ArcadeKartGroundUp : RigidBody
 	float m_CurrentGrip = 1.0f;
 	float m_DriftTurningPower = 0.0f;
 	float m_PreviousGroundPercent = 1.0f;
-/* 	readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>(); //TODO: change types */
-/* 	readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>(); //TODO: change types */
+/* 	readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>();*/
+/* 	readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>();*/
 
 	// can the kart move?
 	bool m_CanMove = true;
@@ -273,7 +273,7 @@ public class ArcadeKartGroundUp : RigidBody
 	public void SetCanMove(bool move) => m_CanMove = move;
 	public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
-	//TODO: needs adjustment for collection maneuvering
+	//NOTE: needs adjustment for collection maneuvering
 	private void ActivateDriftVFX(bool active)
 	{
 		/*foreach (var vfx in m_DriftSparkInstances)
@@ -309,7 +309,6 @@ public class ArcadeKartGroundUp : RigidBody
         } */
     }
 
-    //TODO:
     void UpdateSuspensionParams(RigidBody wheel)
     {
         /* wheel.suspensionDistance = SuspensionHeight;
@@ -350,27 +349,6 @@ public class ArcadeKartGroundUp : RigidBody
         //setup collision callbacks with the CollisionShape
         Connect("body_entered", this, "_OnCollisionEnter");
         Connect("body_exited", this, "_OnCollisionExit");
-
-        //TODO: add in vfx when necessary
-        /* if (DriftSparkVFX != null)
-        {
-            AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
-            AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
-        } */
-
-        /* if (DriftTrailPrefab != null)
-        {
-            AddTrailToWheel(RearLeftWheel);
-            AddTrailToWheel(RearRightWheel);
-        } */
-
-        /* if (NozzleVFX != null)
-        {
-            foreach (var nozzle in Nozzles)
-            {
-                Instantiate(NozzleVFX, nozzle, false);
-            }
-        } */
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState state)
@@ -394,7 +372,6 @@ public class ArcadeKartGroundUp : RigidBody
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
 
-		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
 		if (FrontLeftWheel.GetCollidingBodies().Count > 0)
 			groundedCount++;
@@ -484,7 +461,7 @@ public class ArcadeKartGroundUp : RigidBody
 			// use this value to play kart sound when it is waiting the race start countdown.
 			return Input.Accelerate ? 1.0f : 0.0f;
 		} */
-		return 0f; // TODO: Dummy return
+		return 0f;
 	}
 
     // see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot
@@ -519,7 +496,7 @@ public class ArcadeKartGroundUp : RigidBody
         }
     }
 
-    /* TODO:
+    /*
     void OnCollisionStay(Collision collision)
     {
         m_HasCollision = true;
@@ -690,7 +667,7 @@ public class ArcadeKartGroundUp : RigidBody
         }
 
         bool validPosition = false;
-		/* m_LastCollisionNormal = Vector3.Up; // TODO: remove
+		/* m_LastCollisionNormal = Vector3.Up;
 		var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
 		var intersection = spacestate.IntersectRay(Rigidbody.GlobalTransform.origin, -Up, ignoreCollision);
@@ -731,7 +708,7 @@ public class ArcadeKartGroundUp : RigidBody
 		/* if (GroundPercent < 0.7f)
 		{
  			state.AngularVelocity = new Vector3(0.0f, state.AngularVelocity.y * 0.98f, 0.0f);
-			Forward = Rigidbody.GlobalTransform.basis.z; // TODO: is this correct? shouldnt we take an updated global transform because the previous code changed it
+			Forward = Rigidbody.GlobalTransform.basis.z;
 			Plane projectionPlane = new Plane(m_VerticalReference, 0.0f);
 			Vector3 finalOrientationDirection = projectionPlane.Project(Forward);
 			finalOrientationDirection = finalOrientationDirection.Normalized();
@@ -746,8 +723,6 @@ public class ArcadeKartGroundUp : RigidBody
 				Quat lerpQuat = new Quat(QuatSlerp(Rotation, lookAt.GetEuler(), slerpRatio));
 				state.Transform = state.Transform.LookingAt(finalOrientationDirection, m_VerticalReference);
 				//state.Transform.basis.RotationQuat = lerpQuat;
-				// state.Transform = state.GetTransform().
-				//state.AngularVelocity.Rotated // TODO: find something for MoveRotation
 			}
 		} */
 	}

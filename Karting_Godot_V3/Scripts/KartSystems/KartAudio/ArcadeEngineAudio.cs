@@ -34,7 +34,6 @@ namespace KartGame.KartSystems
 		// NOTE: instead of searching for the parents arcadeKart in _Ready(),
 		// we simply assume that the user sets the exported property arcadeKart
 		// to the same Kart in both scripts
-		// TODO: check if this needs an extra export now
 		[Export(hintString: "The Kart to which the played sound effects belong")]
 		public NodePath arcadeKartPath;
 		public ArcadeKartVehicleBody arcadeKart;

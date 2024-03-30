@@ -6,7 +6,6 @@ public class DisplayMessage : Node, IDisability
     [Export(hintString: "The text that will be displayed")]
     public string message;
     [Export(hintString: "Prefab for the message")]
-    //public PoolObjectDef messagePrefab; //TODO: implement pooling if necessary
     public NodePath messagePrefab;
     [Export(hintString: "Delay before displaying the message")]
     public float delayBeforeShowing;
@@ -65,17 +64,6 @@ public class DisplayMessage : Node, IDisability
 
     public void Display()
     {
-        //TODO: port this to godot, when necessary
-
-        /* notification = messagePrefab.getObject(true,m_DisplayMessageManager.DisplayMessageRect.transform).GetComponent<NotificationToast>();
-
-        notification.Initialize(message);
-
-        m_DisplayMessageManager.DisplayMessageRect.UpdateTable(notification.gameObject);
-
-        m_WasDisplayed = true;
-
-        StartCoroutine(messagePrefab.ReturnWithDelay(notification.gameObject,notification.TotalRunTime)); */
 
     }
 }

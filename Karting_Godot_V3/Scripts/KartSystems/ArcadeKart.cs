@@ -126,7 +126,7 @@ public class ArcadeKart : RigidBody
 	/// <summary>
 	/// The transform that determines the position of the kart's mass.
 	/// </summary>
-	public Transform CenterOfMass; //TODO: change type
+	public Transform CenterOfMass;
 
 	[Export(PropertyHint.Range, "0.0f, 20.0f,")]
 	/// <summary>
@@ -245,15 +245,14 @@ public class ArcadeKart : RigidBody
 	float m_CurrentGrip = 1.0f;
 	float m_DriftTurningPower = 0.0f;
 	float m_PreviousGroundPercent = 1.0f;
-/* 	readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>(); //TODO: change types */
-/* 	readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>(); //TODO: change types */
+/* 	readonly Godot.Collections.Array<(GameObject trailRoot, WheelCollider wheel, TrailRenderer trail)> m_DriftTrailInstances = new List<(GameObject, WheelCollider, TrailRenderer)>(); */
+/* 	readonly Godot.Collections.Array<(WheelCollider wheel, float horizontalOffset, float rotation, ParticleSystem sparks)> m_DriftSparkInstances = new List<(WheelCollider, float, float, ParticleSystem)>(); */
 
 	// can the kart move?
 	bool m_CanMove = true;
 	Godot.Collections.Array<StatPowerup> m_ActivePowerupList = new Godot.Collections.Array<StatPowerup>();
 	ArcadeKart.Stats m_FinalStats;
 
-/* 	Godot.Quaternion m_LastValidRotation; */
 	Godot.Vector3 m_LastValidPosition;
 	Godot.Vector3 m_LastCollisionNormal;
 	bool m_HasCollision;
@@ -271,7 +270,7 @@ public class ArcadeKart : RigidBody
 	public void SetCanMove(bool move) => m_CanMove = move;
 	public float GetMaxSpeed() => Mathf.Max(m_FinalStats.TopSpeed, m_FinalStats.ReverseSpeed);
 
-	//TODO: needs adjustment for collection maneuvering
+	//NOTE: needs adjustment for collection maneuvering
 /* 	private void ActivateDriftVFX(bool active)
 	{
 		foreach (var vfx in m_DriftSparkInstances)
@@ -307,7 +306,6 @@ public class ArcadeKart : RigidBody
 		}
 	} */
 
-	//TODO:
 	void UpdateSuspensionParams(CollisionShape wheel)
 	{
 		/* wheel.suspensionDistance = SuspensionHeight;
@@ -342,27 +340,6 @@ public class ArcadeKart : RigidBody
 		}
 
 		m_CurrentGrip = baseStats.Grip;
-
-		//TODO: add in vfx when necessary
-		/* if (DriftSparkVFX != null)
-		{
-			AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
-			AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
-		} */
-
-		/* if (DriftTrailPrefab != null)
-		{
-			AddTrailToWheel(RearLeftWheel);
-			AddTrailToWheel(RearRightWheel);
-		} */
-
-		/* if (NozzleVFX != null)
-		{
-			foreach (var nozzle in Nozzles)
-			{
-				Instantiate(NozzleVFX, nozzle, false);
-			}
-		} */
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState state)
@@ -386,7 +363,5 @@ public class ArcadeKart : RigidBody
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
 
 		int groundedCount = 0;
-		/*if (FrontLeftWheel.)*/
 	}
-	//TODO: continue porting methods here
 }

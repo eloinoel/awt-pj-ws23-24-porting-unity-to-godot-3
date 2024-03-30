@@ -46,7 +46,7 @@ func _physics_process(delta: float):
 
     # sway the camera to where we are currently d
     """ var local_target: Vector3
-    # TODO: camera acceleration is slow when accelerating
+    # NOTE: camera acceleration is slow when accelerating
     if localVelocity.z < 0:
         local_target = Vector3(target_anchor.x, target_anchor.y, target_anchor.z)
     else:
