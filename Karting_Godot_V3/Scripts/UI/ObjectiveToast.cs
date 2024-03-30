@@ -14,8 +14,6 @@ public class ObjectiveToast : Node2D
 	public NodePath counterTextContentPath;
 	public Label counterTextContent;
 
-	/* [Export(hintString: "Rect that will display the description")]
-	public RectTransform subTitleRect;*/
 	[Export(hintString: "Canvas used to fade in and out the content")]
 	public NodePath canvasGroupPath;
 	public Node2D canvasGroup;
@@ -34,13 +32,9 @@ public class ObjectiveToast : Node2D
 
 	[Export(hintString: "Time it takes to move in the screen")]
 	public float moveInDuration = 0.5f;
-	/* [Export(hintString: "Animation curve for move in, position in x over time")]
-	public AnimationCurve moveInCurve;*/
 
 	[Export(hintString: "Time it takes to move out of the screen")]
 	public float moveOutDuration = 2f;
-	/*[Export(hintString: "Animation curve for move out, position in x over time")]
-	public AnimationCurve moveOutCurve; */
 
 	float m_StartFadeTime;
 	bool m_IsFadingIn;
@@ -54,8 +48,6 @@ public class ObjectiveToast : Node2D
 	public void Initialize(string titleText, string descText, string counterText, bool isOptionnal, float delay)
 	{
 		// set the description for the objective, and forces the content size fitter to be recalculated
-		// Canvas.ForceUpdateCanvases(); // TODO: I believe, that because Godot uses Scenes rather than Canvases, that this call is not necessary in godot
-
 		titleTextContent = GetNode<Label>(titleTextContentPath);
 		descriptionTextContent = GetNode<Label>(descriptionTextContentPath);
 		counterTextContent = GetNode<Label>(counterTextContentPath);
@@ -66,7 +58,6 @@ public class ObjectiveToast : Node2D
 		counterTextContent.Text = counterText;
 
 		m_AudioSource = new AudioStreamPlayer();
-		// LayoutRebuilder.ForceRebuildLayoutImmediate(m_RectTransform); // TODO: Here too i imagine that this isnt needed in godot (We'll see ;))
 
 		m_StartFadeTime = HelperFunctions.GetTime() + delay;
 		// start the fade in
@@ -91,7 +82,6 @@ public class ObjectiveToast : Node2D
 	public void SetDescriptionText(string text)
 	{
 		descriptionTextContent.Text = text;
-		// TODO: "see if this is necessary" subTitleRect.gameObject.SetActive(!string.IsNullOrEmpty(text));
 	}
 	
 	public void SetCounterText(string text)
@@ -117,7 +107,7 @@ public class ObjectiveToast : Node2D
 				// end the fade in
 				m_IsFadingIn = false;
 
-				PlaySound(initSound); // TODO: No sound is played after this call ;)
+				PlaySound(initSound);
 			}
 		}
 

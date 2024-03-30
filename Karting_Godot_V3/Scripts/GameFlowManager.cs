@@ -29,11 +29,8 @@ public class GameFlowManager : Node
     [Export(hintString: "Prefab for the win game message")]
     public NodePath winDisplayMessagePath;
     public DisplayMessage winDisplayMessage;
-    /* [Export] //TODO: playback the race countdown
-    public PlayableDirector raceCountdownTrigger; */
 
     // Lose
-
     [Export(hintString: "This string has to be the name of the scene you want to load when losing")]
     public string loseSceneName = "LoseScene";
     [Export(hintString: "Prefab for the lose game message")]
@@ -144,23 +141,6 @@ public class GameFlowManager : Node
         }
     }
 
-    /* Unity way of async functions
-
-        /* IEnumerator CountdownThenStartRaceRoutine() {
-            yield return new WaitForSeconds(3f);
-            StartRace();
-        }
-        IEnumerator ShowObjectivesRoutine() {
-            while (m_ObjectiveManager.Objectives.Count == 0)
-                yield return null;
-            yield return new WaitForSecondsRealtime(0.2f);
-            for (int i = 0; i < m_ObjectiveManager.Objectives.Count; i++)
-            {
-               if (m_ObjectiveManager.Objectives[i].displayMessage)m_ObjectiveManager.Objectives[i].displayMessage.Display();
-               yield return new WaitForSecondsRealtime(1f);
-            }
-        } */
-
     public override void _Process(float delta)
     {
         base._Process(delta);
@@ -173,7 +153,6 @@ public class GameFlowManager : Node
 
                 float timeRatio = 1 - (m_TimeLoadEndGameScene - HelperFunctions.GetTime()) / endSceneLoadDelay;
 
-                //endGameFadeCanvasGroup.alpha = timeRatio;
                 endGameFadeCanvasGroup.Modulate = new Color(0.0f, 0.0f, 0.0f, timeRatio);
 
                 float volumeRatio = Mathf.Abs(timeRatio);
@@ -208,14 +187,11 @@ public class GameFlowManager : Node
         // Remember that we need to load the appropriate end scene after a delay
         gameState = win ? GameState.Won : GameState.Lost;
 
-        //endGameFadeCanvasGroup.gameObject.SetActive(true); TODO:
-
         if (win)
         {
             m_SceneToLoad = winSceneName;
             m_TimeLoadEndGameScene = HelperFunctions.GetTime() + endSceneLoadDelay + delayBeforeFadeToBlack;
 
-            // TODO: play a sound after a delay (currently it plays it immediately)
             AudioStreamPlayer victorySoundPlayer = new AudioStreamPlayer();
             victorySoundPlayer.Stream = victorySound;
             victorySoundPlayer.Autoplay = false;

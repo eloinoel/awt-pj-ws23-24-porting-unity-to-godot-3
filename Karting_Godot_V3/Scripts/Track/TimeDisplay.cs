@@ -11,8 +11,6 @@ public class TimeDisplay : Node
     public NodePath bestLaptTextPath;
     private TimeDisplayItem bestLapText;
 
-    /* [Export(hintString: "Pool object for the time display UI item.")]
-    public PoolObjectDef timeDisplayItem;  */
     [Export(hintString:"Prefab to TimeDisplayItem")]
     public string TimeDisplayItemPrefabPath = "res://Scenes/GameHUD/LapTimeCanvas/TimeDisplayItem.tscn";
 

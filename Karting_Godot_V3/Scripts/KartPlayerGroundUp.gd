@@ -13,8 +13,6 @@ public InputData Input { get; private set; }
 public float AirPercent { get; private set; }
 public float GroundPercent { get; private set; } """
 
-# TODO: Export stats into godot editor, so that they can be changed there as properties of this script
-# TODO: Depending on its merits, wrap all Kart properties within a class (like it was done in the unity script)
 var base_stats = {
 	top_speed = 10,
 	acceleration = 5,

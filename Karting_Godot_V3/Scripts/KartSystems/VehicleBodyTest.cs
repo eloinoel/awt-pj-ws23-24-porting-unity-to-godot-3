@@ -237,8 +237,6 @@ public class VehicleBodyTest : RigidBody
 	//-----------------------------------------
 
 	// the input sources that can control the kart
-/* 	IInput[] m_Inputs; //TODO: change type */
-
 	const float k_NullInput = 0.01f;
 	const float k_NullSpeed = 0.01f;
 /* 	Godot.Vector3 m_VerticalReference = Vector3.up; */
@@ -338,7 +336,6 @@ public class VehicleBodyTest : RigidBody
 	public override void _Ready()
 	{
         Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
-        // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
         // set properties from given node paths
         FrontLeftWheel = GetNode<VehicleWheel>(FrontLeftWheelPath);
@@ -390,10 +387,8 @@ public class VehicleBodyTest : RigidBody
 		UpdateSuspensionParams(RearLeftWheel);
 		UpdateSuspensionParams(RearRightWheel);
 
-		/*GatherInputs();
-
 		// apply our powerups to create our finalStats
-		TickPowerups(); */
+		/* TickPowerups(); */
 
 		// apply our physics properties
 		/* Unitys rigidbodies have a centerOfMass property that influences how collisions play out (Godots do not) */
@@ -430,20 +425,6 @@ public class VehicleBodyTest : RigidBody
 
 		UpdateDriftVFXOrientation();
 	}
-
-    /* void GatherInputs()
-    {
-        // reset input
-        Input = new InputData();
-        WantsToDrift = false;
-
-        // gather nonzero input from our sources
-        for (int i = 0; i < m_Inputs.Length; i++)
-        {
-            Input = m_Inputs[i].GenerateInput();
-            WantsToDrift = Input.Brake && Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
-        }
-    } */
 
 	void TickPowerups()
 	{

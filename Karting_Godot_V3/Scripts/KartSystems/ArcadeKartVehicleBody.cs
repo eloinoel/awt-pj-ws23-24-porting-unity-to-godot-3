@@ -265,8 +265,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 	//-----------------------------------------
 
 	// the input sources that can control the kart
-/*  IInput[] m_Inputs; //TODO: change type */
-
 	const float k_NullInput = 0.01f;
 	const float k_NullSpeed = 0.01f;
 	Godot.Vector3 m_VerticalReference = Vector3.Up;
@@ -375,7 +373,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 	public override void _Ready()
 	{
 		Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
-		// m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
 		// set properties from given node paths
 		FrontLeftWheel = GetNode<VehicleWheel>(FrontLeftWheelPath);
@@ -467,8 +464,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 		UpdateSuspensionParams(RearLeftWheel);
 		UpdateSuspensionParams(RearRightWheel);
 
-		/* GatherInputs(); probably not needed*/
-
 		// apply our powerups to create our finalStats
 		TickPowerups(state);
 
@@ -512,20 +507,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 
 		UpdateDriftVFXOrientation();
 	}
-
-	/* void GatherInputs()
-	{
-		// reset input
-		Input = new InputData();
-		WantsToDrift = false;
-
-		// gather nonzero input from our sources
-		for (int i = 0; i < m_Inputs.Length; i++)
-		{
-			Input = m_Inputs[i].GenerateInput();
-			WantsToDrift = Input.Brake && Vector3.Dot(Rigidbody.velocity, transform.forward) > 0.0f;
-		}
-	} */
 
 	void TickPowerups(PhysicsDirectBodyState state)
 	{
