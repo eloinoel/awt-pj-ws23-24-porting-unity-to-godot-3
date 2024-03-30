@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/Menues/IntroMenu/MainMenuControlFont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Scenes/Menues/IntroMenu/MainMenu.gd" type="Script" id=2]
@@ -13,10 +13,33 @@ font_data = ExtResource( 4 )
 [sub_resource type="DynamicFont" id=2]
 size = 64
 outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 4 )
 
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.282353, 0.72549, 0.952941, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+
 [sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.231373, 0.231373, 0.231373, 1 )
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 2
+border_width_top = 1
+border_width_right = 2
+border_width_bottom = 1
+border_color = Color( 0.219608, 0.219608, 0.219608, 1 )
+border_blend = true
+
+[sub_resource type="DynamicFont" id=4]
+size = 25
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.282353, 0.72549, 0.952941, 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource( 2 )
@@ -63,13 +86,20 @@ size_flags_horizontal = 3
 [node name="Control" type="Control" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer"]
 
 [node name="PlayButton" type="Button" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer/MarginContainer/Control"]
-margin_left = -144.0
-margin_top = 178.0
-margin_right = 144.0
-margin_bottom = 256.0
+margin_left = -178.0
+margin_top = 169.0
+margin_right = 202.0
+margin_bottom = 245.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
 custom_styles/normal = SubResource( 3 )
-text = "Play!"
+text = "PLAY"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4"]
 margin_top = 4.0
@@ -81,13 +111,20 @@ size_flags_horizontal = 3
 [node name="Control" type="Control" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2/MarginContainer"]
 
 [node name="ControlButton" type="Button" parent="Control2/MarginContainer2/VBoxContainer/VBoxContainer4/VBoxContainer2/MarginContainer/Control"]
-margin_left = -144.0
-margin_top = 86.0
-margin_right = 144.0
-margin_bottom = 162.0
-custom_fonts/font = SubResource( 2 )
+margin_left = -178.0
+margin_top = 110.0
+margin_right = 202.0
+margin_bottom = 150.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+custom_styles/hover = SubResource( 7 )
+custom_styles/pressed = SubResource( 8 )
 custom_styles/normal = SubResource( 3 )
-text = "Control"
+text = "Controls"
 
 [node name="ControlsImage" type="TextureRect" parent="Control2"]
 visible = false
