@@ -56,9 +56,6 @@ public class ObjectiveToast : Node2D
 		// set the description for the objective, and forces the content size fitter to be recalculated
 		// Canvas.ForceUpdateCanvases(); // TODO: I believe, that because Godot uses Scenes rather than Canvases, that this call is not necessary in godot
 
-		// We rather get this by means of an exported property // TODO: Set exported property m_RectTransform in Editor
-/*         m_RectTransform = GetComponent<RectTransform>();
-		DebugUtility.HandleErrorIfNullGetComponent<RectTransform, ObjectiveToast>(m_RectTransform, this, gameObject); */
 		titleTextContent = GetNode<Label>(titleTextContentPath);
 		descriptionTextContent = GetNode<Label>(descriptionTextContentPath);
 		counterTextContent = GetNode<Label>(counterTextContentPath);
@@ -112,12 +109,10 @@ public class ObjectiveToast : Node2D
 			if (timeSinceFadeStarted < fadeInDuration)
 			{
 				// calculate alpha ratio
-				// PREV: canvasGroup.alpha = timeSinceFadeStarted / fadeInDuration;
 				canvasGroup.Modulate = new Color(1, 1, 1, timeSinceFadeStarted / fadeInDuration);
 			}
 			else
 			{
-				// PREV: canvasGroup.alpha = 1f;
 				canvasGroup.Modulate = new Color(1, 1, 1, 1);
 				// end the fade in
 				m_IsFadingIn = false;
@@ -133,55 +128,17 @@ public class ObjectiveToast : Node2D
 			// move in
 			if (timeSinceFadeStarted < moveInDuration)
 			{
-				// PREV: m_RectTransform.anchoredPosition =
-				//	new Vector2((int) moveInCurve.Evaluate(timeSinceFadeStarted / moveInDuration),   m_RectTransform.anchoredPosition.y);
 				canvasGroup.Position = new Vector2((timeSinceFadeStarted / moveInDuration) * movedOutDistance - movedOutDistance + hOffset, canvasGroup.Position.y);
 			}
 			else
 			{
 				// making sure the position is exact
-				// PREV: m_RectTransform.anchoredPosition = new Vector2(0,  m_RectTransform.anchoredPosition.y);
 				canvasGroup.Position = new Vector2(0.0f + hOffset, canvasGroup.Position.y);
 
 				m_IsMovingIn = false;
 			}
 
 		}
-
-		// NOTE: This was not used in the unity Karting project, thus we ignore it ;)
-		/*if (m_IsFadingOut)
-		{
-			// fade out
-			if (timeSinceFadeStarted < fadeOutDuration)
-			{
-				// calculate alpha ratio
-				canvasGroup.alpha = 1 - (timeSinceFadeStarted) / fadeOutDuration;
-			}
-			else
-			{
-				canvasGroup.alpha = 0f;
-
-				// end the fade out, then destroy the object
-				m_IsFadingOut = false;
-			   gameObject.SetActive(false);
-			}
-		}
-
-		if (m_IsMovingOut)
-		{
-			// move out
-			if (timeSinceFadeStarted < moveOutDuration)
-			{
-				m_RectTransform.anchoredPosition =
-					new Vector2((int) moveOutCurve.Evaluate(timeSinceFadeStarted / moveOutDuration),
-						m_RectTransform.anchoredPosition.y);
-
-			}
-			else
-			{
-				m_IsMovingOut = false;
-			}
-		} */
 	}
 
 	void PlaySound(AudioStream sound)
@@ -196,7 +153,6 @@ public class ObjectiveToast : Node2D
 			m_AudioSource.Bus = "HUDObjective";
 		}
 
-		// m_AudioSource.PlayOneShot(sound);
 		m_AudioSource.Stream = sound;
 		m_AudioSource.Play();
 	}

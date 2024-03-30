@@ -16,18 +16,11 @@ public class KartTestCollisionVehicleBody : VehicleBody
         Connect("body_exited", this, "OnCollisionExit");
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
-
     private void OnCollisionEnter(Node body)
     {
         GD.Print("Collision detected");
     }
 
-    /* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
     private void OnCollisionExit(Node body)
     {
         GD.Print("Exited detected collision");

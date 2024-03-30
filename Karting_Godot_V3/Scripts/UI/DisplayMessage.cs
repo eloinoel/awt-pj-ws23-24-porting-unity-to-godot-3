@@ -3,7 +3,6 @@ using System;
 
 public class DisplayMessage : Node, IDisability
 {
-    //[TextArea]
     [Export(hintString: "The text that will be displayed")]
     public string message;
     [Export(hintString: "Prefab for the message")]
@@ -44,10 +43,8 @@ public class DisplayMessage : Node, IDisability
         // gets time in micro secs
         m_InitTime = HelperFunctions.GetTime();
         if (m_DisplayMessageManager == null)
-            // Prev: m_DisplayMessageManager = FindObjectOfType<DisplayMessageManager>();
             m_DisplayMessageManager = GetNode<DisplayMessageManager>(displayMessageManagerPath);
 
-        // prev: DebugUtility.HandleErrorIfNullFindObject<DisplayMessageManager, DisplayMessage>(m_DisplayMessageManager, this);
         if (m_DisplayMessageManager == null)
             GD.PrintErr("Error at DisplayMessage.cs: DisplayMessageManager is null.");
 

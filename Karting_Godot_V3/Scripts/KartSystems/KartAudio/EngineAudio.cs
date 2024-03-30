@@ -52,7 +52,7 @@ namespace KartGame.KartSystems
 
 			m_Stroke = 0;
 			m_Time = 0;
-			m_SecondsPerSample = 1f / AudioServer.GetMixRate()/* AudioSettings.outputSampleRate */;
+			m_SecondsPerSample = 1f / AudioServer.GetMixRate();
 		}
 
 		public override void _Process(float delta)
@@ -62,10 +62,6 @@ namespace KartGame.KartSystems
 
 			//damp the movement of m_LastRPM
 			m_LastRPM = Mathf.Lerp(m_LastRPM, RPM, delta * 100);
-			/* PREV: if (Time.timeScale < 1)
-				m_Volume = 0;
-			else
-				m_Volume = 1; */
 			m_Volume = 1;
 		}
 

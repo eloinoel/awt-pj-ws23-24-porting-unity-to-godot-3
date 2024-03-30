@@ -20,19 +20,15 @@ namespace KartGame.KartSystems
 		[Export(hintString: "What audio clip should play when the kart is drifting")]
 		public NodePath DriftPath;
 		public AudioStreamPlayer3D Drift;
-/*         [Export(hintString: "Maximum Volume the running sound will be at full speed")] */
 		[Export(PropertyHint.Range, "0.1f, 1.0f")]
 		public float RunningSoundMaxVolume = 1.0f;
-/*         [Export(hintString: "Maximum Pitch the running sound will be at full speed")] */
 		[Export(PropertyHint.Range, "0.1f, 2.0f")]
 		public float RunningSoundMaxPitch = 1.0f;
 		[Export(hintString: "What audio clip should play when the kart moves in Reverse?")]
 		public NodePath ReverseSoundPath;
 		public AudioStreamPlayer3D ReverseSound;
-/*         [Export(hintString: "Maximum Volume the Reverse sound will be at full Reverse speed")] */
 		[Export(PropertyHint.Range, "0.1f, 1.0f")]
 		public float ReverseSoundMaxVolume = 0.5f;
-/*         [Export(hintString: "Maximum Pitch the Reverse sound will be at full Reverse speed")] */
 		[Export(PropertyHint.Range, "0.1f, 2.0f")]
 		public float ReverseSoundMaxPitch = 0.6f;
 		// NOTE: instead of searching for the parents arcadeKart in _Ready(),
@@ -45,7 +41,6 @@ namespace KartGame.KartSystems
 
 		public override void _Ready()
 		{
-			//PREV: arcadeKart = GetComponentInParent<ArcadeKart>();
 			StartSound = GetNode<AudioStreamPlayer3D>(StartSoundPath);
 			IdleSound = GetNode<AudioStreamPlayer3D>(IdleSoundPath);
 			RunningSound = GetNode<AudioStreamPlayer3D>(RunningSoundPath);

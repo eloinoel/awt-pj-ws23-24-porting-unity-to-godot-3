@@ -8,7 +8,7 @@ namespace KartGame.KartSystems
 		/// <summary>
 		/// Represents audio data for a single stroke of an engine (2 strokes per revolution)
 		/// </summary>
-		/* [System.Serializable] */ public struct Stroke
+		public struct Stroke
 		{
 			public AudioStreamOGGVorbis clip;
 			[Export(PropertyHint.Range, "0.0f, 1.0f")]
@@ -43,7 +43,6 @@ namespace KartGame.KartSystems
 				else
 				{
 					buffer = new float[clip.Data.Length];
-					//PREV: clip.GetData (buffer, 0);
 					for (var i = 0; i < clip.Data.Length; i++)
 						buffer[i] = clip.Data[i];
 				}

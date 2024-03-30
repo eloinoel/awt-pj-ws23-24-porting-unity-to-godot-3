@@ -4,12 +4,6 @@ using Dictionary = System.Collections.Generic.Dictionary<Objective, ObjectiveToa
 
 public class ObjectiveHUDManager : Node
 {
-/*     [Export(hintString: "UI panel containing the layoutGroup for displaying objectives")]
-	public UITable objectivePanel;
-	[Export(hintString: "Prefab for the primary objectives")]
-	public PoolObjectDef primaryObjectivePrefab;
-	[Export(hintString: "Prefab for the primary objectives")]
-	public PoolObjectDef secondaryObjectivePrefab;*/
 	[Export(hintString: "Prefab for the primary objectives")]
 	public NodePath primaryObjectivePrefabPath;
 	public ObjectiveToast primaryObjectivePrefab;
@@ -19,14 +13,11 @@ public class ObjectiveHUDManager : Node
 	public override void _Ready()
 	{
 		m_ObjectivesDictionary = new System.Collections.Generic.Dictionary<Objective, ObjectiveToast>();
-/* 		Node node = GetNode<Node>(primaryObjectivePrefabPath);
-		primaryObjectivePrefab = GetNode<ObjectiveToast>(node.GetChild(0).GetPath()); */
 		primaryObjectivePrefab = GetNode<ObjectiveToast>(primaryObjectivePrefabPath);
 	}
 
 	public void RegisterObjective(Objective objective)
 	{
-		// PREV: objective.onUpdateObjective += OnUpdateObjective;
 		objective.onUpdateObjective += OnUpdateObjective;
 
 		// instanciate the Ui element for the new objective

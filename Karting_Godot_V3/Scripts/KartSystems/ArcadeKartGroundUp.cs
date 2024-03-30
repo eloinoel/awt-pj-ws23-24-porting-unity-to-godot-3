@@ -513,13 +513,11 @@ public class ArcadeKartGroundUp : RigidBody
 	}
 
     // see https://stackoverflow.com/questions/69728827/how-do-i-detect-collisions-in-godot
-    /* PREV: void OnCollisionEnter(Collision collision) => m_HasCollision = true;*/
     private void _OnCollisionEnter(Node body)
     {
         m_HasCollision = true;
     }
 
-    /* PREV: void OnCollisionExit(Collision collision) => m_HasCollision = false; */
     private void _OnCollisionExit(Node body)
     {
         m_HasCollision = false;
@@ -578,7 +576,6 @@ public class ArcadeKartGroundUp : RigidBody
 
         // manual acceleration curve coefficient scalar
         float accelerationCurveCoeff = 5;
-        // PREV: transform.InverseTransformVector(Rigidbody.velocity);
 		Vector3 localVel = state.Transform.basis.XformInv(state.LinearVelocity);
 
 
@@ -606,10 +603,6 @@ public class ArcadeKartGroundUp : RigidBody
         // apply inputs to forward/backward
         float turningPower = IsDrifting ? m_DriftTurningPower : turnInput * m_FinalStats.Steer;
 
-		/* PREV: Quaternion turnAngle = Quaternion.AngleAxis(turningPower, transform.up);
-            Vector3 fwd = turnAngle * transform.forward;
-            Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f); */
-
        	/* In stack overflow we trust:
 	   	https://stackoverflow.com/questions/48438273/godot-3d-get-forward-vector */
 		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
@@ -633,18 +626,15 @@ public class ArcadeKartGroundUp : RigidBody
         //  clamp max speed if we are on ground
         if (GroundPercent > 0.0f && !wasOverMaxSpeed)
         {
-			/* PREV: newVelocity = Vector3.ClampMagnitude(newVelocity, maxSpeed); */
 			newVelocity = newVelocity.LimitLength(maxSpeed);
         }
 
         // coasting(Leerlauf) is when we aren't touching accelerate
         if (Mathf.Abs(accelInput) < k_NullInput && GroundPercent > 0.0f)
         {
-            // PREV: newVelocity = Vector3.MoveTowards(newVelocity, new Vector3(0, Rigidbody.LinearVelocity.y, 0), Time.fixedDeltaTime * m_FinalStats.CoastingDrag);
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
         }
 		// GD.Print(newVelocity);
-        // PREV: Rigidbody.LinearVelocity = newVelocity;
 		state.LinearVelocity = newVelocity;
 
         // Drift
@@ -668,11 +658,9 @@ public class ArcadeKartGroundUp : RigidBody
             var angularVel = state.AngularVelocity;
 
             // move the Y angular velocity towards our target
-			/* PREV: angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.fixedDeltaTime * angularVelocitySmoothSpeed); */
             angularVel.y = angularVel.MoveToward(new Vector3(0, turningPower * angularVelocitySteering, 0), state.Step * angularVelocitySmoothSpeed).y;
 
             // apply the angular velocity
-			/* PREV: Rigidbody.angularVelocity = angularVel; */
             state.AngularVelocity = angularVel;
 
             // rotate rigidbody's velocity as well to generate immediate velocity redirection
@@ -734,7 +722,6 @@ public class ArcadeKartGroundUp : RigidBody
             }*/
 
             // rotate our velocity based on current steer value
-			/* PREV: Rigidbody.velocity = Quaternion.AngleAxis(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * Time.fixedDeltaTime, transform.up) * Rigidbody.velocity; */
 			//GD.Print("LinearVelocity"); //TODO: take out the trash
             //state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
 
@@ -751,15 +738,6 @@ public class ArcadeKartGroundUp : RigidBody
         }
 
         bool validPosition = false;
-		/* PREV: if (Physics.Raycast(transform.position + (transform.up * 0.1f), -transform.up, out RaycastHit hit, 3.0f, 1 << 9 | 1 << 10 | 1 << 11)) // Layer: ground (9) / Environment(10) / Track (11)
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > hit.normal.y) ? m_LastCollisionNormal : hit.normal;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime * (GroundPercent > 0.0f ? 10.0f : 1.0f)));    // Blend faster if on ground
-        } else
-        {
-            Vector3 lerpVector = (m_HasCollision && m_LastCollisionNormal.y > 0.0f) ? m_LastCollisionNormal : Vector3.up;
-            m_VerticalReference = Vector3.Slerp(m_VerticalReference, lerpVector, Mathf.Clamp01(AirborneReorientationCoefficient * Time.fixedDeltaTime));
-        }*/
 		/* m_LastCollisionNormal = Vector3.Up; // TODO: remove
 		var spacestate = GetWorld().DirectSpaceState;
 		var ignoreCollision = new Godot.Collections.Array { this };
