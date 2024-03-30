@@ -173,13 +173,6 @@ public class ArcadeKart : RigidBody
 	/// </summary>
 	public float DriftDampening = 10.0f;
 
-
-	/*[Export]
-	/// <summary>
-	/// VFX that will be placed on the wheels when drifting.
-	/// </summary>
- 	public ParticleSystem DriftSparkVFX; //TODO: change type */
-
 	[Export(PropertyHint.Range, "0.0f, 0.2f,")]
 	/// <summary>
 	/// Offset to displace the VFX to the side.
@@ -192,35 +185,11 @@ public class ArcadeKart : RigidBody
 	/// </summary>
 	public float DriftSparkRotation = 17.0f;
 
-	/*[Export]
-	/// <summary>
-	/// VFX that will be placed on the wheels when drifting.
-	/// </summary>
- 	public GameObject DriftTrailPrefab; //TODO: change type */
-
 	[Export(PropertyHint.Range, "-0.1f, 0.1f,")]
 	/// <summary>
 	/// Vertical to move the trails up or down and ensure they are above the ground.
 	/// </summary>
 	public float DriftTrailVerticalOffset;
-
-	/*[Export]
-	/// <summary>
-	/// VFX that will spawn upon landing, after a jump.
-	/// </summary>
- 	public GameObject JumpVFX; //TODO: change type */
-
-	/*[Export]
-	/// <summary>
-	/// VFX that is spawn on the nozzles of the kart.
-	/// </summary>
- 	public GameObject NozzleVFX; //TODO: change type */
-
-	/*[Export]
-	/// <summary>
-	/// List of the kart's nozzles.
-	/// </summary>
- 	public Godot.Collections.Array<Transform> Nozzles; //TODO: change type */
 
 	[Export(PropertyHint.Range, "0.0f, 1.0f,")]
 	/// <summary>
@@ -262,13 +231,6 @@ public class ArcadeKart : RigidBody
 	[Export]
 	public Godot.NodePath RearRightWheelPath;
 	public Godot.CollisionShape RearRightWheel;
-
-//	[Export]
-	/// <summary>
-	/// Which layers the wheels will detect.
-	/// </summary>
-/* 	public LayerMask GroundLayers = Physics.DefaultRaycastLayers; //TODO: change type */
-
 
 	//-----------------------------------------
 	//---------- Internal Parameters ----------
