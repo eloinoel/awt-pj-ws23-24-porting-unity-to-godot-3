@@ -281,7 +281,6 @@ public class ArcadeKart : RigidBody
 
 	public void AddPowerup(StatPowerup statPowerup)
 	{
-		//Debug.Log("add Powerup");
 		m_ActivePowerupList.Add(statPowerup);
 	}
 
@@ -339,8 +338,6 @@ public class ArcadeKart : RigidBody
 	// Replaces Awake Method from Unity
 	public override void _Ready()
 	{
-		GD.Print("ArcadeKart script is loaded"); // TODO: remove debug
-
 		// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
 		// m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 

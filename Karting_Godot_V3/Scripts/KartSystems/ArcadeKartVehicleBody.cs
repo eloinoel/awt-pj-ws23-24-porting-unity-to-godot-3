@@ -480,7 +480,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 			this can't be backported to Godot 3.x without a complete rewrite.
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
-		//GD.Print(state.CenterOfMass);
 
 		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
@@ -540,7 +539,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 				m_ActivePowerupList.Remove(powerup);
 			}
 		} */
-		//GD.Print(m_ActivePowerupList);
 		if (m_ActivePowerupList.Count > 0)
 		{
 			StatPowerup powerup = m_ActivePowerupList[0];
@@ -633,9 +631,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 			for(int i = 0; i < contactCount; i++)
 			{
 				Vector3 contactNormal = state.GetContactLocalNormal(i);
-				//GD.Print("local normal" + contactNormal);
-				//contactNormal = state.Transform.XformInv(contactNormal); //convert to world space
-				//GD.Print("global normal" + contactNormal);
 				if(contactNormal.Dot(Vector3.Up) > dot)
 				{
 					m_LastCollisionNormal = contactNormal;
@@ -657,17 +652,8 @@ public class ArcadeKartVehicleBody : VehicleBody
 				m_LastCollisionNormal = contact.normal;
 		}
 	} */
-	private float debugTimer = 0.0f; //TODO: remove debub
-	/* if(debugTimer >= 1)
-	{
-		GD.Print("Up " + Up + ", Forward: " + Forward + ", fwd: " + fwd + ", movement: " + FloorVec(movement, 2) + "turning power: " + turningPower);
-		GD.Print("newVelocity: " + newVelocity);
-		debugTimer = 0.0f;
-	} */
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
-		debugTimer += state.Step; //TODO: remove debug
-
 		float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
 		// manual acceleration curve coefficient scalar
@@ -727,13 +713,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		{
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
 		}
-
-		//TODO: remove debug
-
-		// GD.Print(newVelocity);
-		// newVelocity.x = -newVelocity.x; // x axis is inverted in godot
 		state.LinearVelocity = newVelocity;
-		//GD.Print(newVelocity);
 
 		// Drift
 		if (GroundPercent > 0.0f)
@@ -741,8 +721,6 @@ public class ArcadeKartVehicleBody : VehicleBody
 			if (m_InAir)
 			{
 				m_InAir = false;
-				//GD.Print("Kart becomes grounded"); //TODO: remove debug
-				//TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity);
 			}
 
 			// manual angular velocity coefficient
@@ -756,15 +734,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 			var angularVel = state.AngularVelocity;
 
 			// move the Y angular velocity towards our target
-			/* GD.Print(angularVel.Length());
-			GD.Print(angularVel);
-			GD.Print(angularVel.y); */
-/*          GD.Print(turningPower);
-			GD.Print(angularVelocitySteering);
-			GD.Print(angularVelocitySmoothSpeed);
-			GD.Print(state.Step); */
 			angularVel.y = Mathf.MoveToward(angularVel.y, turningPower * angularVelocitySteering, state.Step * angularVelocitySmoothSpeed);
-			// TODO: GD.Print(angularVel);
 
 			// apply the angular velocity
 			state.AngularVelocity = angularVel;
@@ -828,14 +798,11 @@ public class ArcadeKartVehicleBody : VehicleBody
 			}*/
 
 			// rotate our velocity based on current steer value
-			//GD.Print("LinearVelocity"); //TODO: take out the trash
-			//state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
 			localVel = state.Transform.basis.XformInv(state.LinearVelocity);
 			state.LinearVelocity = state.LinearVelocity.Rotated(Up, Mathf.Deg2Rad(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step));
 		}
 		else
 		{
-			//GD.Print("Kart becomes ungrounded (in air)");
 			m_InAir = true;
 		}
 

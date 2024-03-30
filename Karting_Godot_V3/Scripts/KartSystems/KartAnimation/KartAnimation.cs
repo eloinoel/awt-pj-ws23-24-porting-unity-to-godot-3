@@ -55,8 +55,6 @@ public class KartAnimation : Node
         frontRightWheel.Setup(rightVehicleWheel);
         //rearLeftWheel.Setup(GetNode<VehicleWheel>(rearLeftWheelPath));
         //rearRightWheel.Setup(GetNode<VehicleWheel>(rearRightWheelPath));
-        GD.Print(leftVehicleWheel);
-
     }
 
     public override void _PhysicsProcess(float delta)
@@ -64,7 +62,6 @@ public class KartAnimation : Node
         m_SmoothedSteeringInput = Mathf.Lerp(m_SmoothedSteeringInput, Input.GetAxis("right","left"), steeringAnimationDamping * delta);
 
         float rotationAngle = m_SmoothedSteeringInput * maxSteeringAngle;
-        //GD.Print("rotation angle: " + rotationAngle);
 
         //frontLeftWheel.SetToDefaultRotation();
         frontLeftWheel.rotateByDegrees(-rotationAngle);
@@ -76,6 +73,5 @@ public class KartAnimation : Node
         //wheelMesh.RotateY(Mathf.Deg2Rad(2));
 
         //frontLeftWheel.wheelObj.RotateY(Mathf.Deg2Rad(20));
-        //GD.Print(frontLeftWheel.wheelObj.RotationDegrees);
     }
 }

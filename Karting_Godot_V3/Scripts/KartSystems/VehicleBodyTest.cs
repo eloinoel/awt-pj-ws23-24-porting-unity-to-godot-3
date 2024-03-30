@@ -280,7 +280,6 @@ public class VehicleBodyTest : RigidBody
 
 	public void AddPowerup(StatPowerup statPowerup)
 	{
-		//Debug.Log("add Powerup");
 		m_ActivePowerupList.Add(statPowerup);
 	}
 
@@ -338,8 +337,6 @@ public class VehicleBodyTest : RigidBody
     // Replaces Awake Method from Unity
 	public override void _Ready()
 	{
-		GD.Print("VehicleBodyTest script is loaded"); // TODO: remove debug
-
         Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
         // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
@@ -452,7 +449,6 @@ public class VehicleBodyTest : RigidBody
 	{
 		/* // remove all elapsed powerups
 		m_ActivePowerupList.RemoveAll((p) => { return p.ElapsedTime > p.MaxTime; });
-		//Debug.Log(m_ActivePowerupList.Count);
 
 		// zero out powerups before we add them all up
 		var powerups = new Stats();

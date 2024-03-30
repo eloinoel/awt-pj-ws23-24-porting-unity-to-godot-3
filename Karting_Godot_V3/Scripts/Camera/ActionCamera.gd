@@ -12,8 +12,6 @@ var target_anchor: Vector3
 # for acceleration computation
 var previous_velocity_z: float
 
-var timer = 0 # debug
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
     camera.current = isMainCamera
@@ -25,7 +23,6 @@ func _ready():
     camera.set_perspective(60, 0.1, 5000)
 
 func _physics_process(delta: float):
-    timer+=delta
     # detach camera from car in editor by adding a simple normal node as parent
 
     # cam follows car, smooth out any sudden movements
@@ -64,15 +61,6 @@ func _physics_process(delta: float):
     #local_target = Vector3(target_anchor.x, target_anchor.y, max(target_anchor.z, localVelocity.z + target_anchor.z))
     look_at_target = look_at_target.linear_interpolate(vehicle.to_global(local_target), delta * 30) """
 
-    # TODO: remove debug
-    """ if(timer >= 0.5):
-        #print(localVelocity.z)
-        #print(target_anchor.z)
-        #print("final: " + str(local_target.z))
-        #print(percent_of_max_speed)
-        #print(_ease_in_sine(percent_of_max_speed))
-        #print("----------")
-        timer = 0 """
     #DebugDrawingGD.draw_sphere(look_at_target, 0.5, Color(0, 0, 1, 1))
     #DebugDrawingGD.draw_line(vehicle_position, vehicle_position + camera.global_transform.basis.y)
     #camera.look_at(look_at_target, Vector3.UP)

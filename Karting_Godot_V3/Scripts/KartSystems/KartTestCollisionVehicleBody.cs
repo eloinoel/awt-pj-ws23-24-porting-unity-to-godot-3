@@ -11,18 +11,17 @@ public class KartTestCollisionVehicleBody : VehicleBody
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        GD.Print("loaded collision test kart");
         Connect("body_entered", this, "OnCollisionEnter");
         Connect("body_exited", this, "OnCollisionExit");
     }
 
     private void OnCollisionEnter(Node body)
     {
-        GD.Print("Collision detected");
+
     }
 
     private void OnCollisionExit(Node body)
     {
-        GD.Print("Exited detected collision");
+
     }
 }

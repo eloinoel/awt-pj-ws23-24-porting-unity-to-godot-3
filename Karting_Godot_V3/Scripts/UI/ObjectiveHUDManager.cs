@@ -68,8 +68,6 @@ public class ObjectiveHUDManager : Node
  			if (!string.IsNullOrEmpty(updateObjective.counterText))
 				toast.SetCounterText(updateObjective.counterText);
 			
-			GD.Print("Update Lap Counter");
-
 			/*RectTransform toastRectTransform = toast.GetComponent<RectTransform>();
 			if (toastRectTransform != null) UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(toastRectTransform); */
 		}

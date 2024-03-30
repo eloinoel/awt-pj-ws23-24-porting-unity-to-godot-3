@@ -270,7 +270,6 @@ public class ArcadeKartGroundUp : RigidBody
 
 	public void AddPowerup(StatPowerup statPowerup)
 	{
-		//Debug.Log("add Powerup");
 		m_ActivePowerupList.Add(statPowerup);
 	}
 
@@ -328,8 +327,6 @@ public class ArcadeKartGroundUp : RigidBody
     // Replaces Awake Method from Unity
 	public override void _Ready()
 	{
-		GD.Print("ArcadeKart script is loaded"); // TODO: remove debug
-
         Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
         // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
@@ -402,7 +399,6 @@ public class ArcadeKartGroundUp : RigidBody
 			this can't be backported to Godot 3.x without a complete rewrite.
 		*/
 		/* CenterOfMass = this.transform.InverseTransformPoint(CenterOfMass.position); */
-        //GD.Print(state.CenterOfMass);
 
 		/* TODO: Unity script also fills a WheelHit structure. But i couldnt find any place it is used in. So I think this is equivalent. */
 		int groundedCount = 0;
@@ -452,7 +448,6 @@ public class ArcadeKartGroundUp : RigidBody
 	{
 		/*// remove all elapsed powerups
 		m_ActivePowerupList.RemoveAll((p) => { return p.ElapsedTime > p.MaxTime; });
-		//Debug.Log(m_ActivePowerupList.Count);
 
 		// zero out powerups before we add them all up
 		var powerups = new Stats();
@@ -536,9 +531,6 @@ public class ArcadeKartGroundUp : RigidBody
             for(int i = 0; i < contactCount; i++)
             {
                 Vector3 contactNormal = state.GetContactLocalNormal(i);
-                //GD.Print("local normal" + contactNormal);
-                //contactNormal = state.Transform.XformInv(contactNormal); //convert to world space
-                //GD.Print("global normal" + contactNormal);
                 if(contactNormal.Dot(Vector3.Up) > dot)
                 {
                     m_LastCollisionNormal = contactNormal;
@@ -560,18 +552,9 @@ public class ArcadeKartGroundUp : RigidBody
                 m_LastCollisionNormal = contact.normal;
         }
     } */
-    private float debugTimer = 0.0f; //TODO: remove debub
-    /*  if(debugTimer >= 1)
-        {
-            GD.Print("global: " + state.LinearVelocity);
-            GD.Print("local:" + localVel);
-            debugTimer = 0.0f;
-        } */
 
 	void MoveVehicle(bool accelerate, bool brake, float turnInput, PhysicsDirectBodyState state)
 	{
-        debugTimer += state.Step; //TODO: remove debug
-
 		float accelInput = (accelerate ? 1.0f : 0.0f) - (brake ? 1.0f : 0.0f);
 
         // manual acceleration curve coefficient scalar
@@ -608,7 +591,6 @@ public class ArcadeKartGroundUp : RigidBody
 		Vector3 Up = Rigidbody.GlobalTransform.basis.y;
 		Vector3 Forward = Rigidbody.GlobalTransform.basis.z;
 
-		//GD.Print("fwd"); //TODO: remove debug
         Vector3 fwd = Forward.Rotated(Up, turningPower);
         Vector3 movement = fwd * accelInput * finalAcceleration * ((m_HasCollision || GroundPercent > 0.0f) ? 1.0f : 0.0f);
 
@@ -634,7 +616,6 @@ public class ArcadeKartGroundUp : RigidBody
         {
 			newVelocity = newVelocity.MoveToward(new Vector3(0, state.LinearVelocity.y, 0), state.Step * m_FinalStats.CoastingDrag);
         }
-		// GD.Print(newVelocity);
 		state.LinearVelocity = newVelocity;
 
         // Drift
@@ -643,8 +624,6 @@ public class ArcadeKartGroundUp : RigidBody
 			if (m_InAir)
             {
                 m_InAir = false;
-				//GD.Print("Kart becomes grounded"); //TODO: remove debug
-                /* TODO: Instantiate(JumpVFX, transform.position, Quaternion.identity); */
             }
 
             // manual angular velocity coefficient
@@ -722,18 +701,11 @@ public class ArcadeKartGroundUp : RigidBody
             }*/
 
             // rotate our velocity based on current steer value
-			//GD.Print("LinearVelocity"); //TODO: take out the trash
-            //state.LinearVelocity = state.LinearVelocity.Rotated(Up, turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step);
-
-            // TODO:
-            /* GD.Print(Up);
-            GD.Print(); */
 		    localVel = state.Transform.basis.XformInv(state.LinearVelocity);
             state.LinearVelocity = state.LinearVelocity.Rotated(Up, Mathf.Deg2Rad(turningPower * Mathf.Sign(localVel.z) * velocitySteering * m_CurrentGrip * state.Step));
         }
         else
         {
-			//GD.Print("Kart becomes ungrounded (in air)");
             m_InAir = true;
         }
 
