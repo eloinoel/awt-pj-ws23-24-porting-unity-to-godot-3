@@ -18,7 +18,6 @@ public class ArcadeKart : RigidBody
 
 	public struct Stats
 	{
-		//[ExportGroup("Movement Settings")]
 		[Export(PropertyHint.Range, "0.001f,,")]
 		/// <summary>
 		/// Top speed attainable when moving forward.
@@ -121,12 +120,10 @@ public class ArcadeKart : RigidBody
 	//----Additionally Exported Parameters-----
 	//-----------------------------------------
 
-	//[ExportGroup("Vehicle Visual")]
 	[Export]
 	public Godot.Collections.Array<Godot.NodePath> m_VisualWheels;
 
 
-	//[ExportGroup("Vehicle Physics")]
 	[Export]
 	/// <summary>
 	/// The transform that determines the position of the kart's mass.
@@ -140,7 +137,6 @@ public class ArcadeKart : RigidBody
 	public float AirborneReorientationCoefficient = 3.0f;
 
 
-	//[ExportGroup("Drifting")]
 	[Export(PropertyHint.Range, "0.01f, 1.0f,")]
 	/// <summary>
 	/// The grip value when drifting.
@@ -178,7 +174,6 @@ public class ArcadeKart : RigidBody
 	public float DriftDampening = 10.0f;
 
 
-	//[ExportGroup("VFX")]
 	/*[Export]
 	/// <summary>
 	/// VFX that will be placed on the wheels when drifting.
@@ -227,7 +222,6 @@ public class ArcadeKart : RigidBody
 	/// </summary>
  	public Godot.Collections.Array<Transform> Nozzles; //TODO: change type */
 
-	//[ExportGroup("Suspensions")]
 	[Export(PropertyHint.Range, "0.0f, 1.0f,")]
 	/// <summary>
 	/// The maximum extension possible between the kart's body and the wheels.
@@ -253,22 +247,21 @@ public class ArcadeKart : RigidBody
 	public float WheelsPositionVerticalOffset = 0.0f;
 
 
-	//[ExportGroup("Physical Wheels")]
 	[Export]
 	public Godot.NodePath FrontLeftWheelPath;
-    public Godot.CollisionShape FrontLeftWheel;
+	public Godot.CollisionShape FrontLeftWheel;
 
 	[Export]
 	public Godot.NodePath FrontRightWheelPath;
-    public Godot.CollisionShape FrontRightWheel;
+	public Godot.CollisionShape FrontRightWheel;
 
 	[Export]
 	public Godot.NodePath RearLeftWheelPath;
-    public Godot.CollisionShape RearLeftWheel;
+	public Godot.CollisionShape RearLeftWheel;
 
 	[Export]
 	public Godot.NodePath RearRightWheelPath;
-    public Godot.CollisionShape RearRightWheel;
+	public Godot.CollisionShape RearRightWheel;
 
 //	[Export]
 	/// <summary>
@@ -312,7 +305,7 @@ public class ArcadeKart : RigidBody
 	//--------------- Functions ---------------
 	//-----------------------------------------
 
-    
+	
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
@@ -354,82 +347,82 @@ public class ArcadeKart : RigidBody
 			trail.Item3.emitting = active && trail.wheel.GetGroundHit(out WheelHit hit);
 	} */
 
-    /* private void UpdateDriftVFXOrientation()
-    {
-        foreach (var vfx in m_DriftSparkInstances)
-        {
-            vfx.sparks.transform.position = vfx.wheel.transform.position - (vfx.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up) + (transform.right * vfx.horizontalOffset);
-            vfx.sparks.transform.rotation = transform.rotation * Quaternion.Euler(0.0f, 0.0f, vfx.rotation);
-        }
+	/* private void UpdateDriftVFXOrientation()
+	{
+		foreach (var vfx in m_DriftSparkInstances)
+		{
+			vfx.sparks.transform.position = vfx.wheel.transform.position - (vfx.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up) + (transform.right * vfx.horizontalOffset);
+			vfx.sparks.transform.rotation = transform.rotation * Quaternion.Euler(0.0f, 0.0f, vfx.rotation);
+		}
 
-        foreach (var trail in m_DriftTrailInstances)
-        {
-            trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up);
-            trail.trailRoot.transform.rotation = transform.rotation;
-        }
-    } */
+		foreach (var trail in m_DriftTrailInstances)
+		{
+			trail.trailRoot.transform.position = trail.wheel.transform.position - (trail.wheel.radius * Vector3.up) + (DriftTrailVerticalOffset * Vector3.up);
+			trail.trailRoot.transform.rotation = transform.rotation;
+		}
+	} */
 
-    //TODO:
-    void UpdateSuspensionParams(CollisionShape wheel)
-    {
-        /* wheel.suspensionDistance = SuspensionHeight;
-        wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
-        JointSpring spring = wheel.suspensionSpring;
-        spring.spring = SuspensionSpring;
-        spring.damper = SuspensionDamp;
-        wheel.suspensionSpring = spring; */
-    }
+	//TODO:
+	void UpdateSuspensionParams(CollisionShape wheel)
+	{
+		/* wheel.suspensionDistance = SuspensionHeight;
+		wheel.center = new Vector3(0.0f, WheelsPositionVerticalOffset, 0.0f);
+		JointSpring spring = wheel.suspensionSpring;
+		spring.spring = SuspensionSpring;
+		spring.damper = SuspensionDamp;
+		wheel.suspensionSpring = spring; */
+	}
 
-    // Called when the node enters the scene tree for the first time.
-    // Replaces Awake Method from Unity
+	// Called when the node enters the scene tree for the first time.
+	// Replaces Awake Method from Unity
 	public override void _Ready()
 	{
 		GD.Print("ArcadeKart script is loaded"); // TODO: remove debug
 
-        // Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
-        // m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
+		// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
+		// m_Inputs = GetComponents<IInput>(); --> don't know what this is used for
 
-        // set properties from given node paths
-        FrontLeftWheel = GetNode<CollisionShape>(FrontLeftWheelPath);
-        FrontRightWheel = GetNode<CollisionShape>(FrontRightWheelPath);
-        RearLeftWheel = GetNode<CollisionShape>(RearLeftWheelPath);
-        RearRightWheel = GetNode<CollisionShape>(RearRightWheelPath);
+		// set properties from given node paths
+		FrontLeftWheel = GetNode<CollisionShape>(FrontLeftWheelPath);
+		FrontRightWheel = GetNode<CollisionShape>(FrontRightWheelPath);
+		RearLeftWheel = GetNode<CollisionShape>(RearLeftWheelPath);
+		RearRightWheel = GetNode<CollisionShape>(RearRightWheelPath);
 
-        //apply code to properties
-        if(FrontRightWheel != null && FrontLeftWheel != null && RearLeftWheel != null && RearRightWheel != null)
-        {
-            UpdateSuspensionParams(FrontLeftWheel);
-            UpdateSuspensionParams(FrontRightWheel);
-            UpdateSuspensionParams(RearLeftWheel);
-            UpdateSuspensionParams(RearRightWheel);
-        }
-        else
-        {
-            GD.PrintErr("_Ready: Wheel Colliders were null");
-        }
+		//apply code to properties
+		if(FrontRightWheel != null && FrontLeftWheel != null && RearLeftWheel != null && RearRightWheel != null)
+		{
+			UpdateSuspensionParams(FrontLeftWheel);
+			UpdateSuspensionParams(FrontRightWheel);
+			UpdateSuspensionParams(RearLeftWheel);
+			UpdateSuspensionParams(RearRightWheel);
+		}
+		else
+		{
+			GD.PrintErr("_Ready: Wheel Colliders were null");
+		}
 
-        m_CurrentGrip = baseStats.Grip;
+		m_CurrentGrip = baseStats.Grip;
 
-        //TODO: add in vfx when necessary
-        /* if (DriftSparkVFX != null)
-        {
-            AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
-            AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
-        } */
+		//TODO: add in vfx when necessary
+		/* if (DriftSparkVFX != null)
+		{
+			AddSparkToWheel(RearLeftWheel, -DriftSparkHorizontalOffset, -DriftSparkRotation);
+			AddSparkToWheel(RearRightWheel, DriftSparkHorizontalOffset, DriftSparkRotation);
+		} */
 
-        /* if (DriftTrailPrefab != null)
-        {
-            AddTrailToWheel(RearLeftWheel);
-            AddTrailToWheel(RearRightWheel);
-        } */
+		/* if (DriftTrailPrefab != null)
+		{
+			AddTrailToWheel(RearLeftWheel);
+			AddTrailToWheel(RearRightWheel);
+		} */
 
-        /* if (NozzleVFX != null)
-        {
-            foreach (var nozzle in Nozzles)
-            {
-                Instantiate(NozzleVFX, nozzle, false);
-            }
-        } */
+		/* if (NozzleVFX != null)
+		{
+			foreach (var nozzle in Nozzles)
+			{
+				Instantiate(NozzleVFX, nozzle, false);
+			}
+		} */
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState state)

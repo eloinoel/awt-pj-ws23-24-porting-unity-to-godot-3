@@ -18,7 +18,6 @@ public class VehicleBodyTest : RigidBody
 
 	public struct Stats
 	{
-		//[ExportGroup("Movement Settings")]
 		[Export(PropertyHint.Range, "0.001f,,")]
 		/// <summary>
 		/// Top speed attainable when moving forward.
@@ -121,12 +120,10 @@ public class VehicleBodyTest : RigidBody
 	//----Additionally Exported Parameters-----
 	//-----------------------------------------
 
-	//[ExportGroup("Vehicle Visual")]
 	[Export]
 	public Godot.Collections.Array<Godot.NodePath> m_VisualWheels;
 
 
-	//[ExportGroup("Vehicle Physics")]
 	[Export]
 	/// <summary>
 	/// The transform that determines the position of the kart's mass.
@@ -140,7 +137,6 @@ public class VehicleBodyTest : RigidBody
 	public float AirborneReorientationCoefficient = 3.0f;
 
 
-	//[ExportGroup("Drifting")]
 	[Export(PropertyHint.Range, "0.01f, 1.0f,")]
 	/// <summary>
 	/// The grip value when drifting.
@@ -178,7 +174,6 @@ public class VehicleBodyTest : RigidBody
 	public float DriftDampening = 10.0f;
 
 
-	//[ExportGroup("VFX")]
 	/*[Export]
 	/// <summary>
 	/// VFX that will be placed on the wheels when drifting.
@@ -227,7 +222,6 @@ public class VehicleBodyTest : RigidBody
 	/// </summary>
  	public Godot.Collections.Array<Transform> Nozzles; //TODO: change type */
 
-	//[ExportGroup("Suspensions")]
 	[Export(PropertyHint.Range, "0.0f, 1.0f,")]
 	/// <summary>
 	/// The maximum extension possible between the kart's body and the wheels.
@@ -253,7 +247,6 @@ public class VehicleBodyTest : RigidBody
 	public float WheelsPositionVerticalOffset = 0.0f;
 
 
-	//[ExportGroup("Physical Wheels")]
 	[Export]
 	public Godot.NodePath FrontLeftWheelPath;
     public Godot.VehicleWheel FrontLeftWheel;
