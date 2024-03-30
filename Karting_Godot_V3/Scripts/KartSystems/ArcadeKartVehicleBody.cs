@@ -107,8 +107,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 		}
 	}
 
-	public RigidBody Rigidbody { get; private set; } //TODO: probably not needed because this instance is the Rigidbody
-/*  public InputData Input { get; private set; }//TODO: change type */
+	public RigidBody Rigidbody { get; private set; }
 	public float AirPercent { get; private set; }
 	public float GroundPercent { get; private set; }
 
@@ -372,7 +371,7 @@ public class ArcadeKartVehicleBody : VehicleBody
 	// Replaces Awake Method from Unity
 	public override void _Ready()
 	{
-		Rigidbody = this;// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
+		Rigidbody = this;
 
 		// set properties from given node paths
 		FrontLeftWheel = GetNode<VehicleWheel>(FrontLeftWheelPath);

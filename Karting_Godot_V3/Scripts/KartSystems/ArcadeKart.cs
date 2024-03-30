@@ -97,8 +97,6 @@ public class ArcadeKart : RigidBody
 		}
 	}
 
-	/* 	public Rigidbody Rigidbody { get; private set; } //TODO: probably not needed because this instance is the Rigidbody */
-/* 	public InputData Input { get; private set; }//TODO: change type */
 	public float AirPercent { get; private set; }
 	public float GroundPercent { get; private set; }
 
@@ -265,18 +263,6 @@ public class ArcadeKart : RigidBody
 	//--------------- Functions ---------------
 	//-----------------------------------------
 
-	
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
-
-
-
-
-
 	public void AddPowerup(StatPowerup statPowerup)
 	{
 		m_ActivePowerupList.Add(statPowerup);
@@ -336,8 +322,6 @@ public class ArcadeKart : RigidBody
 	// Replaces Awake Method from Unity
 	public override void _Ready()
 	{
-		// Rigidbody = GetComponent<Rigidbody>(); --> this class is the Rigidbody
-
 		// set properties from given node paths
 		FrontLeftWheel = GetNode<CollisionShape>(FrontLeftWheelPath);
 		FrontRightWheel = GetNode<CollisionShape>(FrontRightWheelPath);
